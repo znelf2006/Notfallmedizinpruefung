@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notfallmedizinprüfung 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:15px;line-height:1.55;background:#f5f5f3;color:#1a1a18;min-height:100vh}
+a{color:inherit;text-decoration:none}
+
+/* Header */
+header{background:#fff;border-bottom:1px solid #e0dfd8;padding:1.25rem 1.5rem 1rem;position:sticky;top:0;z-index:100}
+.hdr-top{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap}
+h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
+.hdr-sub{font-size:0.8rem;color:#888;margin-top:2px}
+.filters{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.75rem}
+.filter-btn{padding:0.3rem 0.75rem;border:1px solid #d4d4cc;border-radius:20px;background:#fff;font-size:0.8rem;cursor:pointer;transition:all .15s;color:#555}
+.filter-btn:hover{border-color:#888;color:#111}
+.filter-btn.active{background:#1a1a18;color:#fff;border-color:#1a1a18}
+.filter-btn.cat-btn[data-cat="kardiologie"].active{background:#dc2626;border-color:#dc2626}
+.filter-btn.cat-btn[data-cat="pulmonal"].active{background:#1d4ed8;border-color:#1d4ed8}
+.filter-btn.cat-btn[data-cat="neurologie"].active{background:#6d28d9;border-color:#6d28d9}
+.filter-btn.cat-btn[data-cat="intern"].active{background:#047857;border-color:#047857}
+.filter-btn.cat-btn[data-cat="trauma"].active{background:#b45309;border-color:#b45309}
+.filter-btn.cat-btn[data-cat="paediatrie"].active{background:#15803d;border-color:#15803d}
+.filter-btn.cat-btn[data-cat="organisation"].active{background:#374151;border-color:#374151}
+
+/* Grid */
+#grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;padding:1.25rem 1.5rem;max-width:1400px}
+.card{background:#fff;border:1px solid #e0dfd8;border-radius:10px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .1s;display:flex;flex-direction:column}
+.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-1px)}
+.card-stripe{height:4px;width:100%}
+.card-body{padding:1rem 1.1rem 0.9rem;flex:1;display:flex;flex-direction:column;gap:0.5rem}
+.card-meta{display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap}
+.card-num{font-size:0.75rem;color:#aaa;font-weight:500}
+.badge{font-size:0.7rem;padding:0.2rem 0.55rem;border-radius:12px;font-weight:500;letter-spacing:0.01em}
+.card-title{font-size:0.97rem;font-weight:600;line-height:1.35}
+.card-alarm{font-size:0.82rem;color:#555;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{padding:0.6rem 1.1rem;border-top:1px solid #f0efea;font-size:0.8rem;color:#888;display:flex;align-items:center;justify-content:space-between}
+.card-footer span{display:flex;align-items:center;gap:0.3rem}
+
+/* Category colors */
+.stripe-kardiologie,.badge-kardiologie{background:#ef4444}
+.badge-kardiologie{color:#7f1d1d}
+.bg-kardiologie{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+.stripe-pulmonal,.badge-pulmonal{background:#3b82f6}
+.badge-pulmonal{color:#1e3a8a}
+.bg-pulmonal{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+.stripe-neurologie,.badge-neurologie{background:#8b5cf6}
+.badge-neurologie{color:#3b0764}
+.bg-neurologie{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+.stripe-intern,.badge-intern{background:#10b981}
+.badge-intern{color:#064e3b}
+.bg-intern{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+.stripe-trauma,.badge-trauma{background:#f59e0b}
+.badge-trauma{color:#78350f}
+.bg-trauma{background:#fffbeb;color:#b45309;border-color:#fde68a}
+.stripe-paediatrie,.badge-paediatrie{background:#22c55e}
+.badge-paediatrie{color:#14532d}
+.bg-paediatrie{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.stripe-organisation,.badge-organisation{background:#6b7280}
+.badge-organisation{color:#111827}
+.bg-organisation{background:#f9fafb;color:#374151;border-color:#d1d5db}
+
+.diff-basis{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+.diff-fortgeschritten{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+
+/* Detail view */
+#detail-view{display:none;padding:1.25rem 1.5rem;max-width:900px}
+.detail-back{display:inline-flex;align-items:center;gap:0.5rem;color:#555;font-size:0.88rem;cursor:pointer;margin-bottom:1rem;padding:0.4rem 0;border:none;background:none}
+.detail-back:hover{color:#111}
+.detail-header{background:#fff;border:1px solid #e0dfd8;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem}
+.detail-header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:0.75rem}
+.detail-title{font-size:1.3rem;font-weight:700;line-height:1.3}
+.detail-badges{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.4rem}
+.detail-alarm{font-size:0.9rem;color:#444;line-height:1.6;background:#fafaf8;border:1px solid #e8e8e0;border-radius:6px;padding:0.75rem 1rem;margin-top:0.75rem}
+.detail-alarm strong{color:#111;display:block;margin-bottom:0.3rem;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.04em}
+
+.vitals-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:0.5rem;margin-top:0.75rem}
+.vital-box{background:#f9f9f7;border:1px solid #e5e5dc;border-radius:6px;padding:0.45rem 0.6rem;text-align:center}
+.vital-label{font-size:0.68rem;color:#888;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px}
+.vital-value{font-size:1rem;font-weight:600;line-height:1.2}
+.vital-value.abnormal{color:#dc2626}
+.vital-value.warning{color:#d97706}
+
+.detail-section{background:#fff;border:1px solid #e0dfd8;border-radius:10px;padding:1.1rem 1.4rem;margin-bottom:0.75rem}
+.section-title{font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#888;margin-bottom:0.85rem;display:flex;align-items:center;gap:0.4rem}
+.section-title::before{content:'';display:inline-block;width:3px;height:14px;border-radius:2px;background:currentColor}
+
+.eh-list{display:flex;flex-direction:column;gap:0.4rem}
+.eh-item{display:flex;gap:0.6rem;align-items:flex-start;font-size:0.88rem;line-height:1.5;padding:0.45rem 0.6rem;background:#f9faf8;border-radius:5px}
+.eh-check{width:18px;height:18px;min-width:18px;border:1.5px solid #d1d5db;border-radius:4px;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;background:#fff}
+.eh-check.checked{background:#16a34a;border-color:#16a34a;color:#fff}
+.eh-check.checked::after{content:'✓';font-size:11px;font-weight:700}
+
+.fragen-list{display:flex;flex-direction:column;gap:0.5rem;counter-reset:fragen}
+.frage-item{counter-increment:fragen;display:flex;gap:0.7rem;font-size:0.88rem;line-height:1.5;padding:0.5rem 0.7rem;border-left:3px solid #e5e7eb;border-radius:0 5px 5px 0}
+.frage-item::before{content:counter(fragen);font-size:0.75rem;font-weight:700;color:#9ca3af;min-width:16px;margin-top:1px}
+
+.meds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0.5rem}
+.med-card{background:#fafaf8;border:1px solid #e5e5dc;border-radius:6px;padding:0.6rem 0.8rem}
+.med-name{font-weight:600;font-size:0.88rem;margin-bottom:2px}
+.med-dosis{font-family:'Courier New',Courier,monospace;font-size:0.83rem;color:#1d4ed8;margin-bottom:3px}
+.med-hinweis{font-size:0.78rem;color:#666;line-height:1.4}
+
+.fallstricke-list{display:flex;flex-direction:column;gap:0.4rem}
+.fallstrick-item{display:flex;gap:0.5rem;font-size:0.86rem;line-height:1.45;padding:0.4rem 0.6rem;background:#fff7ed;border:1px solid #fed7aa;border-radius:5px;color:#7c2d12}
+.fallstrick-item::before{content:'⚠';font-size:0.9rem}
+
+.befund-box{font-size:0.87rem;color:#333;line-height:1.6;padding:0.6rem 0.8rem;background:#f9f9f7;border:1px solid #e5e5dc;border-radius:6px}
+
+.detail-print-btn{margin-top:0.5rem;padding:0.5rem 1rem;background:#fff;border:1px solid #d4d4cc;border-radius:6px;font-size:0.83rem;cursor:pointer;color:#555}
+.detail-print-btn:hover{border-color:#888;color:#111}
+
+/* Print */
+@media print{
+  header,#grid-view,.detail-back,.detail-print-btn{display:none!important}
+  #detail-view{display:block!important;padding:0}
+  .card,.detail-section,.detail-header{page-break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  .eh-check{display:none}
+  body{background:#fff;font-size:12px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">
+    <h1>Notfallmedizinprüfung 2026</h1>
+    <span class="hdr-sub">AGNN-Therapieempfehlungen 2026 · Zusatzweiterbildung Notfallmedizin · Muster-WBO BÄK</span>
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">Alle (25)</button>
+    <button class="filter-btn cat-btn" data-cat="kardiologie">Kardiologie</button>
+    <button class="filter-btn cat-btn" data-cat="pulmonal">Pulmonal · Allergie</button>
+    <button class="filter-btn cat-btn" data-cat="neurologie">Neurologie</button>
+    <button class="filter-btn cat-btn" data-cat="intern">Internistisch</button>
+    <button class="filter-btn cat-btn" data-cat="trauma">Traumatologie</button>
+    <button class="filter-btn cat-btn" data-cat="paediatrie">Pädiatrie</button>
+    <button class="filter-btn cat-btn" data-cat="organisation">Organisation · Recht</button>
+  </div>
+</header>
+
+<div id="grid-view"></div>
+<div id="detail-view"></div>
+
+<script>
+const CATS = {
+  kardiologie:'Kardiologie',
+  pulmonal:'Pulmonal · Allergie',
+  neurologie:'Neurologie',
+  intern:'Internistisch',
+  trauma:'Traumatologie',
+  paediatrie:'Pädiatrie',
+  organisation:'Organisation · Recht'
+};
+
+const cases = [
+// ── KARDIOLOGIE ────────────────────────────────────────────
+{
+  id:1, cat:'kardiologie', diff:'fortgeschritten',
+  title:'STEMI mit kardiogenem Schock',
+  agnn:'Akutes Koronarsyndrom (ACS), Schock',
+  alarm:'72-jähriger Mann, Brustschmerz seit 60 min mit Ausstrahlung in den linken Arm, Kaltschweißigkeit, Schwindel. Ehefrau ruft Rettungsdienst.',
+  befund:'Patient blass-kaltschweißig, marmorierte Haut, kein Ödeme. Lunge: basale feuchte RG bds. 12-Kanal-EKG: ST-Hebungen in II, III, aVF → V. a. Hinterwandinfarkt. CAVE: V3R/V4R zeigen ST-Hebungen → Rechtsherzinfarkt!',
+  vitals:{RR:'85/55',HF:'118/min',SpO2:'90 %',AF:'24/min',GCS:'14',BZ:'148 mg/dl'},
+  eh:[
+    'Erkennt STEMI anhand von ST-Hebungen im 12-Kanal-EKG; fordert rechtsseitige Ableitungen (V3R/V4R) bei Hinterwandinfarkt',
+    'Kennt absolute Kontraindikation für Nitroglycerin beim Rechtsherzinfarkt (RR-Absturz!)',
+    'Trifft korrekte Transportentscheidung: primäre PCI (door-to-balloon < 90 min) → Herzkatheterzentrum',
+    'Kennt hämodynamische Strategie: vorsichtige Volumen-Gabe beim Rechtsherzinfarkt, Vasopressoren (Noradrenalin) bei persistierendem Schock',
+    'Nennt korrekte Pharmakotherapie: ASS + Heparin + titrierte Analgesie (kein Nitroglycerin)',
+    'Erkennt Komplikationen: VF als mögliche Folge → Defibrillation bereithalten'
+  ],
+  fragen:[
+    'Wie stellen Sie die Diagnose STEMI präklinisch? Welche EKG-Kriterien sind entscheidend?',
+    'Warum ist Nitroglycerin beim Rechtsherzinfarkt kontraindiziert?',
+    'Lyse oder primäre PCI – wie entscheiden Sie präklinisch?',
+    'Wie behandeln Sie die Hypotonie? Wann geben Sie Volumen, wann Katecholamine?',
+    'Welche Zielklinik wählen Sie, wenn das nächste KH kein Herzkatheterlabor hat?',
+    'Der Patient verliert während des Transports das Bewusstsein und zeigt VF im EKG – Ihr Vorgehen?'
+  ],
+  meds:[
+    {n:'ASS',d:'150–300 mg p.o. oder i.v.',h:'Sofort – nicht auf EKG-Ergebnis warten'},
+    {n:'Heparin',d:'5.000 IE i.v.',h:'Beim STE-ACS am Einsatzort'},
+    {n:'Fentanyl',d:'0,05–0,1 mg titriert i.v.',h:'Analgesie – Vorsicht bei Schock'},
+    {n:'Noradrenalin',d:'0,1–0,5 µg/kg/min',h:'Vasopressor bei persistierendem Schock'}
+  ],
+  fallstricke:[
+    'Nitrat beim Rechtsherzinfarkt → fataler Blutdruckabfall',
+    'V3R/V4R-Ableitungen nicht vergessen bei inferiorem STEMI',
+    'Zu aggressive Volumengabe → Verschlechterung der Rechtsherzfunktion'
+  ]
+},
+{
+  id:2, cat:'kardiologie', diff:'basis',
+  title:'Reanimation bei Kammerflimmern',
+  agnn:'Reanimation (Erwachsene)',
+  alarm:'65-jähriger Mann bricht beim Spaziergang zusammen. Passanten beginnen mit Laienreanimation. AED vorhanden aber noch nicht angebracht. Bewusstlosigkeit, keine Atmung.',
+  befund:'Pat. bewusstlos, keine Atmung, keine Lebenszeichen. Laienhelfer führen CPR durch. AED signalisiert defibrillierbaren Rhythmus (VF).',
+  vitals:{RR:'n.m.',HF:'VF',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
+  eh:[
+    'Führt strukturierte Reanimation nach aktuellem ERC-Algorithmus: HDM 100–120/min, Tiefe 5–6 cm, 30:2',
+    'Minimiert No-Flow-Zeit: Defibrillation mit minimalster CPR-Unterbrechung (Laden während HDM)',
+    'Kennt Medikation: Adrenalin 1 mg i.v./i.o. nach 3. Schock, Amiodaron 300 mg nach 3. Schock',
+    'Sucht und behandelt reversible Ursachen (4H/HITS): Hypoxie, Hypovolämie, Hypothermie, Hypo-/Hyperkaliämie, Herztamponade, Intoxikation, Thrombose, Spannungspneumothorax',
+    'Erkennt ROSC (etCO₂-Anstieg, tastbarer Puls) und leitet Post-Reanimationsmanagement ein',
+    'Kennt ECPR-Kriterien und wann Transport unter laufender CPR sinnvoll ist'
+  ],
+  fragen:[
+    'Wie hoch ist die optimale Kompressionsfrequenz und -tiefe? Was sind häufige Fehler?',
+    'Wann und wie oft geben Sie Adrenalin? Wann Amiodaron?',
+    'Was sind die reversiblen Ursachen eines Kreislaufstillstands? (4H/HITS)',
+    'Woran erkennen Sie einen ROSC unter Reanimation?',
+    'Was sind Ihre ersten Schritte nach ROSC? Welche Zielwerte streben Sie an?',
+    'Wann beenden Sie die Reanimation? Welche Faktoren beeinflussen die Entscheidung?'
+  ],
+  meds:[
+    {n:'Adrenalin',d:'1 mg i.v./i.o. alle 3–5 min',h:'Ab 3. Schock / nach 3 Zyklen bei nicht-defibrillierbarem Rhythmus'},
+    {n:'Amiodaron',d:'300 mg i.v./i.o. nach 3. Schock; 150 mg nach 5. Schock',h:'Bei refraktärem VF/pVT'},
+    {n:'Natriumbicarbonat',d:'1 mmol/kg i.v.',h:'Nur bei Hyperkaliämie oder Intoxikation mit TCA'}
+  ],
+  fallstricke:[
+    'No-Flow-Zeit > 10 s durch zu lange Rhythmuskontrolle',
+    'Beatmung zu schnell/mit zu hohem Druck → Hyperventilation, Thoraxüberblähung',
+    'ROSC verpasst → etCO₂-Monitoring obligat!'
+  ]
+},
+{
+  id:3, cat:'kardiologie', diff:'fortgeschritten',
+  title:'Ventrikuläre Tachykardie mit Kreislaufinstabilität',
+  agnn:'Herzrhythmusstörungen – Tachykardie',
+  alarm:'70-jähriger Mann mit bekannter KHK, Palpitationen und Schwindel seit 20 min, jetzt Präsynkope. EKG zeigt breite Kammerkomplexe, Frequenz 180/min.',
+  befund:'Pat. blass, schwitzt, minimal orientiert. Puls schwach, kaum tastbar. EKG: monomorphe VT, breite Kammerkomplexe, AV-Dissoziation erkennbar.',
+  vitals:{RR:'80/50',HF:'180/min',SpO2:'88 %',AF:'22/min',GCS:'13',BZ:'n.e.'},
+  eh:[
+    'Differenziert zwischen SVT mit Aberration und VT anhand klinischer + EKG-Kriterien (AV-Dissoziation, Capture-/Fusion-Beats)',
+    'Entscheidet sich bei hämodynamischer Instabilität für sofortige synchronisierte Kardioversion',
+    'Kennt Energieeinstellungen: VT biphasisch 120–150 J, SVT 70–120 J',
+    'Plant Kurznarkose vor Kardioversion (Midazolam + Fentanyl, ggf. Propofol)',
+    'Kennt medikamentöse Alternative bei stabiler Hämodynamik: Amiodaron 300 mg i.v.',
+    'Erkennt zugrundeliegende Ursache (Ischämie bei KHK) → Zielklinik Kardiologie/Herzkatheterlabor'
+  ],
+  fragen:[
+    'Wie unterscheiden Sie VT von SVT mit Aberration präklinisch?',
+    'Bei welchen Zeichen ist sofortige Kardioversion indiziert?',
+    'Welche Energie wählen Sie für die Kardioversion bei VT?',
+    'Wie führen Sie eine Kurznarkose vor Kardioversion durch?',
+    'Welches Antiarrhythmikum würden Sie bei stabiler hämodynamischer Situation erwägen?',
+    'Was tun Sie, wenn die Kardioversion nicht erfolgreich ist?'
+  ],
+  meds:[
+    {n:'Midazolam',d:'2–5 mg titriert i.v.',h:'Für Kurznarkose vor Kardioversion'},
+    {n:'Fentanyl',d:'0,05–0,1 mg i.v.',h:'Analgesie/Sedierung vor Kardioversion'},
+    {n:'Amiodaron',d:'300 mg über 10–20 min i.v.',h:'Medikamentöse Konversion bei stabiler VT'},
+    {n:'Adrenalin',d:'1 mg i.v./i.o.',h:'Bei Degeneration zu VF – dann sofortige Defibrillation'}
+  ],
+  fallstricke:[
+    'Verapamil bei VT geben → kardiogener Schock und Tod möglich!',
+    'Synchronisation vergessen → unsynchronisierter Schock kann VF auslösen',
+    'Zu lange warten auf Medikamentenwirkung bei instabilem Patienten'
+  ]
+},
+{
+  id:4, cat:'kardiologie', diff:'basis',
+  title:'AV-Block III° mit Adams-Stokes-Anfall',
+  agnn:'Herzrhythmusstörungen – Bradykardie',
+  alarm:'72-jährige Frau, mehrfache Synkopen in der letzten Stunde, kurze Bewusstlosigkeit, jetzt wieder ansprechbar aber verwirrt. Bekannte KHK, nimmt Betablocker.',
+  befund:'Patientin blass, kalt, verwirrt. Puls regelmäßig, sehr langsam. EKG: P-Wellen und QRS-Komplexe vollständig dissoziiert, QRS breit (HIS-unterhalb).',
+  vitals:{RR:'75/45',HF:'32/min',SpO2:'91 %',AF:'18/min',GCS:'13',BZ:'n.e.'},
+  eh:[
+    'Erkennt AV-Block III° anhand von P-QRS-Dissoziation; unterscheidet HIS-oberhalb (schmaler QRS) von HIS-unterhalb (breiter QRS)',
+    'Kennt Indikation für sofortigen transkutanen Herzschrittmacher bei hämodynamisch relevantem Block',
+    'Beschreibt Technik und Durchführung des transkutanen Schrittmachers (Elektroden, Frequenz, Stromstärke)',
+    'Plant Analgesie/Sedierung für transdermales Pacing (Muskelzuckungen schmerzhaft)',
+    'Nennt Atropin als Überbrückung (nur bei HIS-oberhalbem Block wirksam!)',
+    'Erkennt Zielklinik: Kardiologie mit Möglichkeit zur transvenösen Stimulation'
+  ],
+  fragen:[
+    'Wie unterscheiden Sie die verschiedenen AV-Block-Grade? Was sehen Sie im EKG?',
+    'Welche Bradykardie-Formen sprechen auf Atropin an, welche nicht?',
+    'Wie legen Sie den transkutanen Herzschrittmacher an? Wie überprüfen Sie, ob er korrekt stimuliert?',
+    'Warum müssen Sie beim Pacing auf Analgesie achten?',
+    'Was bedeutet "Capture" beim Schrittmacher, wie erkennen Sie es?',
+    'Welche reversiblen Ursachen müssen Sie ausschließen?'
+  ],
+  meds:[
+    {n:'Atropin',d:'0,5 mg i.v., max. 3 mg',h:'Nur bei HIS-oberhalbem Block; beim total. AV-Block wirkungslos!'},
+    {n:'Orciprenalin (Alupent)',d:'0,25–0,5 mg i.v. titriert',h:'Überbrückung wenn Schrittmacher nicht verfügbar'},
+    {n:'Midazolam',d:'1–3 mg titriert i.v.',h:'Sedierung für transkutanes Pacing'}
+  ],
+  fallstricke:[
+    'Atropin beim HIS-unterhalb-Block → paradoxe Bradykardie möglich',
+    'Capture mit Kontraktion der Thoraxmuskulatur verwechseln',
+    'Betablocker-Overdose als Ursache vergessen'
+  ]
+},
+{
+  id:5, cat:'kardiologie', diff:'basis',
+  title:'Akutes kardiales Lungenödem',
+  agnn:'Kardiales Lungenödem',
+  alarm:'76-jährige Frau, Atemnot seit 30 min, kann nicht liegen, spricht nur in Ein-Wort-Sätzen. Bekannte Herzinsuffizienz. Sohn alarmiert Notarzt.',
+  befund:'Pat. sitzt aufrecht, zyanotisch, Atemhilfsmuskulatur einsatz. Feuchte Rasselgeräusche über allen Lungenfeldern. Peripherer Puls gut tastbar, Halsvenenstauung. RR hypertensiv.',
+  vitals:{RR:'195/105',HF:'112/min',SpO2:'82 %',AF:'32/min',GCS:'14',BZ:'n.e.'},
+  eh:[
+    'Erkennt akutes kardiales Lungenödem, unterscheidet von Asthma cardiale und Pneumonie',
+    'Kennt NIV (CPAP/PEEP) als Primärmaßnahme: CPAP 5–10 mbar, PEEP 5–15 mbar + PS 3–5 mbar',
+    'Behandelt Hypertension mit Urapidil titriert (Ziel: RR-Senkung um 20–25 % in 1 h)',
+    'Kennt Indikation für Intubation: SpO₂ < 85 % trotz NIV, Erschöpfung, Bewusstseinseintrübung',
+    'Versteht pathophysiologisch: Nachlastsenkung > Vorlastsenkung bei hypertensivem Lungenödem',
+    'Kennt Lagerung: Oberkörper hoch, Beine tief (unblutige Vorlastsenkung)'
+  ],
+  fragen:[
+    'Welche Akutmaßnahmen ergreifen Sie bei SpO₂ 82 % und kardiogenem Lungenödem?',
+    'Wann ist NIV indiziert, wann müssen Sie intubieren?',
+    'Welches Antihypertensivum wählen Sie und warum?',
+    'Warum ist Furosemid präklinisch keine Erstmaßnahme?',
+    'Was unterscheidet Asthma cardiale von Asthma bronchiale klinisch?',
+    'Welchen PEEP und welchen Beatmungsmodus wählen Sie bei NIV?'
+  ],
+  meds:[
+    {n:'O₂ / NIV',d:'Maske 15 l/min → CPAP 5–10 mbar',h:'Erstmaßnahme, sofort'},
+    {n:'Urapidil',d:'5 mg Boli i.v. bis Ziel-RR',h:'Nachlastsenkung bei Hypertension'},
+    {n:'Morphin',d:'2–5 mg i.v.',h:'Anxiolyse, Vorlastsenkung – cave Atemdepression'},
+    {n:'Nitroglycerin',d:'0,4 mg s.l. bei RR > 110 mmHg',h:'Nur wenn kein kardiogener Schock!'}
+  ],
+  fallstricke:[
+    'Furosemid präklinisch bei hypertensivem Lungenödem → kein Vorteil, Hypotonie möglich',
+    'Flachlagerung → akute Verschlechterung der Dyspnoe',
+    'Beta-2-Mimetika bei Asthma cardiale → Tachykardie, Verschlechterung!'
+  ]
+},
+{
+  id:6, cat:'kardiologie', diff:'fortgeschritten',
+  title:'Reanimation – Pulslose Elektrische Aktivität (PEA)',
+  agnn:'Reanimation (Erwachsene)',
+  alarm:'55-jähriger Mann, kolabiert 10 min nach Knie-OP im Aufwachraum. Anästhesist beginnt CPR. Rhythmus: schmale QRS-Komplexe, Frequenz 80/min, kein tastbarer Puls.',
+  befund:'Bewusstlos, keine Atmung, kein Puls. EKG zeigt elektrische Aktivität ohne mechanische Herzaktion. Halsvenenstauung erkennbar.',
+  vitals:{RR:'n.m.',HF:'PEA ~80/min',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
+  eh:[
+    'Erkennt PEA: organisierte elektrische Aktivität ohne Puls → CPR sofort',
+    'Systematisch reversible Ursachen suchen: v. a. bei postoperativem Patienten Lungenembolie (Thrombose!), Spannungspneumothorax, Tamponade, Hypovolämie',
+    'Kennt Diagnostik: Sono (FAST) für Perikardtamponade, Lungenembolie-Hinweise im Echo',
+    'Entscheidet sich bei V. a. massive LAE für Lyse unter CPR (Streptokinase/Alteplase)',
+    'Kennt Mindestreanimationsdauer nach Lyse: 60–90 min CPR nach tPA-Gabe',
+    'Adrenalin alle 3–5 min; kennt Unterschied zu defibrillierbarem Rhythmus'
+  ],
+  fragen:[
+    'Was ist PEA? Welche Ursachen kommen beim postoperativen Patienten besonders in Frage?',
+    'Wie und womit diagnostizieren Sie eine Perikardtamponade unter Reanimation?',
+    'Wann und womit würden Sie eine Lyse unter laufender CPR erwägen?',
+    'Wie lange muss nach Lyse-Gabe reanimiert werden?',
+    'Was unterscheidet das Management von PEA vs. VF/VT?',
+    'Wann ist ein Transport unter CPR sinnvoll?'
+  ],
+  meds:[
+    {n:'Adrenalin',d:'1 mg i.v./i.o. alle 3–5 min',h:'Keine Defibrillation – CPR kontinuierlich'},
+    {n:'Alteplase (rt-PA)',d:'50 mg i.v. Bolus bei V. a. massiver LAE unter CPR',h:'Danach 60–90 min CPR fortführen'},
+    {n:'Heparin',d:'5.000 IE i.v.',h:'Begleitend zur Lyse (nach Lyse-Gabe)'}
+  ],
+  fallstricke:[
+    'CPR-Unterbrechung für lange Sonografie → No-Flow-Zeit steigt',
+    'Lyse-Gabe und dann CPR nach 5 min abbrechen → Lyse braucht Zeit!',
+    'Halsvenenstauung ohne Verminderung der Atemgeräusche → eher Tamponade als Pneumothorax'
+  ]
+},
+// ── PULMONAL / ALLERGIE ──────────────────────────────────
+{
+  id:7, cat:'pulmonal', diff:'fortgeschritten',
+  title:'Anaphylaxie Grad III–IV',
+  agnn:'Anaphylaxie',
+  alarm:'35-jährige Frau, 10 min nach Wespenstich Atemnot, Heiserkeit, Stridor, Urtikaria am ganzen Körper. Bekannte Wespengiftallergie, kein Notfall-Set dabei.',
+  befund:'Patientin sitzt aufrecht, ängstlich, Glottisödem (Stridor, Heiserkeit), Urtikaria und Erythem am gesamten Integument, Angioödem der Lippen. Periphere Vasodilatation, warme gerötete Haut, Blutdruckabfall.',
+  vitals:{RR:'75/40',HF:'130/min',SpO2:'86 %',AF:'28/min',GCS:'14',BZ:'n.e.'},
+  eh:[
+    'Erkennt Anaphylaxie Grad III–IV (lebensbedrohlich: Atemwegsobstruktion + Schock)',
+    'Gibt Adrenalin i.m. als Erstmaßnahme: 500 µg (0,5 ml) in den M. vastus lateralis – sofort ohne Verzögerung',
+    'Wiederholt Adrenalin alle 5–10 min bei persistierender Symptomatik',
+    'Plant frühzeitiges Atemwegsmanagement: Bei zunehmendem Glottisödem early RSI erwägen (Stimmritzen-Ödem verschlechtert sich!)',
+    'Adjuvante Therapie: Prednisolon 1–2 mg/kg i.v., H1-Antihistaminikum, Volumentherapie',
+    'Transportentscheidung: Klinik mit HNO/intensivmedizinischer Überwachung'
+  ],
+  fragen:[
+    'Wie klassifizieren Sie den Schweregrad der Anaphylaxie? Welche Grade gibt es?',
+    'Wo und wie injizieren Sie Adrenalin? Warum nicht i.v. als Erstgabe?',
+    'Wann ist eine frühzeitige Intubation zu erwägen?',
+    'Welche Rolle spielen Kortikosteroide und Antihistaminika in der Akuttherapie?',
+    'Was tun Sie, wenn eine Intubation durch das Glottisödem nicht möglich ist?',
+    'Was müssen Sie nach Stabilisierung der Patientin bedenken (biphasische Reaktion)?'
+  ],
+  meds:[
+    {n:'Adrenalin i.m.',d:'500 µg (0,5 ml) in M. vastus lateralis',h:'Sofortmaßnahme! Alle 5–10 min wiederholen'},
+    {n:'Prednisolon',d:'250–500 mg i.v. (1–2 mg/kg)',h:'Verhindert biphasische Reaktion'},
+    {n:'Dimetinden (Fenistil)',d:'4–8 mg i.v.',h:'H1-Antihistaminikum – nicht als Monotherapie!'},
+    {n:'NaCl 0,9 % / VEL',d:'500–1.000 ml rasch i.v.',h:'Volumenersatz bei Schock'},
+    {n:'Salbutamol',d:'2,5–5 mg inhalativ / 100–200 µg i.v.',h:'Bei Bronchospasmus'}
+  ],
+  fallstricke:[
+    'Antihistaminikum statt Adrenalin als Ersttherapie → Schock und Atemstillstand!',
+    'Adrenalin i.v. untitriert bei bewusstem Pat. → hypertensive Krise, VF möglich',
+    'Glottisödem verpasst → Intubation zu spät geplant, dann unmöglich'
+  ]
+},
+{
+  id:8, cat:'pulmonal', diff:'fortgeschritten',
+  title:'Life-threatening Asthma bronchiale',
+  agnn:'Obstruktive Ventilationsstörungen',
+  alarm:'28-jährige Asthmatikerin, akuter Anfall seit 45 min, kein Ansprechen auf eigenen Inhaler. Partner alarmiert Notarzt. Bekanntes Asthma bronchiale seit Kindheit.',
+  befund:'Patientin sitzt mit Kutscherhaltung, Einsatz der Atemhilfsmuskulatur, Zyanose der Lippen. Auskultation: kaum Atemgeräusche bds. ("silent lung"). Keinen Stridor. Spricht nicht mehr in Sätzen.',
+  vitals:{RR:'140/90',HF:'132/min',SpO2:'82 %',AF:'34/min',GCS:'13',BZ:'n.e.'},
+  eh:[
+    'Erkennt "near-fatal asthma" / "silent lung" als lebensbedrohliche Situation',
+    'Kennt Stufentherapie: Beta-2-Mimetika (Salbutamol), Ipratropium, Kortikosteroide, Magnesiumsulfat',
+    'Entscheidet über NIV-Versuch (off-label bei Asthma) vs. frühzeitige Intubation',
+    'Kennt Besonderheiten der Intubation beim Asthmatiker: Hyperinflation, intrinsischer PEEP, verlängertes Exspirationsverhältnis',
+    'Wählt geeignete Sedierung für RSI: Esketamin (bronchodilatatorisch), Ketamin-Vorteil beschreiben',
+    'Kennt Beatmungsparameter: niedrige AF, verlängertes I:E (1:3–1:4), niedriger PEEP'
+  ],
+  fragen:[
+    'Was bedeutet "silent lung" – warum ist das ein Alarmsymptom?',
+    'Welche Medikamente geben Sie in welcher Reihenfolge?',
+    'Wann entscheiden Sie sich für eine Intubation? Welches Narkosemittel wählen Sie?',
+    'Was ist das Risiko einer Überdruckbeatmung beim Asthmatiker?',
+    'Welche Beatmungsparameter wählen Sie nach Intubation?',
+    'Was ist ein Pneumothorax als Komplikation des Asthmaanfalls?'
+  ],
+  meds:[
+    {n:'Salbutamol',d:'2,5–5 mg über Vernebler / 100 µg i.v.',h:'Wiederholen alle 15–20 min'},
+    {n:'Ipratropium',d:'0,5 mg über Vernebler',h:'Additiv zu Salbutamol'},
+    {n:'Prednisolon',d:'100–250 mg i.v.',h:'Sofort – Wirkung nach 1–4h'},
+    {n:'Magnesiumsulfat',d:'2 g über 20 min i.v.',h:'Bei therapierefraktärem Bronchospasmus'},
+    {n:'Esketamin',d:'1–2 mg/kg RSI-Induktion',h:'Bronchodilatatorisch – Vorteil beim Asthmatiker'}
+  ],
+  fallstricke:[
+    '"Stille Lunge" als Besserung fehldeuten – ist Verschlechterung!',
+    'Zu hoher PEEP beim Beatmungsasthmatiker → intrinsischer PEEP + Barotrauma',
+    'Morphin beim Asthmatiker → Histaminfreisetzung, Verschlechterung des Bronchospasmus'
+  ]
+},
+{
+  id:9, cat:'pulmonal', diff:'fortgeschritten',
+  title:'Lungenarterienembolie mit hämodynamischer Instabilität',
+  agnn:'Lungenarterienembolie (LAE)',
+  alarm:'55-jährige Frau, 5 Tage nach elektiver Hüft-TEP, akute Dyspnoe und Kollaps bei Mobilisationsversuch. Patientin bewusstseinsgetrübt.',
+  befund:'Patientin kaltschweißig, zyanotisch, gestaute Halsvenen. Atemgeräusch bds. auskultierbar. EKG: Sinustachykardie, S1Q3-Muster, Rechtsschenkelblock. Echo/FAST: rechtes Herz massiv dilatiert, D-Zeichen.',
+  vitals:{RR:'70/40',HF:'128/min',SpO2:'83 %',AF:'30/min',GCS:'12',BZ:'n.e.'},
+  eh:[
+    'Erkennt massive LAE mit hämodynamischer Instabilität (Schock) als Indikation zur sofortigen Lysetherapie',
+    'Kennt PERC-Score und Wells-Score für klinische Diagnoseabschätzung',
+    'Kennt EKG-Zeichen: S1Q3-Typ, Rechtsschenkelblock, Tachykardie – sichern nicht, aber Hinweis',
+    'Entscheidet für präklinische Lyse bei Schock und V. a. massiver LAE: Alteplase 50 mg oder Tenecteplase',
+    'Kennt Kontraindikationen zur Lyse (absolute: aktive Blutung, intrakranielle Blutung, Schlaganfall < 3 Mo.)',
+    'Plant Atemwegssicherung: Intubation bei GCS-Verschlechterung, CAVE: hämodynamische Verschlechterung nach Intubation möglich'
+  ],
+  fragen:[
+    'Welche klinischen, EKG- und FAST-Befunde weisen auf eine massive LAE hin?',
+    'Wann ist eine präklinische Lysetherapie indiziert?',
+    'Mit welchem Medikament lysieren Sie? Welche Kontraindikationen müssen Sie beachten?',
+    'Was geschieht hämodynamisch bei der massiven LAE mit dem rechten Herz?',
+    'Warum kann die Intubation die Hämodynamik gefährlich verschlechtern?',
+    'Welche Zielklinik wählen Sie und was melden Sie an?'
+  ],
+  meds:[
+    {n:'Alteplase (rt-PA)',d:'10 mg i.v. Bolus, dann 90 mg über 2 h (oder 50 mg Bolus)',h:'Bei massiver LAE + Schock. Danach Antikoagulation'},
+    {n:'Heparin',d:'5.000 IE i.v.',h:'Vor Lyse, dann nach Lyse weiter'},
+    {n:'Noradrenalin',d:'0,1–0,5 µg/kg/min',h:'Vasopressor bei persistierendem Schock'},
+    {n:'Morphin',d:'2–5 mg titriert i.v.',h:'Analgesie und PAP-Senkung'}
+  ],
+  fallstricke:[
+    'SpO₂ gut trotz massiver LAE möglich (Herzzeitvolumen-Problem, nicht primär O₂-Austausch)',
+    'Lyse trotz absoluter Kontraindikation → lebensbedrohliche Blutung',
+    'Intubation erzeugt positiven Thoraxdruck → Preload-Abfall → Kreislaufkollaps beim RV-Versagen'
+  ]
+},
+// ── NEUROLOGIE ─────────────────────────────────────────────
+{
+  id:10, cat:'neurologie', diff:'basis',
+  title:'Schlaganfall mit Großgefäßverschluss (LVOS)',
+  agnn:'Schlaganfall ("Stroke")',
+  alarm:'68-jähriger Mann, plötzlicher Beginn vor 45 min: Rechtsseitige Lähmung, Sprachlosigkeit, Kopfdrehen nach links. Ehefrau alarmiert Rettungsdienst.',
+  befund:'BE-FAST: B+, E- (kein Doppelbild), F+ (Fazialisparese rechts), A+ (Armparese rechts), ST+ (plötzlicher Beginn). Globale Aphasie. GCS 10. BZ 115 mg/dl.',
+  vitals:{RR:'185/100',HF:'88/min',SpO2:'95 %',AF:'16/min',GCS:'10',BZ:'115 mg/dl'},
+  eh:[
+    'Führt BE-FAST-Test korrekt durch und dokumentiert Defizite und Symptombeginn (Last-seen-well-Zeitpunkt!)',
+    'Unterscheidet Minor Stroke (NIHSS < 5) von Großgefäßverschluss (LVOS) → V. a. LVOS bei schwerem Defizit',
+    'Trifft Transportentscheidung: direkt in Comprehensive Stroke Center mit interventioneller Neuroradiologie (Thrombektomie bis 24h)',
+    'Kennt keine präklinische Blutdrucksenkung (außer > 220/120 mit Symptomen), da Lyse/Thrombektomie primär durch Klinik entschieden',
+    'Vermeidet kontraproduktive Maßnahmen: kein Glukose (außer Hypoglykämie!), kein O₂ ohne SpO₂-Indikation, kein Lagerung flach',
+    'Kennt Zeitketten: Lyse-Fenster 4,5h, Thrombektomie bis 24h; Voranmeldung mit Symptombeginn obligat'
+  ],
+  fragen:[
+    'Wie führen Sie den BE-FAST-Test durch? Was sind die einzelnen Punkte?',
+    'Warum ist die genaue Zeitangabe des Symptombeginns so kritisch?',
+    'Worin unterscheidet sich der Transport-Zielort bei Minor Stroke vs. V. a. LVOS?',
+    'Wie behandeln Sie den Blutdruck beim akuten Stroke präklinisch?',
+    'Was ist die präklinische Bedeutung des Blutzuckers?',
+    'Was melden Sie beim Pränotifikationsgespräch der Klinik?'
+  ],
+  meds:[
+    {n:'Glukose 40 %',d:'Nur bei BZ < 60 mg/dl!',h:'Cave: Hyperglykämie verschlechtert Prognose'},
+    {n:'O₂',d:'Nur bei SpO₂ < 94 %',h:'Kein Routine-O₂ bei normaler Sättigung'},
+    {n:'Urapidil',d:'5–10 mg i.v. titriert',h:'Nur bei RR > 220/120 mmHg mit Symptomen'}
+  ],
+  fallstricke:[
+    'Blutdruck zu früh senken → Penumbra-Versorgung verschlechtert sich',
+    'Falsch positiven Stroke diagnostizieren (Todd-Parese nach Krampfanfall, Hypoglykämie!)',
+    'Transport in nächste Klinik statt Stroke-Zentrum → Thrombektomie dann nicht möglich'
+  ]
+},
+{
+  id:11, cat:'neurologie', diff:'basis',
+  title:'Status epilepticus',
+  agnn:'Status epilepticus',
+  alarm:'42-jähriger Mann, generalisierter tonisch-klonischer Anfall seit 12 min, bisher kein Sistieren. Bekannte Epilepsie, Medikamente zuhause. Partnerin alarmiert Notarzt.',
+  befund:'Patient in Seitenlage, klonische Bewegungen beider Extremitäten, Zungenbiss, Zyanose. Kein i.v.-Zugang möglich während der aktiven Krämpfe. Fieber 37,8°C.',
+  vitals:{RR:'165/95',HF:'118/min',SpO2:'88 %',AF:'unregelmäßig',GCS:'3',BZ:'78 mg/dl'},
+  eh:[
+    'Definiert Status epilepticus korrekt: Anfall > 5 min oder 2 Anfälle ohne Erholung',
+    'Wählt initialen Zugangsweg: i.v. bevorzugt, alternativ Midazolam intranasal/i.m. oder Diazepam rektal',
+    'Kennt korrekte Dosierungen: Lorazepam 4 mg i.v., Midazolam 0,2 mg/kg i.v. oder 10 mg i.m.',
+    'Kennt Fehler: zu niedrige Dosierung und zu viele verschiedene Medikamente (Hauptfehler!)',
+    'Kennt Eskalation: nach 2 erfolglosen Benzodiazepingaben → Levetiracetam oder Valproat i.v. oder Phenobarbital',
+    'Erkennt Notfall-Intubation bei persistierendem Atemversagen oder therapierefraktärem Status'
+  ],
+  fragen:[
+    'Ab wann sprechen Sie von einem Status epilepticus?',
+    'Welche Benzodiazepine setzen Sie ein? Nennen Sie Dosierungen und Applikationswege.',
+    'Was ist der häufigste Fehler bei der Therapie des Status epilepticus?',
+    'Wann wechseln Sie auf ein anderes Antikonvulsivum nach erfolglosem Benzodiazepin?',
+    'Welche Ursachen eines erstmaligen Status epilepticus müssen Sie ausschließen?',
+    'Wann intubieren Sie?'
+  ],
+  meds:[
+    {n:'Lorazepam (Tavor)',d:'4 (–6) mg i.v.',h:'Mittel 1. Wahl – nach 5 min wiederholen bei Wirkungslosigkeit'},
+    {n:'Midazolam (Dormicum)',d:'0,1–0,2 mg/kg i.v.; 10 mg i.m.; 0,2–0,5 mg/kg intranasal',h:'Bei fehlendem i.v.-Zugang: i.m./nasal'},
+    {n:'Diazepam (Valium)',d:'10 (–30) mg i.v. oder rektal',h:'Alternative, kürzere Wirkdauer als Lorazepam'},
+    {n:'Levetiracetam',d:'2.000–3.000 mg i.v. über 15 min',h:'Eskalation nach 2 Benzodiazepin-Gaben'}
+  ],
+  fallstricke:[
+    'Unterdosierung – häufigster Fehler! Lorazepam 1 mg reicht nicht',
+    'Viele verschiedene Medikamente statt hochdosiert ein Mittel',
+    'BZ-Messung vergessen → Hypoglykämie als Ursache/Trigger'
+  ]
+},
+{
+  id:12, cat:'neurologie', diff:'basis',
+  title:'Schwere Hypoglykämie / hypoglykämisches Koma',
+  agnn:'Hypoglykämie',
+  alarm:'55-jähriger Diabetiker (Typ 1, Insulinpumpe), morgens bewusstlos im Bett aufgefunden von Ehefrau. Kein Ansprechen auf Ansprache.',
+  befund:'Patient bewusstlos, Schutzreflexe erhalten, kalte feuchte Haut, Blässe, Muskelzuckungen vereinzelt. Insulinpumpe läuft.',
+  vitals:{RR:'145/85',HF:'105/min',SpO2:'96 %',AF:'16/min',GCS:'6',BZ:'< 20 mg/dl'},
+  eh:[
+    'Stellt korrekte Verdachtsdiagnose anhand Anamnese + BZ-Messung < 60 mg/dl',
+    'Stoppt sofort Insulinpumpe',
+    'Gibt Glukose i.v.: 8–24 g (entsprechend 20–60 ml Glukose 40 %)',
+    'Kennt alternative Applikation: Glukagon 1 mg i.m. bei fehlendem i.v.-Zugang',
+    'Kontrolliert BZ nach 10 min, Ziel: BZ > 80 mg/dl, Patient wieder ansprechbar',
+    'Kennt Einweisungsindikation: Sulfonylharnstoff-induzierte Hypo → immer Klinik (Rezidivgefahr!)'
+  ],
+  fragen:[
+    'Wie hoch muss der Blutzucker sein, damit Sie Glukose geben?',
+    'Wie viel Glukose 40 % geben Sie und wie schnell?',
+    'Was ist die Alternative wenn kein i.v.-Zugang möglich ist?',
+    'Wann können Sie einen Patienten nach behandelter Hypoglykämie zu Hause lassen?',
+    'Warum ist eine Sulfonylharnstoff-induzierte Hypoglykämie besonders gefährlich?',
+    'Was tun Sie wenn der Patient nach Glukosegabe nicht aufwacht?'
+  ],
+  meds:[
+    {n:'Glukose 40 %',d:'20–60 ml (= 8–24 g) i.v. – ausreichend verdünnen!',h:'Sofortmaßnahme; Cave: strenge Verdünnung, Venenreizend'},
+    {n:'Glukagon',d:'1 mg i.m. oder s.c.',h:'Bei fehlendem i.v.-Zugang; wirkt nicht bei Leberschäden/Alkohol'},
+    {n:'Glukose-Infusion',d:'10 % Glukose, 100–200 ml/h',h:'Nach Bolus zur Stabilisierung'}
+  ],
+  fallstricke:[
+    'Insulinpumpe läuft weiter → anhaltende Hypoglykämie',
+    'Glukose 40 % unverdünnt → starke Venenwandreizung, Nekrosen',
+    'Rezidiv nach kurz wirkenden Schüben vergessen → stationäre Aufnahme bei Sulfonylharnstoffen!'
+  ]
+},
+{
+  id:13, cat:'neurologie', diff:'fortgeschritten',
+  title:'CO-Vergiftung – Mehrere Betroffene',
+  agnn:'Kohlenmonoxid-Intoxikation',
+  alarm:'Mehrere Personen (3) in einer Wohnung mit Kohleofen im Winter bewusstlos oder somnolent. Zeugen berichten über Kopfschmerzen und Übelkeit bei allen.',
+  befund:'Pat. 1 (42J): GCS 8, Pat. 2 (38J): GCS 12, bewusstseinsgetrübt, Kopfschmerzen, Übelkeit. Pat. 3 (15J): GCS 14. Feuerwehr misst 350 ppm CO in der Wohnung. SpO₂ (Pulsoxymeter) 98 % – cave: falsch hoch!',
+  vitals:{RR:'130/80',HF:'102/min',SpO2:'98 % (FALSCH!)',AF:'18/min',GCS:'8',BZ:'n.e.'},
+  eh:[
+    'Erkennt CO-Vergiftung und fordert sofortige Eigensicherung / Zugang nur mit Atemschutz',
+    'Versteht: Pulsoxymeter zeigt falsch-hohe Werte bei CO-Vergiftung (COHb wie OxHb)',
+    'Gibt sofort O₂ 100 % (15 l/min Maske) als kompetitive Verdrängung (HWZ von 5h → 60 min)',
+    'Kennt Indikationen für hyperbare Oxygenierung (HBO): schwere neurologische Symptome, Herzrhythmusstörungen, Schwangerschaft',
+    'Priorisiert Patienten bei MANV-ähnlichem Szenario (mehrere Betroffene, unterschiedliche Schweregrade)',
+    'Kennt Symptom-Schweregrade nach COHb-Konzentration (10–20 %: Kopfschmerz bis > 60 %: Koma/Tod)'
+  ],
+  fragen:[
+    'Warum zeigt das Pulsoxymeter bei CO-Vergiftung falsche Werte?',
+    'Welches ist das wichtigste Antidot und wie wirkt es?',
+    'Was sind Indikationen für eine hyperbare Oxygenierung?',
+    'Wie schnell sinkt die COHb-Konzentration unter 100 % O₂?',
+    'Welche Eigensicherungsmaßnahmen sind notwendig?',
+    'Wie priorisieren Sie bei 3 Betroffenen mit unterschiedlicher Symptomatik?'
+  ],
+  meds:[
+    {n:'O₂ 100 %',d:'15 l/min über dichte Maske mit Reservoir',h:'Antidot! HWZ sinkt von 5h auf ~60 min'},
+    {n:'Intubation + Beatmung',d:'FiO₂ 1,0 bei GCS < 9',h:'Atemwegssicherung bei schwerer Vergiftung'}
+  ],
+  fallstricke:[
+    'Pulsoxymeter-Wert wird vertraut → CO-Vergiftung verpasst',
+    'Selbst ohne Atemschutz in verseuchte Räume gehen → eigene Vergiftung',
+    '"Kirschroter Hautkolorit" nur selten vorhanden – Zeichen nicht zuverlässig'
+  ]
+},
+// ── INTERNISTISCH ──────────────────────────────────────────
+{
+  id:14, cat:'intern', diff:'fortgeschritten',
+  title:'Septischer Schock',
+  agnn:'Sepsis im Rettungsdienst',
+  alarm:'68-jährige Frau, Pflegeheimbewohnerin, seit 2 Tagen Fieber, Verwirrung, jetzt kein Ansprechen auf Ansprache. Laut Pflegepersonal "Harnwegsinfekt bekannt". Katheter liegt.',
+  befund:'Patientin somnolent, warme gerötete Haut mit Mottling an Unterschenkeln, kein Schüttelfrost jetzt. Harnkatheter: trüber übelriechender Urin. Rekapillarisierungszeit 4 s.',
+  vitals:{RR:'75/45',HF:'118/min',SpO2:'92 %',AF:'26/min',GCS:'10',BZ:'165 mg/dl',Temp:'39,8 °C'},
+  eh:[
+    'Erkennt septischen Schock: Infektion + persistierende Hypotension + Laktat (klinisch: Schock trotz Volumen)',
+    'Kennt NEWS2-Score zur Risikoeinschätzung und als präklinisches Kommunikationsmittel',
+    'Beginnt sofort mit Volumentherapie: 30 ml/kg Kristalloide (VEL), kein Albumin präklinisch',
+    'Kennt Zeitfenster: AB innerhalb 1h bei septischem Schock, innerhalb 3h bei unkomplizierter Sepsis',
+    'Zieht Infektfokus in Betracht: Harnwegsinfekt → Harnkatheter entfernen/wechseln',
+    'Kennt Vasopressortherapie bei persistierender Hypotension trotz Volumen: Noradrenalin, Ziel MAP > 65 mmHg'
+  ],
+  fragen:[
+    'Wie definieren Sie Sepsis und septischen Schock (Sepsis-3)?',
+    'Was ist der NEWS2-Score und wie nutzen Sie ihn?',
+    'Welche Sofortmaßnahmen ergreifen Sie in den ersten 30 Minuten?',
+    'Wann beginnen Sie Vasopressoren?',
+    'Was bedeutet "Think sepsis – say sepsis"?',
+    'Welche Fokussuche führen Sie präklinisch durch?'
+  ],
+  meds:[
+    {n:'VEL (Vollelektrolytlösung)',d:'500–1.000 ml Bolus, ggf. wiederholen (Ziel: RR-Anstieg)',h:'Kristalloide bevorzugt – kein Albumin präklinisch'},
+    {n:'Noradrenalin',d:'0,1–0,5 µg/kg/min',h:'Wenn Volumen nicht ausreicht, Ziel MAP > 65'},
+    {n:'O₂',d:'nach SpO₂, Ziel 94–98 %',h:''}
+  ],
+  fallstricke:[
+    'Sepsis als "Fieber" abtun und nicht als Notfall erkennen',
+    'Zu wenig Volumen geben aus Angst vor Lungenödem',
+    'Fokussuche vergessen – Katheter als Infektquelle übersehen'
+  ]
+},
+{
+  id:15, cat:'intern', diff:'fortgeschritten',
+  title:'Hypertensiver Notfall mit hypertensiver Enzephalopathie',
+  agnn:'Hypertensiver Notfall',
+  alarm:'58-jähriger Mann, bekannte arterielle Hypertonie, Medikamente seit 3 Tagen nicht eingenommen. Akut verwirrter Patient, Kopfschmerzen, Sehstörungen, Erbrechen.',
+  befund:'Patient unruhig, desorientiert, Sehstörungen ("alles verschwommen"), Übelkeit/Erbrechen, keine Lähmungen, keine Aphasie. Fundoskopie nicht möglich. Pupillen isokor, Reaktion träge.',
+  vitals:{RR:'240/145',HF:'95/min',SpO2:'97 %',AF:'18/min',GCS:'13',BZ:'n.e.'},
+  eh:[
+    'Unterscheidet hypertensiven Notfall (Organschaden: Enzephalopathie) von hypertensiver Krise (kein Organschaden)',
+    'Ziel: RR-Senkung um 20–25 % in der ersten Stunde – kein rapider Abfall!',
+    'Kennt Differentialdiagnose: Schlaganfall ausschließen (BE-FAST), da Therapie fundamental verschieden',
+    'Wählt Medikament nach Organmanifestation: Enzephalopathie → Urapidil oder Labetalol',
+    'Kennt Kontraindikation: Nifedipin sublingual (zu schnelle Senkung, unkontrollierbar) vermeiden',
+    'Kennt spezielle Formen: hypertensiver Notfall in der Schwangerschaft (Eklampsie → Magnesium)'
+  ],
+  fragen:[
+    'Was ist der Unterschied zwischen hypertensivem Notfall und hypertensiver Krise?',
+    'Warum darf der Blutdruck nicht zu schnell gesenkt werden?',
+    'Wie schließen Sie einen Schlaganfall aus?',
+    'Welches Antihypertensivum wählen Sie und warum?',
+    'Was ist bei Verdacht auf Eklampsie das Mittel der Wahl?',
+    'Auf welchen Ziel-Blutdruck senken Sie in der ersten Stunde?'
+  ],
+  meds:[
+    {n:'Urapidil (Ebrantil)',d:'5–10 mg Boli i.v., max 25 mg',h:'Titriert – Ziel 20–25 % Senkung in 1h'},
+    {n:'Nitroglycerin',d:'1–2 µg/kg/min i.v.',h:'Besonders bei kardialer Manifestation (Ischämie, Lungenödem)'},
+    {n:'Magnesiumsulfat',d:'4–6 g i.v. über 15 min',h:'Einziges Mittel bei Eklampsie/Präeklampsie'},
+    {n:'Labetalol',d:'20 mg i.v. als Bolus',h:'Alpha-/Beta-Blocker – cave: Asthma KI'}
+  ],
+  fallstricke:[
+    'Nifedipin sublingual: unkontrollierbarer RR-Abfall → Schlaganfall, Myokardinfarkt möglich',
+    'Stroke vergessen abzugrenzen: RR beim Stroke NICHT senken (außer > 220/120)!',
+    'Zu aggressiv senken → zerebrale Ischämie im Grenzbereich'
+  ]
+},
+// ── TRAUMATOLOGIE ──────────────────────────────────────────
+{
+  id:16, cat:'trauma', diff:'fortgeschritten',
+  title:'Polytrauma nach Verkehrsunfall',
+  agnn:'Polytrauma, Schock',
+  alarm:'32-jähriger Motorradfahrer, Frontalzusammenstoß mit PKW bei ca. 60 km/h. Bewusstseinsgetrübt, Schutzbekleidung zeigt Schürfspuren. Ersthelfer sichern die Unfallstelle.',
+  befund:'Helm noch auf → vorsichtig abnehmen (2-Helfer-Technik). GCS 10 (A3,V3,M4). Linker Oberschenkel stark deformiert, rechter Thorax: abgeschwächtes Atemgeräusch, paradoxe Atmung rechts. Becken stabil. Abdomen weich.',
+  vitals:{RR:'85/60',HF:'128/min',SpO2:'88 %',AF:'26/min',GCS:'10',BZ:'n.e.'},
+  eh:[
+    'Führt xABCDE-Schema konsequent durch; x = exsanguination (lebensbedrohliche äußere Blutung zuerst stoppen)',
+    'Erkennt Polytrauma-Konstellation: Thoraxtrauma + Schocklage + GCS ↓ → RSI-Indikation',
+    'Kennt DCAP-BTLS als systematische Untersuchung am Unfallort',
+    'Plant Damage Control Resuscitation: Volumen mit Zurückhaltung, permissive Hypotension (Ziel RR syst. 80–90 mmHg bis Op), TXA frühzeitig',
+    'Trifft Zielklinikenentscheidung: Schockraum Traumazentrum (überregional) – Voranmeldung!',
+    'Kennt Time-Management: "Stay and play" vs. "scoop and run" – Polytrauma: schneller Transport!'
+  ],
+  fragen:[
+    'Was bedeutet xABCDE und warum beginnen wir mit "x"?',
+    'Welche Intubationsindikationen liegen hier vor?',
+    'Was ist "permissive Hypotension" und wann ist sie kontraindiziert?',
+    'Wann geben Sie Tranexamsäure (TXA)?',
+    'Wie lange sollten Sie am Unfallort für die Initialversorgung verwenden?',
+    'Was melden Sie bei der Pränotifikation der Zielklinik?'
+  ],
+  meds:[
+    {n:'Tranexamsäure (TXA)',d:'1 g i.v. über 10 min (so früh wie möglich, < 3h nach Trauma)',h:'Antifibrinolytikum – signifikante Mortalitätssenkung'},
+    {n:'VEL',d:'250–500 ml zurückhaltend, Ziel RR syst. 80–90',h:'Permissive Hypotension – cave: SHT!'},
+    {n:'Esketamin',d:'1–2 mg/kg RSI-Einleitung',h:'Hämodynamisch günstig beim Trauma'},
+    {n:'Fentanyl',d:'2–4 µg/kg RSI (Co-Induktion)',h:'Dämpft Intubationsreiz'}
+  ],
+  fallstricke:[
+    'Zu viel Volumen → Verdünnungskoagulopathie, "lethal triad" (Azidose, Hypothermie, Koagulopathie)',
+    'Permissive Hypotension beim SHT kontraindiziert (CPP muss erhalten werden!)',
+    'Thoraxentlastung vergessen bei V. a. Spannungspneumothorax'
+  ]
+},
+{
+  id:17, cat:'trauma', diff:'fortgeschritten',
+  title:'Schweres Schädel-Hirn-Trauma (GCS 8)',
+  agnn:'Schädel-Hirn-Trauma des Erwachsenen',
+  alarm:'45-jähriger Mann, Sturz vom Gerüst aus 4 m Höhe, kurze Bewusstlosigkeit, jetzt GCS 8, rechte Pupille weiter. Kein Alkohol laut Zeugen.',
+  befund:'GCS 8 (A2,V2,M4), rechte Pupille weit und reaktionslos, linke normal. Kopfhaut-Riss frontal. Kein offenes SHT erkennbar. Keine Halsvenenstauung.',
+  vitals:{RR:'165/95',HF:'55/min',SpO2:'94 %',AF:'12/min',GCS:'8',BZ:'142 mg/dl'},
+  eh:[
+    'Erkennt herniationsgefährdendes SHT: Anisokorie = transtentorielle Herniation → sofortiger Handlungsbedarf',
+    'Kennt Intubationsindikation: GCS < 9 → RSI, Esketamin geeignet (hämodynamisch stabil)',
+    'Kennt Therapieziele: Normoxämie (SpO₂ 94–98 %), Normotonie, Normokapnie (etCO₂ 35–40 mmHg), Normothermie',
+    'Kennt Kontraindikation für Hyperventilation außer im Ausnahmefall (kurzzeitig bei Herniation)',
+    'Versteht Cushing-Reflex: Hypertension + Bradykardie + Atemstörung = Zeichen des erhöhten ICP',
+    'Trifft Zielklinik-Entscheidung: Neurochirurgie sofort (Hirndruck-OP möglich)'
+  ],
+  fragen:[
+    'Was bedeutet Anisokorie beim SHT? Welchen Befund vermuten Sie?',
+    'Was sind die Zielwerte für O₂, Blutdruck, CO₂ und Temperatur beim SHT?',
+    'Warum ist Hyperventilation beim SHT gefährlich? Wann ist sie ausnahmsweise indiziert?',
+    'Welches Narkosemittel wählen Sie und warum?',
+    'Was ist der Cushing-Reflex?',
+    'Welche Zielklinik wählen Sie und was melden Sie an?'
+  ],
+  meds:[
+    {n:'Esketamin',d:'1–2 mg/kg RSI-Einleitung',h:'Hämodynamisch günstig; ICP-Anstieg präklinisch nicht relevant'},
+    {n:'Rocuronium',d:'1,0–1,2 mg/kg RSI',h:'Obligat – Husten/Pressen hebt ICP an!'},
+    {n:'Fentanyl',d:'2–4 µg/kg Co-Induktion',h:'Dämpft Intubationsreiz'},
+    {n:'Mannitol',d:'0,25–0,5 g/kg i.v.',h:'Nur bei Herniation als Bridging – kein Routineeinsatz'}
+  ],
+  fallstricke:[
+    'Hyperventilation → Vasokontriktion → Ischämie im Grenzstromgebiet',
+    'Hypotension unter Narkose → sekundäre Hirnschädigung (CPP-Abfall)',
+    'Hypoxämie auch kurzzeitig → dramatische Verschlechterung der Prognose'
+  ]
+},
+{
+  id:18, cat:'trauma', diff:'fortgeschritten',
+  title:'Spannungspneumothorax nach Stichverletzung',
+  agnn:'Thoraxtrauma, Durchführung einer Thoraxentlastung',
+  alarm:'19-jähriger Mann, Stichverletzung links lateral nach Auseinandersetzung, zunehmende Luftnot, jetzt bewusstseinsgetrübt. Wunde an der linken Seite sichtbar.',
+  befund:'Pat. bewusstseinsgetrübt, zyanotisch. Links kein Atemgeräusch, hypersonorer Klopfschall links. Trachea nach rechts deviiert. Gestaute Halsvenen. Wunde: "sucking chest wound" mit Lufteinstrom.',
+  vitals:{RR:'70/40',HF:'135/min',SpO2:'78 %',AF:'30/min',GCS:'11',BZ:'n.e.'},
+  eh:[
+    'Erkennt Spannungspneumothorax als sofort lebensbedrohliche Situation (C-Problem)',
+    'Kennt klassische Trias: einseitig fehlendes Atemgeräusch + Halsvenenstaung + Trachealdeviation',
+    'Führt sofortige Thoraxentlastung durch: Mini-Thorakotomie 4. ICR vordere/mittlere Axillarlinie',
+    'Versteht: Entlastungspunktion (Nadel) insuffizient und risikobehaftet → Mini-Thorakotomie bevorzugt',
+    'Behandelt begleitend: RSI wenn GCS ↓, Volumentherapie, O₂',
+    'Kennt beidseitige Thorakostomie beim traumatischen Herzstillstand als Pflicht'
+  ],
+  fragen:[
+    'Welche klinischen Zeichen weisen auf einen Spannungspneumothorax hin?',
+    'Wie führen Sie eine Thoraxentlastung durch? An welcher Stelle?',
+    'Warum ist die Entlastungspunktion (Nadel, 2. ICR) nicht mehr Mittel der Wahl?',
+    'Wann müssen Sie bilateral entlasten?',
+    'Was ist das Vorgehen bei einer offenen Thoraxverletzung?',
+    'Welche weiteren Thoraxverletzungen müssen Sie ausschließen?'
+  ],
+  meds:[
+    {n:'O₂',d:'15 l/min Maske',h:'Sofort'},
+    {n:'Esketamin + Rocuronium',d:'RSI-Dosierungen',h:'Bei GCS < 9 nach Thoraxentlastung'},
+    {n:'VEL',d:'500 ml Bolus',h:'Hypovolämiekorrektur nach Entlastung'}
+  ],
+  fallstricke:[
+    'Auskultation vor Entlastung – zu zeitverzögernd bei vitaler Bedrohung; klinische Diagnose reicht!',
+    'Nur Nadelpunktion ohne Thorakostomie → Nadel knickt, verstopft, insuffizient',
+    'Falsche Seite entlasten – bei Unsicherheit: beidseitig bei Schock'
+  ]
+},
+{
+  id:19, cat:'trauma', diff:'fortgeschritten',
+  title:'Hämorrhagischer Schock nach Beckenfraktur',
+  agnn:'Schock, Beckenfraktur, Indikationen Trochantergurt',
+  alarm:'40-jähriger Fußgänger nach Überrollunfall durch LKW. Bewusstsein erhalten, extreme Schmerzen im Becken, Schwindel.',
+  befund:'Pat. blass, kaltschweißig, Schmerzen bei Beckenkompression bds. Keine äußere Blutung sichtbar, kein Beinlängenunterschied. Instabiles Becken bei Kompressionstest. Kein rektaler Blutabgang.',
+  vitals:{RR:'75/40',HF:'140/min',SpO2:'93 %',AF:'24/min',GCS:'14',BZ:'n.e.'},
+  eh:[
+    'Erkennt instabile Beckenfraktur als potentielle Ursache eines massiven inneren Blutverlustes (bis 5l!)',
+    'Wendet Beckengurt/Trochantergurt korrekt an: auf Trochanter höhe, nicht über Bauch',
+    'Kennt Damage-Control-Strategie: permissive Hypotension syst. 80–90 mmHg, TXA sofort',
+    'Verzichtet auf wiederholte Becken-Kompression (Koagel-Lösung, Blutverlust ↑)',
+    'Plant Transport: schnellstmöglich in überregionales Traumazentrum mit interventioneller Radiologie (Embolisation) oder OP',
+    'Kennt Schock-Klassifikation: Grad III (30–40 % Blutverlust): RR ↓↓, HF ↑↑, GCS ↓'
+  ],
+  fragen:[
+    'Wie viel Blut kann sich in der Beckenhöhle sammeln?',
+    'Wie und wo legen Sie den Trochantergurt an?',
+    'Was ist "permissive Hypotension" und warum ist sie hier indiziert?',
+    'Wann geben Sie TXA – was ist die Zeitgrenze?',
+    'Warum dürfen Sie den Becken-Kompressionstest nicht mehrfach durchführen?',
+    'Welche operative Möglichkeit hat die Klinik zur Blutungskontrolle?'
+  ],
+  meds:[
+    {n:'Tranexamsäure',d:'1 g i.v. Bolus, so früh wie möglich (< 3h)',h:'Mortalitätsreduktion belegt'},
+    {n:'VEL',d:'250–500 ml zurückhaltend',h:'Permissive Hypotension – kein aggressives Auffüllen'},
+    {n:'Fentanyl',d:'0,05–0,15 mg titriert',h:'Ausreichende Analgesie für Lagerung/Gurt-Anlage'}
+  ],
+  fallstricke:[
+    'Beckenringinstabilität durch wiederholten Kompressions-Test löst Koagel → mehr Blutung',
+    'Beckengurt zu hoch (Bauch statt Trochanter) → keine Wirkung',
+    'Zu viel Volumen → Verdünnungskoagulopathie, Hemodilution'
+  ]
+},
+{
+  id:20, cat:'trauma', diff:'basis',
+  title:'Brandverletzungen mit Inhalationstrauma',
+  agnn:'Brandverletzungen',
+  alarm:'38-jähriger Mann, Wohnungsbrand, ca. 20 min in verrauchtem Raum gewesen, Verbrennungen sichtbar an Armen und Thorax. Heiserkeit, rußige Nasenschleimhaut.',
+  befund:'Verbrennungen Grad 2a-2b an beiden Armen (ca. 9 % KOF) und Brust (ca. 9 % KOF). Gesicht gerötet, Augenbrauen angesengt. Ruß in Mund/Nase. Heiserkeit. Kein Stridor jetzt.',
+  vitals:{RR:'130/80',HF:'110/min',SpO2:'94 %',AF:'20/min',GCS:'14',BZ:'n.e.'},
+  eh:[
+    'Erkennt Inhalationstrauma als wichtigsten prognostischen Faktor (Rußablagerungen, Heiserkeit, Verbrennungsumgebung)',
+    'Plant frühzeitige Atemwegssicherung: progredientes Ödem → Intubationsfenster schließt sich!',
+    'Schätzt verbrannte KOF mit Neuner-Regel (Arme 9 % je = 18 %; Brust = 9 %)',
+    'Kennt Volumentherapie: ca. 1000 ml in ersten 2h präklinisch (keine agressive Volumen-Gabe)',
+    'Verzichtet auf großflächige Kühlung (Hypothermieschutz!)',
+    'Erkennt CO-Vergiftung als häufige Begleitverletzung → O₂ 100 %'
+  ],
+  fragen:[
+    'Woran erkennen Sie ein Inhalationstrauma?',
+    'Warum müssen Sie bei Heiserkeit frühzeitig intubieren?',
+    'Wie schätzen Sie die verbrannte Körperoberfläche ein?',
+    'Welche Volumentherapie empfehlen Sie präklinisch?',
+    'Warum ist großflächige Kühlung kontraindiziert?',
+    'An welche Begleitverletzung/Intoxikation denken Sie immer beim Wohnungsbrand?'
+  ],
+  meds:[
+    {n:'O₂ 100 %',d:'15 l/min Maske',h:'Immer bei Wohnungsbrand – CO-Vergiftung ausschließen'},
+    {n:'VEL',d:'Ca. 1.000 ml in ersten 2h',h:'Zurückhaltende Volumengabe präklinisch'},
+    {n:'Esketamin',d:'0,25–0,5 mg/kg analgetisch',h:'Gute Analgesie, hämodynamisch günstig'},
+    {n:'Salbutamol',d:'2,5 mg über Vernebler',h:'Bei bronchospastischen Symptomen (Inhalationstrauma)'}
+  ],
+  fallstricke:[
+    'Kühlung mit kaltem Wasser großflächig → Hypothermie, erhöhte Mortalität',
+    'Heiserkeit ignorieren → Stunden später Stimmritzenschwellung, Intubation unmöglich',
+    'CO-Vergiftung vergessen → SpO₂ falsch normal!'
+  ]
+},
+// ── PÄDIATRIE ─────────────────────────────────────────────
+{
+  id:21, cat:'paediatrie', diff:'fortgeschritten',
+  title:'Kinderreanimation nach Ertrinken',
+  agnn:'Kinderreanimation',
+  alarm:'3-jähriges Kind, ca. 5 min in Gartenteich eingetaucht, von Eltern gerettet, bewusstlos, keine Atmung. Eltern führen Laienreanimation durch.',
+  befund:'Kind bewusstlos, kalt-nass, keine Atmung, kein tastbarer Puls. GCS 3. Lippen bläulich. Körperkern: kalt (Kleidung nass). Keine sicheren Todeszeichen.',
+  vitals:{RR:'n.m.',HF:'0/min (Asytolie)',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
+  eh:[
+    'Erkennt Kreislaufstillstand bei Kind → Hypoxie als Hauptursache (nicht Herzrhythmus!)',
+    'Beginnt mit 5 initialen Beatmungen vor Thoraxkompressionen (Oxygenierung Priorität)',
+    'Kennt pediatrisches CPR-Verhältnis: 15 Kompressionen : 2 Beatmungen (nicht 30:2!)',
+    'Nutzt altersadaptierte Medikamentendosierung: Adrenalin 0,01 mg/kg i.v./i.o.; Amiodaron 5 mg/kg',
+    'Erkennt Besonderheit Hypothermie: kein ROSC bis ≥ 30 °C Kerntemperatur angestrebt, Transport unter CPR',
+    'Beachtet Elternpräsenz und Krisenintervention als Teil der Versorgung'
+  ],
+  fragen:[
+    'Wie unterscheidet sich die Kinderreanimation von der Erwachsenen-Reanimation?',
+    'Warum beginnen Sie bei Kindern mit 5 initialen Beatmungen?',
+    'Welches CPR-Verhältnis wählen Sie beim Kind?',
+    'Wie dosieren Sie Adrenalin beim Kind?',
+    'Wann beenden Sie die Reanimation beim ertrunkenen Kind?',
+    'Welche Besonderheiten hat die Reanimation beim hypothermen Kind?'
+  ],
+  meds:[
+    {n:'Adrenalin',d:'0,01 mg/kg i.v./i.o. (= 0,1 ml/kg der 1:10.000-Lösung)',h:'Alle 3–5 min nach 3 nicht defibrillierbaren Zyklen'},
+    {n:'Amiodaron',d:'5 mg/kg i.v./i.o.',h:'Nach 3. Schock bei VF/VT'},
+    {n:'Glukose',d:'2 ml/kg Glukose 10 %',h:'Bei Hypoglykämie unter Reanimation'}
+  ],
+  fallstricke:[
+    '30:2 statt 15:2 beim Kind – FALSCH bei zweihelfer-CPR',
+    'Erwachsenendosis Adrenalin: 0,1 mg/kg → 10fache Überdosierung!',
+    'Hypothermes Kind zu früh aufgeben: "Not dead until warm and dead"'
+  ]
+},
+{
+  id:22, cat:'paediatrie', diff:'basis',
+  title:'Fieberkrampf / Status epilepticus Kind',
+  agnn:'Fieberkrampf/Kindlicher Krampfanfall',
+  alarm:'18 Monate altes Kind, tonisch-klonischer Krampf seit 12 min, Fieber 39,5°C. Eltern panisch, Kind "wie tot" gewirkt. Kein i.v.-Zugang möglich.',
+  befund:'Kind krampft noch, generalisiert, Zyanose der Lippen. Kein Seitenzeichen. Fieber taktil bestätigt. Eltern angaben: kein Krampf in der Vorgeschichte.',
+  vitals:{RR:'n.m.',HF:'130/min',SpO2:'87 %',AF:'unregelmäßig',GCS:'3',BZ:'92 mg/dl',Temp:'39,6 °C'},
+  eh:[
+    'Unterscheidet unkomplizierten Fieberkrampf (< 5 min, generalisiert) von kompliziertem Fieberkrampf (> 5 min, fokal)',
+    'Kennt Medikation ohne i.v.-Zugang: Midazolam intranasal (0,2 mg/kg über MAD) oder bukkal, Diazepam rektal',
+    'Beruhigt Eltern: Fieberkrampf per se lebensbedrohlich erscheinend, selten tödlich bei sonst gesundem Kind',
+    'Weist darauf hin: Antipyrese schützt NICHT vor erneutem Fieberkrampf (schneller Temperaturanstieg)',
+    'Kennt Komplikationen: Atemwegsobstruktion, Aspiration → Seitenlage nach Sistieren',
+    'Transportentscheidung: immer in Klinik (erster Krampf = Ausschlussdiagnose: Meningitis, Enzephalitis!)'
+  ],
+  fragen:[
+    'Was ist ein Fieberkrampf? Wie unterscheiden Sie unkompliziert von kompliziert?',
+    'Wie behandeln Sie ohne i.v.-Zugang?',
+    'Welche Dosierung Midazolam intranasal beim Kind?',
+    'Wie erklären Sie den Eltern, dass Fiebersenkung keine Schutzwirkung hat?',
+    'Warum muss das Kind auch nach Sistieren des Krampfes in die Klinik?',
+    'Ab wann sprechen Sie von Status epilepticus beim Kind?'
+  ],
+  meds:[
+    {n:'Midazolam intranasal',d:'0,2–0,5 mg/kg über MAD (max. 10 mg)',h:'Methode der Wahl ohne i.v.-Zugang'},
+    {n:'Diazepam rektal (Diazepam)',d:'5 mg (< 15 kg) / 10 mg (> 15 kg)',h:'Alternative wenn kein MAD verfügbar'},
+    {n:'Lorazepam',d:'0,05–0,1 mg/kg i.v. (max. 4 mg)',h:'Bei i.v.-Zugang der Erwachsenentherapie analog'},
+    {n:'Ibuprofen',d:'10 mg/kg p.o. oder rektal (Fiebersenkung)',h:'Kein Schutz vor Krampfrezidiv, aber symptomatische Therapie'}
+  ],
+  fallstricke:[
+    'Zu niedrige Midazolam-Dosis → keine Wirkung',
+    'Eltern nicht beruhigen → Informationsdefizit führt zu unnötiger Angst',
+    'Meningitis/Enzephalitis nicht als DD erwägen → Klinikeinweisung vergessen'
+  ]
+},
+{
+  id:23, cat:'paediatrie', diff:'fortgeschritten',
+  title:'Anaphylaxie beim Kind',
+  agnn:'Anaphylaxie',
+  alarm:'8-jähriges Kind, 15 min nach versehentlichem Erdnussverzehr in der Schule: Stridor, Atemnot, Nesselsucht. Bekannte Erdnussallergie, Notfall-Set (Epipen Junior) wurde verwendet.',
+  befund:'Kind ängstlich, inspiratorischer Stridor, Lippen ödematös, generalisierte Urtikaria. Nach Epipen (150 µg) leichte Besserung, aber Stridor noch vorhanden. RR gefallen.',
+  vitals:{RR:'78/45',HF:'140/min',SpO2:'88 %',AF:'28/min',GCS:'14',BZ:'n.e.'},
+  eh:[
+    'Erkennt Anaphylaxie Grad III (Atemwegsbeteiligung + Kreislaufkompromittierung)',
+    'Kennt pädiatrische Adrenalin-Dosierung i.m.: 6–12 J: 300 µg, < 6 J: 150 µg',
+    'Gibt Adrenalin erneut trotz Epipen, da Wirkung unzureichend',
+    'Versteht: Atemweg hat Priorität – frühzeitig intubieren oder Larynxmaske, bevor Ödem zunimmt',
+    'Kennt Adjuvantien: Prednisolon 1–2 mg/kg, H1-Antihistaminikum, Volumen',
+    'Erkennt Notwendigkeit einer Überwachungsaufnahme (biphasische Reaktion 4–8h später möglich)'
+  ],
+  fragen:[
+    'Wie ist die korrekte Adrenalin-Dosierung i.m. beim 8-jährigen Kind?',
+    'Warum geben Sie Adrenalin erneut, obwohl der Epipen schon benutzt wurde?',
+    'Wann ist eine frühzeitige Atemwegssicherung beim Kind besonders wichtig?',
+    'Was sind die Besonderheiten der Volumentherapie beim Kind in der Anaphylaxie?',
+    'Was ist eine "biphasische anaphylaktische Reaktion"?',
+    'Was ist der Unterschied zwischen Anaphylaxie Grad I und Grad IV?'
+  ],
+  meds:[
+    {n:'Adrenalin i.m.',d:'6–12 J: 300 µg (0,3 ml); < 6 J: 150 µg (0,15 ml)',h:'M. vastus lateralis – alle 5–10 min wiederholen'},
+    {n:'Prednisolon',d:'1–2 mg/kg i.v. (max. 100 mg)',h:'Verhindert Spätreaktion'},
+    {n:'Dimetinden',d:'0,1 mg/kg i.v. (max. 4 mg)',h:'H1-Antihistaminikum'},
+    {n:'NaCl 0,9 % / VEL',d:'20 ml/kg Bolus, ggf. wiederholen',h:'Volumenersatz bei Schock'}
+  ],
+  fallstricke:[
+    'Epipen-Gabe durch Eltern als ausreichend ansehen – Nachgabe notwendig!',
+    'Stridor = Alarmsymptom: Atemwegssicherung nicht verzögern',
+    'Entlassung nach Besserung ohne Überwachung → biphasische Reaktion!'
+  ]
+},
+{
+  id:24, cat:'paediatrie', diff:'basis',
+  title:'Stridor / Krupp-Anfall beim Kleinkind',
+  agnn:'Atemstörung im Kindesalter',
+  alarm:'2-jähriges Kind, nächtlich aufgewacht mit bellendem Husten und inspiratorischem Stridor. Eltern alarmieren Notruf. Kind schreit, Stridor besser beim Aufnehmen.',
+  befund:'Kind weinend, inspiratorischer Stridor in Ruhe, bellender Husten. Kein Speichelfluss, kein Fieber, Heiserkeit. Atemreserve noch gut (schreit kräftig). Keine Einziehungen in Ruhe.',
+  vitals:{RR:'n.m.',HF:'135/min',SpO2:'96 %',AF:'28/min',GCS:'15',BZ:'n.e.',Temp:'37,1 °C'},
+  eh:[
+    'Erkennt subglottischen Krupp (viraler Krupp, Pseudokrupp): bellender Husten, inspiratorischer Stridor, kein Speichelfluss',
+    'Unterscheidet von Epiglottitis: Fieber, Schluckstörungen, Speichelfluss, krankes Kind → medizinischer Notfall',
+    'Gibt Kortikosteroide (Dexamethason p.o. oder Prednisolon), ggf. Adrenalin inhalativ bei schwerem Stridor',
+    'Beruhigt Kind und Eltern: Aufregung verschlechtert Symptome, ruhige Umgebung',
+    'Kennt Kälteluft-Effekt (Frischluft-Therapie) als einfache erste Maßnahme',
+    'Entscheidet über Transport: milder Krupp ambulant, schwerer Stridor + SpO₂ < 92 % → Klinik'
+  ],
+  fragen:[
+    'Wie unterscheiden Sie Krupp von Epiglottitis?',
+    'Welche Erstmaßnahmen ergreifen Sie beim Kruppanfall?',
+    'Warum ist Beruhigung des Kindes so wichtig?',
+    'Welches Kortikosteroid in welcher Dosierung?',
+    'Wann ist Adrenalin inhalativ indiziert?',
+    'Wann entscheiden Sie sich für eine Krankenhauseinweisung?'
+  ],
+  meds:[
+    {n:'Dexamethason',d:'0,15–0,6 mg/kg p.o. (max. 8 mg)',h:'Mittel der Wahl; rasche Wirkung, gute Verträglichkeit'},
+    {n:'Prednisolon',d:'1–2 mg/kg rektal',h:'Alternative zu Dexamethason'},
+    {n:'Adrenalin (L-Epinephrin)',d:'5 ml Adrenalin 1:1.000 vernebelt',h:'Bei schwerem Stridor; Wirkung nach 10–30 min, Rebound nach 2h!'},
+    {n:'O₂',d:'Nur wenn SpO₂ < 92 %',h:'Unaufgeregte Applikation bevorzugen'}
+  ],
+  fallstricke:[
+    'Kind durch Untersuchung/Aufregung verschlechtern → ruhiges Vorgehen!',
+    'Epiglottitis mit Krupp verwechseln – bei Epiglottitis Rachen NICHT inspizieren → Atemwegsverschluss!',
+    'Adrenalin-Rebound vergessen → Kind 2h nach Adrenalin-Gabe überwachen'
+  ]
+},
+// ── ORGANISATION & RECHT ──────────────────────────────────
+{
+  id:25, cat:'organisation', diff:'fortgeschritten',
+  title:'MANV – Ersteintreffender Notarzt',
+  agnn:'Verhalten des ersteintreffenden Notarztes (MANV)',
+  alarm:'Busunfall auf der Autobahn, Bus mit Reisegruppe (Schätzung 40 Personen), gegen Leitplanke. Ersteintreffender RTW meldet: "Viele Verletzte, mind. 5 reglos".',
+  befund:'Eigene Situation: Sie treffen als erstes NEF ein. Mindestens 15 erkennbar Verletzte, davon 2 offensichtlich leblos, ca. 5 mit schweren Verletzungen (blutend, bewusstlos).',
+  vitals:{RR:'–',HF:'–',SpO2:'–',AF:'–',GCS:'–',BZ:'–'},
+  eh:[
+    'Versteht: Organisation vor Therapie – kein Einzelversorgungsmodus bei MANV',
+    'Führt Kurzerkundung durch und meldet früh an Leitstelle: Anzahl Verletzte, Schweregrad, Gefahren, Anfahrt',
+    'Ordnet Transportstopp an (nur wenn sinnvoll), nimmt Aufgaben des LNA bis zu dessen Eintreffem wahr',
+    'Kennt Sichtungssysteme: START/mSTaRT oder SEG-Schema; Kategorien SK I–IV kennen',
+    'Erkennt Eigenschutz als Priorität: nie in Gefahrenbereich ohne Sicherung',
+    'Beschreibt Kommunikationsstruktur: Absprache mit Einsatzleiter Feuerwehr/Polizei, Vorinformation Kliniken'
+  ],
+  fragen:[
+    'Was ist Ihr erster Handgriff am Einsatzort?',
+    'Wie und was melden Sie der Leitstelle?',
+    'Welche Sichtungskategorien kennen Sie? Was bedeutet "SK IV"?',
+    'Wann ist ein Transportstopp sinnvoll?',
+    'Was sind Ihre Aufgaben als LNA-Vertreter?',
+    'Welche psychosozialen Aspekte müssen Sie am Einsatzort berücksichtigen?'
+  ],
+  meds:[],
+  fallstricke:[
+    'Sofort mit Individualversorgung beginnen → andere Schwerverletzte sterben unversorgt',
+    'Schwerste Verletzung zuerst versorgen (SK I) statt nach Überlebenschance sichten',
+    'Eigensicherung vergessen – instabiles Fahrzeug, Kraftstoff, Gefahrgut'
+  ]
+}
+];
+
+// ── Rendering ─────────────────────────────────────────────
+
+let currentFilter = 'all';
+let checkState = {}; // {caseId: [bool]}
+
+function getCatLabel(cat){ return CATS[cat] || cat; }
+
+function renderBadge(cls, text){
+  return `<span class="badge ${cls}">${text}</span>`;
+}
+
+function renderStripe(cat){ return `<div class="card-stripe stripe-${cat}"></div>`; }
+
+function renderGrid(filter){
+  const filtered = filter === 'all' ? cases : cases.filter(c => c.cat === filter);
+  const grid = document.getElementById('grid-view');
+  grid.innerHTML = filtered.map(c => `
+    <div class="card" onclick="openCase(${c.id})">
+      ${renderStripe(c.cat)}
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-num">Fall ${c.id}</span>
+          ${renderBadge('badge bg-'+c.cat, getCatLabel(c.cat))}
+          ${renderBadge('diff-'+c.diff, c.diff==='basis'?'Basis':'Fortgeschritten')}
+        </div>
+        <div class="card-title">${c.title}</div>
+        <div class="card-alarm">${c.alarm}</div>
+      </div>
+      <div class="card-footer">
+        <span>AGNN: ${c.agnn}</span>
+        <span>→</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openCase(id){
+  const c = cases.find(x => x.id === id);
+  if(!c) return;
+  if(!checkState[id]) checkState[id] = c.eh.map(()=>false);
+
+  const vt = c.vitals;
+  function isAbnormal(key, val){
+    if(!val || val === 'n.m.' || val === 'n.e.' || val === '–') return '';
+    const n = parseFloat(val);
+    if(isNaN(n)) return '';
+    if(key==='HF' && (n>100||n<50)) return 'abnormal';
+    if(key==='SpO2' && n<94) return 'abnormal';
+    if(key==='AF' && (n>20||n<10)) return 'warning';
+    if(key==='GCS' && n<15) return n<=8?'abnormal':'warning';
+    if(key==='BZ'){
+      const mg = val.includes('mmol') ? n*18 : n;
+      if(mg<60||mg>180) return 'warning';
+    }
+    return '';
+  }
+
+  const vitalKeys = [
+    {k:'RR',l:'RR (mmHg)'},
+    {k:'HF',l:'HF (/min)'},
+    {k:'SpO2',l:'SpO₂'},
+    {k:'AF',l:'AF (/min)'},
+    {k:'GCS',l:'GCS'},
+    {k:'BZ',l:'BZ'},
+    {k:'Temp',l:'Temp'},
+  ];
+
+  const vitalsHtml = vitalKeys.filter(vk => vt[vk.k]).map(vk => {
+    const cls = isAbnormal(vk.k, vt[vk.k]);
+    return `<div class="vital-box">
+      <div class="vital-label">${vk.l}</div>
+      <div class="vital-value ${cls}">${vt[vk.k]}</div>
+    </div>`;
+  }).join('');
+
+  const ehHtml = c.eh.map((e,i) => {
+    const checked = checkState[id][i];
+    return `<div class="eh-item">
+      <div class="eh-check ${checked?'checked':''}" onclick="toggleEH(${c.id},${i});event.stopPropagation()"></div>
+      <span>${e}</span>
+    </div>`;
+  }).join('');
+
+  const fragenHtml = c.fragen.map(f => `<div class="frage-item">${f}</div>`).join('');
+
+  const medsHtml = c.meds.length ? `<div class="meds-grid">${c.meds.map(m=>`
+    <div class="med-card">
+      <div class="med-name">${m.n}</div>
+      <div class="med-dosis">${m.d}</div>
+      ${m.h ? `<div class="med-hinweis">${m.h}</div>` : ''}
+    </div>`).join('')}</div>` : '<em style="color:#aaa;font-size:.85rem">Keine spezifischen Medikamente</em>';
+
+  const fallstrickeHtml = c.fallstricke.length ? `<div class="fallstricke-list">${c.fallstricke.map(f=>`<div class="fallstrick-item">${f}</div>`).join('')}</div>` : '';
+
+  document.getElementById('detail-view').innerHTML = `
+    <button class="detail-back" onclick="closeCase()">← Zurück zur Übersicht</button>
+    <div class="detail-header">
+      <div class="detail-header-top">
+        <div>
+          <div style="font-size:.75rem;color:#aaa;font-weight:500;margin-bottom:.25rem">Fall ${c.id} · AGNN: ${c.agnn}</div>
+          <div class="detail-title">${c.title}</div>
+          <div class="detail-badges">
+            ${renderBadge('badge bg-'+c.cat, getCatLabel(c.cat))}
+            ${renderBadge('diff-'+c.diff, c.diff==='basis'?'Basis':'Fortgeschritten')}
+          </div>
+        </div>
+        <button class="detail-print-btn" onclick="window.print()">Drucken</button>
+      </div>
+      <div class="detail-alarm">
+        <strong>Alarmierung / Fallvorstellung</strong>
+        ${c.alarm}
+      </div>
+      <div class="vitals-grid">${vitalsHtml}</div>
+      ${c.befund ? `<div class="befund-box" style="margin-top:.75rem"><strong style="font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:#888;display:block;margin-bottom:.3rem">Befund</strong>${c.befund}</div>` : ''}
+    </div>
+
+    <div class="detail-section">
+      <div class="section-title" style="color:#047857">Erwartungshorizont (Muster-WBO Notfallmedizin)</div>
+      <div class="eh-list" id="eh-list-${c.id}">${ehHtml}</div>
+      <div style="margin-top:.6rem;font-size:.75rem;color:#aaa">Häkchen = Kandidat hat diesen Punkt korrekt benannt</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="section-title" style="color:#1d4ed8">Prüferfragen</div>
+      <div class="fragen-list">${fragenHtml}</div>
+    </div>
+
+    <div class="detail-section">
+      <div class="section-title" style="color:#b45309">AGNN-Medikamente & Dosierungen (2026)</div>
+      ${medsHtml}
+    </div>
+
+    ${fallstrickeHtml ? `<div class="detail-section">
+      <div class="section-title" style="color:#dc2626">Typische Fehler / Fallstricke</div>
+      ${fallstrickeHtml}
+    </div>` : ''}
+  `;
+
+  document.getElementById('grid-view').style.display = 'none';
+  const dv = document.getElementById('detail-view');
+  dv.style.display = 'block';
+  dv.scrollIntoView({behavior:'smooth',block:'start'});
+  window.scrollTo(0,0);
+}
+
+function closeCase(){
+  document.getElementById('detail-view').style.display = 'none';
+  document.getElementById('grid-view').style.display = 'grid';
+}
+
+function toggleEH(caseId, idx){
+  if(!checkState[caseId]) return;
+  checkState[caseId][idx] = !checkState[caseId][idx];
+  const list = document.getElementById('eh-list-'+caseId);
+  if(list){
+    const items = list.querySelectorAll('.eh-check');
+    if(items[idx]){
+      items[idx].classList.toggle('checked', checkState[caseId][idx]);
+    }
+  }
+}
+
+// Filter buttons
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if(!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const cat = btn.dataset.cat || 'all';
+  currentFilter = cat;
+  renderGrid(currentFilter);
+});
+
+renderGrid('all');
+</script>
+</body>
+</html>
