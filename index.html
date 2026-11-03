@@ -130,7 +130,7 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
     <span class="hdr-sub">AGNN-Therapieempfehlungen 2026 · Zusatzweiterbildung Notfallmedizin · Muster-WBO BÄK</span>
   </div>
   <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">Alle (25)</button>
+    <button class="filter-btn active" data-filter="all">Alle (31)</button>
     <button class="filter-btn cat-btn" data-cat="kardiologie">Kardiologie</button>
     <button class="filter-btn cat-btn" data-cat="pulmonal">Pulmonal · Allergie</button>
     <button class="filter-btn cat-btn" data-cat="neurologie">Neurologie</button>
@@ -1022,6 +1022,206 @@ const cases = [
     'Sofort mit Individualversorgung beginnen → andere Schwerverletzte sterben unversorgt',
     'Schwerste Verletzung zuerst versorgen (SK I) statt nach Überlebenschance sichten',
     'Eigensicherung vergessen – instabiles Fahrzeug, Kraftstoff, Gefahrgut'
+  ]
+},
+// ── ORGANISATION (2) ──────────────────────────────────────
+{
+  id:26, cat:'organisation', diff:'basis',
+  title:'NEF-Beladung – Ausrüstung & Medikamente',
+  agnn:'Ausrüstung und Beladung des NEF / Rettungsdienstrecht',
+  alarm:'Wissensfall – kein Patientenszenario. Prüfling soll Kenntnisse über die Mindestbeladung, Qualitätssicherung und rechtliche Grundlagen des NEF nachweisen.',
+  befund:'Theoretischer Fall. Prüfungsgespräch über Ausrüstungs- und Arzneimittelstandards im Rettungsdienst.',
+  vitals:{RR:'–',HF:'–',SpO2:'–',AF:'–',GCS:'–',BZ:'–'},
+  eh:[
+    'Kennt die gesetzliche Grundlage: Rettungsdienstgesetze der Länder (z. B. RDG) sowie DIN EN 1789 für Rettungsfahrzeuge',
+    'Benennt Pflichtmedikamente: Adrenalin, Atropin, Midazolam, Morphin/Fentanyl, ASS, Heparin, Prednisolon, Glukose 40 %, NaCl/VEL, Intubationsmittel (Rocuronium/Succinylcholin), Amiodaron, Nitroglycerin',
+    'Kennt Pflichtequipment: Defibrillator/AED, 12-Kanal-EKG, Beatmungsgerät, Absauggerät, Pulsoxymeter, Kapnometer, BZ-Messgerät, Thoraxentlastungsset, Infusionszugang, Laryngoskop/Videolaryngoskop, IO-Set',
+    'Weiß: Verfallsdaten, Kühlkette und Dokumentationspflichten für BTM-Medikamente (Midazolam, Morphin)',
+    'Kennt Verantwortlichkeit: Notarzt ist verantwortlich für die Überprüfung der für seinen Einsatz benötigten Ausrüstung; Desinfektionsmittel/Schutzausrüstung nach Hygieneplänen',
+    'Weiß was bei fehlender Ausrüstung zu tun ist: Einsetzen alternativer Mittel, Dokumentation, Meldung an Träger'
+  ],
+  fragen:[
+    'Welche Medikamente müssen nach Ihrem Kenntnisstand auf jedem NEF vorhanden sein – nennen Sie die wichtigsten 10?',
+    'Was prüfen Sie zu Dienstbeginn am NEF?',
+    'Welche Dokumentationspflichten bestehen für Betäubungsmittel (Midazolam, Morphin) im Rettungsdienst?',
+    'Was tun Sie, wenn Sie am Einsatzort feststellen, dass das Succinylcholin abgelaufen ist?',
+    'Welche Qualitätsnorm regelt die Ausstattung von Rettungsfahrzeugen?',
+    'Was gehört zur persönlichen Schutzausrüstung des Notarztes und wann tragen Sie sie?',
+    'Welches Monitoring ist bei der Präklinischen RSI unverzichtbar und muss mitgeführt werden?'
+  ],
+  meds:[],
+  fallstricke:[
+    'BTM-Dokubuch nicht ausgefüllt → rechtliche Konsequenzen für den Notarzt',
+    'Defibrillator-Batterie/Elektroden bei Dienstbeginn nicht geprüft → Gerät versagt im Einsatz',
+    'Fehlendes Kapnometer nicht als Dokumentationsmangel gewertet – ist Pflicht bei Intubation!'
+  ]
+},
+{
+  id:27, cat:'organisation', diff:'fortgeschritten',
+  title:'Transportverweigerung – Einwilligung & Zwangsmaßnahmen',
+  agnn:'Rechtsfragen im Rettungsdienst – Einwilligungsfähigkeit, Transportverweigerung',
+  alarm:'58-jähriger Diabetiker (Typ 2), nach hypoglykämischem Ereignis (BZ 38 mg/dl), aufgewacht nach Glukosegabe. Beharrt darauf, nicht ins Krankenhaus zu wollen. "Ich kenn das, das passiert mir öfter."',
+  befund:'Patient jetzt wach, orientiert (4×), kein fokal-neurologisches Defizit. BZ nach Glukosegabe 95 mg/dl. Kein Sturztrauma erkennbar. Patient unterschreibt Verweigerung – Sie zweifeln, ob er wirklich einwilligungsfähig ist.',
+  vitals:{RR:'138/82',HF:'82/min',SpO2:'97 %',AF:'14/min',GCS:'15',BZ:'95 mg/dl'},
+  eh:[
+    'Unterscheidet Einwilligungsfähigkeit von Geschäftsfähigkeit: Einwilligungsfähigkeit ist situativ und aufklärungsabhängig',
+    'Kennt Voraussetzungen der Einwilligungsfähigkeit: Pat. versteht Situation und Konsequenzen der Ablehnung, kann abwägen, kann Entscheidung stabil kommunizieren',
+    'Führt strukturiertes Aufklärungsgespräch: erklärt Risiken (Rezidiv-Hypo, Sulfonylharnstoff!) in verständlicher Sprache und dokumentiert dies',
+    'Erkennt Indikationen für Behandlung gegen den Willen: Pat. nicht einwilligungsfähig + akute Lebensgefahr + kein anderer Wille (keine Patientenverfügung) → Geschäftsführung ohne Auftrag (GfoA) / rechtfertigender Notstand §34 StGB',
+    'Kennt PsychKG/UBG: bei psychiatrischer Erkrankung + Eigengefährdung → Zwangseinweisung über Ordnungsbehörde/Polizei, nicht durch Notarzt allein möglich',
+    'Dokumentiert vollständig: Aufklärung, Einwilligungsfähigkeitsbewertung, Unterschrift des Pat., Zeugen, eigene Einschätzung mit Begründung'
+  ],
+  fragen:[
+    'Wie beurteilen Sie präklinisch, ob ein Patient einwilligungsfähig ist?',
+    'Darf ein einwilligungsfähiger Patient lebensrettende Maßnahmen ablehnen?',
+    'Was ist die "Geschäftsführung ohne Auftrag" im rettungsdienstlichen Kontext?',
+    'Wie gehen Sie vor, wenn ein Patient nach Suizidversuch den Transport ablehnt?',
+    'Was ist der Unterschied zwischen Einwilligungsunfähigkeit und der Ablehnung durch einen Menschen mit psychiatrischer Erkrankung?',
+    'Was dokumentieren Sie bei einer Transportverweigerung und warum?',
+    'Welche Rolle spielt eine vorliegende Patientenverfügung?'
+  ],
+  meds:[],
+  fallstricke:[
+    'Einwilligungsfähigkeit mit Orientiertheit gleichsetzen – ein orientierter Patient kann trotzdem nicht einwilligungsfähig sein',
+    'Ohne Dokumentation behandeln oder Behandlung unterlassen → Körperverletzung oder unterlassene Hilfeleistung',
+    'Zwangsmaßnahmen allein durchführen ohne Polizei/richterliche Genehmigung beim psychiatrischen Pat.'
+  ]
+},
+// ── ORGANISATION / RECHT (weitere) ────────────────────────
+{
+  id:28, cat:'organisation', diff:'basis',
+  title:'Leichenschau & Todesfeststellung',
+  agnn:'Leichenschau, Totenschein, rechtliche Grundlagen',
+  alarm:'Sie werden als Notarzt zu einer 83-jährigen Frau gerufen, die leblos in ihrem Bett aufgefunden wird. Tochter (Anruferin) berichtet: seit gestern Abend kein Kontakt mehr möglich. Herzinsuffizienz bekannt.',
+  befund:'Patientin leblos, keine Atmung, kein Puls. Körper kühl, Totenstarre in Kiefergelenken und Extremitäten, Leichenflecken an Rücken und Gesäß lagestabil (beim Umdrehen nicht wegdrückbar). Mundschleimhaut trocken, Augen leicht eingefallen.',
+  vitals:{RR:'n.m.',HF:'0',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
+  eh:[
+    'Kennt sichere Todeszeichen: Leichenstarre (Rigor mortis), Leichenflecken (Livores, lage-stabil = > 6–8h), Fäulnis, Verletzungen die mit Leben unvereinbar sind',
+    'Kennt unsichere Todeszeichen: Bewusstlosigkeit, Atemstillstand, Pulslosigkeit – rechtfertigen allein KEINE Todesfeststellung',
+    'Führt vollständige äußere Leichenschau durch (gesamte Körperoberfläche!) und dokumentiert Befunde',
+    'Unterscheidet natürlichen von nicht-natürlichem Tod: bei Unklarheit/Hinweisen auf Fremdeinwirkung → Polizei hinzuziehen, Leiche nicht unnötig bewegen',
+    'Kennt Pflicht zur Ausstellung des Leichenschauscheins: nächste zuständige Ärztekammer-Formulare, Angaben zu Todesart (natürlich/nicht-natürlich/ungeklärt) und Todeszeitpunkt (Schätzung)',
+    'Kennt Meldepflicht bei nicht-natürlichem Tod: Polizei sofort verständigen, Tatort nicht kontaminieren'
+  ],
+  fragen:[
+    'Welche sicheren Todeszeichen kennen Sie und wann sind sie jeweils frühestens nachweisbar?',
+    'Was ist der Unterschied zwischen lagefesten und lagebedingten Leichenflecken?',
+    'Wie unterscheiden Sie einen natürlichen von einem nicht-natürlichen Tod?',
+    'Was tun Sie, wenn Sie Hinweise auf eine Strangulationsmarke am Hals finden?',
+    'Welche Angaben müssen Sie im Leichenschauschein zwingend machen?',
+    'Dürfen Sie einen Totenschein ausstellen, wenn Sie den Patienten nicht persönlich kannten?',
+    'Was tun Sie, wenn die Angehörigen auf eine Reanimation bestehen, Sie aber eindeutige sichere Todeszeichen feststellen?'
+  ],
+  meds:[],
+  fallstricke:[
+    'Unsichere Todeszeichen als Grundlage für Todesfeststellung → rechtlich unzulässig',
+    'Leichenschau nur am bekleideten Körper → Verletzungen/Todeszeichen übersehen',
+    'Bei V. a. nicht-natürlichem Tod Leiche bewegen/umkleiden → Spurenvernichtung, strafrechtliche Konsequenzen'
+  ]
+},
+// ── KARDIOLOGIE (Lücke SVT) ────────────────────────────────
+{
+  id:29, cat:'kardiologie', diff:'basis',
+  title:'Paroxysmale SVT / AVNRT – Adenosin',
+  agnn:'Herzrhythmusstörungen – Tachykardie (supraventrikulär)',
+  alarm:'38-jährige Frau, plötzlich einsetzende Herzrasen-Attacke seit 45 min, leichter Schwindel. Bisher keine Herzerkrankung. Erste Episode dieser Art. Ansonsten gesund.',
+  befund:'Patientin wach, aufgeregt, Kreislauf kompensiert. EKG: schmale QRS-Komplexe, Frequenz 185/min, regelmäßig, keine erkennbaren P-Wellen vor QRS (versteckt im QRS oder danach). V. a. AVNRT.',
+  vitals:{RR:'110/70',HF:'185/min',SpO2:'97 %',AF:'18/min',GCS:'15',BZ:'n.e.'},
+  eh:[
+    'Erkennt SVT (supraventrikuläre Tachykardie) anhand: schmale QRS, regelmäßig, hohe Frequenz, fehlende typische P-Wellen',
+    'Kennt und probiert vagale Manöver als Erstmaßnahme: Valsalva (modifiziert: 15 s pressen, dann Beine hochlagern), Karotismassage, Eistauchen',
+    'Kennt Adenosin als Mittel der Wahl bei stabiler SVT: 6 mg → 12 mg → 18 mg i.v. als schneller Bolus (zentral oder antekubital mit Nachspülen)',
+    'Erklärt Wirkungsmechanismus: Adenosin blockiert AV-Knoten kurzzeitig → unterbricht Reentry-Kreislauf',
+    'Informiert Patientin über Nebenwirkungen: kurze Asystolie (Sekunden), Flush, Brustenge – ist normal und passagery',
+    'Kennt Alternative bei Versagen: Verapamil 5–10 mg i.v. (CAVE: nie bei WPW-Syndrom ohne Sinusrhythmus-Nachweis), ggf. Kardioversion'
+  ],
+  fragen:[
+    'Woran erkennen Sie eine SVT im EKG? Was sind Kriterien?',
+    'Welche vagalen Manöver kennen Sie? Wie führen Sie das modifizierte Valsalva durch?',
+    'Wie geben Sie Adenosin korrekt? Warum muss es so schnell sein?',
+    'Was sehen Sie auf dem Monitor bei erfolgreicher Adenosin-Gabe?',
+    'Warum dürfen Sie Verapamil nicht geben, wenn Sie sich nicht sicher sind, ob SVT oder VT vorliegt?',
+    'Was bedeutet WPW-Syndrom und warum ist es bei der Tachykardie besonders gefährlich?'
+  ],
+  meds:[
+    {n:'Adenosin',d:'6 mg i.v. Bolus, ggf. 12 mg, ggf. 18 mg',h:'Schnell injizieren + 20 ml NaCl nachspülen; Halbwertszeit 10 s!'},
+    {n:'Verapamil',d:'5 mg i.v. über 2–3 min (ggf. 10 mg)',h:'Alternative – KI: VT, Herzinsuffizienz, WPW + Vorhofflimmern'},
+    {n:'Metoprolol',d:'5 mg i.v. langsam',h:'Alternative Betablocker – cave: Asthma, AV-Block'}
+  ],
+  fallstricke:[
+    'Adenosin zu langsam injizieren → wird im Blut abgebaut, bevor er den AV-Knoten erreicht',
+    'Verapamil bei unklarer Breitkomplextachykardie → bei VT fataler Blutdruckabfall',
+    'Adenosin bei WPW + Vorhofflimmern → Entblockierung der Bahn → ventrikuläres Flattern'
+  ]
+},
+// ── GEBURTSHILFE ──────────────────────────────────────────
+{
+  id:30, cat:'intern', diff:'fortgeschritten',
+  title:'Eklampsie / Geburtshilfe-Notfall',
+  agnn:'Geburtshilfliche Notfälle – Eklampsie, Nabelschnurvorfall',
+  alarm:'28-jährige Erstgebärende, 36. SSW, generalisierter Krampfanfall zuhause, Ehemann alarmiert Notruf. Vorsorge-Pass zeigt: Proteinurie und erhöhter RR bei letzter Vorsorge vor 1 Woche.',
+  befund:'Patientin nach 90 s Krampf jetzt post-iktal, verwirrt. Sichtbar schwanger. Ödeme an Knöcheln und Gesicht (Faziesödem). Kind durch Bauchmanöver: Kind quer, keine regelmäßigen Wehen.',
+  vitals:{RR:'175/115',HF:'108/min',SpO2:'94 %',AF:'20/min',GCS:'10',BZ:'88 mg/dl',Temp:'37,2 °C'},
+  eh:[
+    'Erkennt Eklampsie: Schwangerschaft + Hypertension + Krampfanfall (Ausschlussdiagnose, nachdem andere Ursachen unwahrscheinlich)',
+    'Unterscheidet Präeklampsie (Hypertonie + Proteinurie ohne Krampf) von Eklampsie (mit Krampf)',
+    'Gibt Magnesiumsulfat als Antikonvulsivum und Prophylaxe weiterer Anfälle: 4–6 g i.v. über 15–20 min, dann 1–2 g/h',
+    'Behandelt Hypertonie: Urapidil oder Labetalol (Ziel RR < 160/110) – KEIN ACE-Hemmer, KEIN AT1-Antagonist (teratogen)',
+    'Lagerung: Links-Seitenlage (vena-cava-Syndrom-Prophylaxe), O₂, Venenweg, Zielklinik: Perinatalzentrum Level I',
+    'Kennt Nabelschnurvorfall als weitere Komplikation: tastbare Nabelschnur bei Beckenendlage → Knie-Ellenbogen-Lage, Druck vom Kopf nehmen, sofortige Notsectio-Klinik'
+  ],
+  fragen:[
+    'Was ist der Unterschied zwischen Gestose, Präeklampsie und Eklampsie?',
+    'Welches Medikament ist das Mittel der Wahl bei Eklampsie-Krampfanfall?',
+    'Warum dürfen Sie Urapidil geben, aber keine ACE-Hemmer?',
+    'Wie legen Sie die Schwangere im RTW? Warum?',
+    'Was ist ein Nabelschnurvorfall und wie reagieren Sie?',
+    'Welches Perinatalzentrum-Level wählen Sie bei einer Frühgeburt 36. SSW?'
+  ],
+  meds:[
+    {n:'Magnesiumsulfat',d:'4–6 g i.v. über 15–20 min (Bolus), dann 1–2 g/h',h:'Antikonvulsivum UND Prophylaxe – Mittel 1. Wahl bei Eklampsie'},
+    {n:'Urapidil',d:'5–10 mg Boli i.v., Ziel RR < 160/110',h:'RR-Senkung in der Schwangerschaft – verträglich'},
+    {n:'Diazepam',d:'10 mg i.v. nur wenn Magnesium nicht verfügbar',h:'Alternative – Magnesium deutlich bevorzugt bei Eklampsie'}
+  ],
+  fallstricke:[
+    'Lorazepam/Diazepam statt Magnesium als Ersttherapie – keine evidenzbasierte Überlegenheit, Magnesium ist Standard',
+    'Patientin in Rückenlage transportieren → V.-cava-Kompression → fetale Bradykardie',
+    'Magnesium-Überdosierung: Reflexverlust, Atemdepression → Antidot: Calciumgluconat 1 g i.v.'
+  ]
+},
+// ── TRAUMA / INTERN (Aorta) ────────────────────────────────
+{
+  id:31, cat:'trauma', diff:'fortgeschritten',
+  title:'Ruptured BAA / Akutes Aortensyndrom',
+  agnn:'Abdominelles Aortenaneurysma, Aortendissektion – Schock',
+  alarm:'72-jähriger Mann, plötzlich einsetzende vernichtende Rücken- und Bauchschmerzen, Schwindel, einmalig erbrochen. Bekannte arterielle Hypertonie, Raucher. Frau alarmiert 112.',
+  befund:'Pat. blass, kaltschweißig, Schmerzen thorakal/abdominal ausstrahlend in den Rücken. Abdomen: pulsatile Resistenz periumbilikal tastbar, druckdolent. Kein Peritonismus. Unterschiedliche Blutdrücke bds. Arme (ΔRR > 20 mmHg): re 160/90, li 105/65.',
+  vitals:{RR:'105/65 (li)',HF:'118/min',SpO2:'93 %',AF:'22/min',GCS:'13',BZ:'n.e.'},
+  eh:[
+    'Erkennt akutes Aortensyndrom: pulsatile Bauchresistenz + vernichtende Rückenschmerzen + Schock = rupturiertes BAA bis Beweis des Gegenteils',
+    'Kennt Differentialdiagnosen: Aortendissektion (Typ A/B nach Stanford, Seitenasymmetrie RR!), Hinterwandinfarkt, Nierenkolik (RR-Differenz schließt Kolik aus)',
+    'Versteht permissive Hypotension: Ziel RR syst. 80–90 mmHg (keine aggressive Volumengabe → Koagel-Lösung)',
+    'Erkennt: keine Zeit für CT oder Sono am Einsatzort – sofortiger Transport in Gefäßchirurgie/Hybridraum ist das Ziel',
+    'Plant Analgesie: Morphin/Fentanyl titriert – Cave: Hypotension verstärken',
+    'Kennt RR-Differenz bds. Arme als Hinweis auf Typ-A-Dissektion (Aortenbogen betroffen)'
+  ],
+  fragen:[
+    'Welche 3 Befunde lassen Sie an ein rupturiertes Bauchaortenaneurysma denken?',
+    'Was ist der Unterschied zwischen BAA-Ruptur und Aortendissektion?',
+    'Was bedeutet der Seitenunterschied im Blutdruck bds. Arme?',
+    'Warum ist zu viel Volumengabe hier gefährlich?',
+    'Welche Zielklinik wählen Sie und was melden Sie vorab?',
+    'Wie behandeln Sie die Schmerzen, ohne die Hämodynamik zu gefährden?'
+  ],
+  meds:[
+    {n:'Fentanyl',d:'0,05–0,1 mg titriert i.v.',h:'Analgesie – langsam titrieren, RR beobachten'},
+    {n:'VEL',d:'Maximal 250–500 ml zurückhaltend',h:'Permissive Hypotension – Ziel RR syst. 80–90'},
+    {n:'Noradrenalin',d:'0,1 µg/kg/min bei RR < 60 syst.',h:'Nur wenn RR trotz Volumen kritisch niedrig'}
+  ],
+  fallstricke:[
+    'Nierenkolik-Diagnose bei vernichtenden Rückenschmerzen → BAA-Ruptur übersehen',
+    'Aggressive Volumengabe → Druckanstieg → Koagel reißt → unkontrollierte Blutung',
+    'Transport in nächste Chirurgie ohne Gefäßchirurgie → keine Operationsmöglichkeit'
   ]
 }
 ];
