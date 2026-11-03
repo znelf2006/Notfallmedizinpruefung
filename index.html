@@ -109,6 +109,9 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
 .fallstrick-item::before{content:'⚠';font-size:0.9rem}
 
 .befund-box{font-size:0.87rem;color:#333;line-height:1.6;padding:0.6rem 0.8rem;background:#f9f9f7;border:1px solid #e5e5dc;border-radius:6px}
+.notruf-box{font-size:.85rem;color:#7c2d12;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:.65rem 1rem;margin-top:.5rem;line-height:1.55}
+.notruf-box b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#b45309;margin-bottom:.2rem}
+.card-stw{font-size:.72rem;color:#777;font-style:italic;margin-top:.1rem}
 
 .detail-print-btn{margin-top:0.5rem;padding:0.5rem 1rem;background:#fff;border:1px solid #d4d4cc;border-radius:6px;font-size:0.83rem;cursor:pointer;color:#555}
 .detail-print-btn:hover{border-color:#888;color:#111}
@@ -130,7 +133,7 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
     <span class="hdr-sub">AGNN-Therapieempfehlungen 2026 · Zusatzweiterbildung Notfallmedizin · Muster-WBO BÄK</span>
   </div>
   <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">Alle (31)</button>
+    <button class="filter-btn active" data-filter="all">Alle (37)</button>
     <button class="filter-btn cat-btn" data-cat="kardiologie">Kardiologie</button>
     <button class="filter-btn cat-btn" data-cat="pulmonal">Pulmonal · Allergie</button>
     <button class="filter-btn cat-btn" data-cat="neurologie">Neurologie</button>
@@ -161,6 +164,8 @@ const cases = [
   id:1, cat:'kardiologie', diff:'fortgeschritten',
   title:'STEMI mit kardiogenem Schock',
   agnn:'Akutes Koronarsyndrom (ACS), Schock',
+  stichwort:'M 72 · Bauchschmerzen, Schwindel, blass',
+  notruf:'"Mein Mann hat Magenschmerzen und schwitzt wie verrückt, ist ganz blass" – kein Brustschmerz erwähnt, Lageabhängigkeit verneint',
   alarm:'72-jähriger Mann, Brustschmerz seit 60 min mit Ausstrahlung in den linken Arm, Kaltschweißigkeit, Schwindel. Ehefrau ruft Rettungsdienst.',
   befund:'Patient blass-kaltschweißig, marmorierte Haut, kein Ödeme. Lunge: basale feuchte RG bds. 12-Kanal-EKG: ST-Hebungen in II, III, aVF → V. a. Hinterwandinfarkt. CAVE: V3R/V4R zeigen ST-Hebungen → Rechtsherzinfarkt!',
   vitals:{RR:'85/55',HF:'118/min',SpO2:'90 %',AF:'24/min',GCS:'14',BZ:'148 mg/dl'},
@@ -196,6 +201,8 @@ const cases = [
   id:2, cat:'kardiologie', diff:'basis',
   title:'Reanimation bei Kammerflimmern',
   agnn:'Reanimation (Erwachsene)',
+  stichwort:'M 65 · Bewusstlosigkeit, Kollaps',
+  notruf:'"Mein Vater ist beim Spazieren einfach umgefallen und schläft, wir können ihn nicht wecken" – Laien erkennen Kreislaufstillstand nicht',
   alarm:'65-jähriger Mann bricht beim Spaziergang zusammen. Passanten beginnen mit Laienreanimation. AED vorhanden aber noch nicht angebracht. Bewusstlosigkeit, keine Atmung.',
   befund:'Pat. bewusstlos, keine Atmung, keine Lebenszeichen. Laienhelfer führen CPR durch. AED signalisiert defibrillierbaren Rhythmus (VF).',
   vitals:{RR:'n.m.',HF:'VF',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
@@ -230,6 +237,8 @@ const cases = [
   id:3, cat:'kardiologie', diff:'fortgeschritten',
   title:'Ventrikuläre Tachykardie mit Kreislaufinstabilität',
   agnn:'Herzrhythmusstörungen – Tachykardie',
+  stichwort:'M 70 · Herzrasen + Schwindel',
+  notruf:'"Herzrasen seit einer Stunde, er sagt eigentlich ist es gar nicht so schlimm" – hämodynamische Instabilität durch Laien nicht erkannt',
   alarm:'70-jähriger Mann mit bekannter KHK, Palpitationen und Schwindel seit 20 min, jetzt Präsynkope. EKG zeigt breite Kammerkomplexe, Frequenz 180/min.',
   befund:'Pat. blass, schwitzt, minimal orientiert. Puls schwach, kaum tastbar. EKG: monomorphe VT, breite Kammerkomplexe, AV-Dissoziation erkennbar.',
   vitals:{RR:'80/50',HF:'180/min',SpO2:'88 %',AF:'22/min',GCS:'13',BZ:'n.e.'},
@@ -265,6 +274,8 @@ const cases = [
   id:4, cat:'kardiologie', diff:'basis',
   title:'AV-Block III° mit Adams-Stokes-Anfall',
   agnn:'Herzrhythmusstörungen – Bradykardie',
+  stichwort:'W 72 · Stürze, Bewusstlosigkeit',
+  notruf:'"Meine Mutter ist heute schon dreimal hingefallen, jetzt ist sie wieder wach aber sehr verwirrt" – Synkopen als Stürze gemeldet',
   alarm:'72-jährige Frau, mehrfache Synkopen in der letzten Stunde, kurze Bewusstlosigkeit, jetzt wieder ansprechbar aber verwirrt. Bekannte KHK, nimmt Betablocker.',
   befund:'Patientin blass, kalt, verwirrt. Puls regelmäßig, sehr langsam. EKG: P-Wellen und QRS-Komplexe vollständig dissoziiert, QRS breit (HIS-unterhalb).',
   vitals:{RR:'75/45',HF:'32/min',SpO2:'91 %',AF:'18/min',GCS:'13',BZ:'n.e.'},
@@ -299,6 +310,8 @@ const cases = [
   id:5, cat:'kardiologie', diff:'basis',
   title:'Akutes kardiales Lungenödem',
   agnn:'Kardiales Lungenödem',
+  stichwort:'W 76 · schwere Luftnot',
+  notruf:'"Meine Mutter bekommt keine Luft mehr, liegt im Bett und kann kaum sprechen" – Herzerkrankung nicht erwähnt, Asthma-Anamnese angegeben',
   alarm:'76-jährige Frau, Atemnot seit 30 min, kann nicht liegen, spricht nur in Ein-Wort-Sätzen. Bekannte Herzinsuffizienz. Sohn alarmiert Notarzt.',
   befund:'Pat. sitzt aufrecht, zyanotisch, Atemhilfsmuskulatur einsatz. Feuchte Rasselgeräusche über allen Lungenfeldern. Peripherer Puls gut tastbar, Halsvenenstauung. RR hypertensiv.',
   vitals:{RR:'195/105',HF:'112/min',SpO2:'82 %',AF:'32/min',GCS:'14',BZ:'n.e.'},
@@ -334,8 +347,10 @@ const cases = [
   id:6, cat:'kardiologie', diff:'fortgeschritten',
   title:'Reanimation – Pulslose Elektrische Aktivität (PEA)',
   agnn:'Reanimation (Erwachsene)',
-  alarm:'55-jähriger Mann, kolabiert 10 min nach Knie-OP im Aufwachraum. Anästhesist beginnt CPR. Rhythmus: schmale QRS-Komplexe, Frequenz 80/min, kein tastbarer Puls.',
-  befund:'Bewusstlos, keine Atmung, kein Puls. EKG zeigt elektrische Aktivität ohne mechanische Herzaktion. Halsvenenstauung erkennbar.',
+  stichwort:'M 55 · Kollaps beim Sport, Reanimation',
+  notruf:'"Ein Mann ist im Fitnessstudio einfach umgefallen und zuckt, reagiert nicht mehr" – Kreislaufstillstand zunächst nicht erkannt',
+  alarm:'55-jähriger Mann, kollabiert beim Krafttraining im Fitnessstudio. Trainer beginnt sofort CPR. NEF trifft nach 6 min ein: kein Puls trotz CPR, im EKG schmale QRS-Komplexe, Frequenz ~70/min.',
+  befund:'Bewusstlos, keine Atmung, kein Puls trotz laufender CPR. EKG: organisierte schmale Kammerkomplexe ohne mechanische Herzaktion (PEA). Gestaute Halsvenen erkennbar. Kein Trauma. Trainingsrucksack mit privaten Unterlagen: Flugticket gestern zurück aus Singapur.',
   vitals:{RR:'n.m.',HF:'PEA ~80/min',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
   eh:[
     'Erkennt PEA: organisierte elektrische Aktivität ohne Puls → CPR sofort',
@@ -369,6 +384,8 @@ const cases = [
   id:7, cat:'pulmonal', diff:'fortgeschritten',
   title:'Anaphylaxie Grad III–IV',
   agnn:'Anaphylaxie',
+  stichwort:'W 35 · Luftnot nach Wespenstich',
+  notruf:'"Frau hatte Wespenstich, ihr ist jetzt schlecht und sie bekommt irgendwie schlecht Luft, Haut ist komisch" – Schwere der Reaktion stark unterschätzt',
   alarm:'35-jährige Frau, 10 min nach Wespenstich Atemnot, Heiserkeit, Stridor, Urtikaria am ganzen Körper. Bekannte Wespengiftallergie, kein Notfall-Set dabei.',
   befund:'Patientin sitzt aufrecht, ängstlich, Glottisödem (Stridor, Heiserkeit), Urtikaria und Erythem am gesamten Integument, Angioödem der Lippen. Periphere Vasodilatation, warme gerötete Haut, Blutdruckabfall.',
   vitals:{RR:'75/40',HF:'130/min',SpO2:'86 %',AF:'28/min',GCS:'14',BZ:'n.e.'},
@@ -405,6 +422,8 @@ const cases = [
   id:8, cat:'pulmonal', diff:'fortgeschritten',
   title:'Life-threatening Asthma bronchiale',
   agnn:'Obstruktive Ventilationsstörungen',
+  stichwort:'W 28 · schwerer Asthmaanfall',
+  notruf:'"Meine Freundin hat einen Asthmaanfall, hat ihren Inhaler benutzt, hilft aber nicht so richtig" – Schweregrad (silent lung) nicht kommuniziert',
   alarm:'28-jährige Asthmatikerin, akuter Anfall seit 45 min, kein Ansprechen auf eigenen Inhaler. Partner alarmiert Notarzt. Bekanntes Asthma bronchiale seit Kindheit.',
   befund:'Patientin sitzt mit Kutscherhaltung, Einsatz der Atemhilfsmuskulatur, Zyanose der Lippen. Auskultation: kaum Atemgeräusche bds. ("silent lung"). Keinen Stridor. Spricht nicht mehr in Sätzen.',
   vitals:{RR:'140/90',HF:'132/min',SpO2:'82 %',AF:'34/min',GCS:'13',BZ:'n.e.'},
@@ -441,8 +460,10 @@ const cases = [
   id:9, cat:'pulmonal', diff:'fortgeschritten',
   title:'Lungenarterienembolie mit hämodynamischer Instabilität',
   agnn:'Lungenarterienembolie (LAE)',
-  alarm:'55-jährige Frau, 5 Tage nach elektiver Hüft-TEP, akute Dyspnoe und Kollaps bei Mobilisationsversuch. Patientin bewusstseinsgetrübt.',
-  befund:'Patientin kaltschweißig, zyanotisch, gestaute Halsvenen. Atemgeräusch bds. auskultierbar. EKG: Sinustachykardie, S1Q3-Muster, Rechtsschenkelblock. Echo/FAST: rechtes Herz massiv dilatiert, D-Zeichen.',
+  stichwort:'W 55 · akute Luftnot + Kollaps zuhause',
+  notruf:'"Meine Frau ist beim Aufstehen umgefallen und bekommt schlecht Luft" – Gips-Abnahme und lange Autofahrt vom Anrufer nicht erwähnt',
+  alarm:'55-jährige Frau, zu Hause kollabiert beim Aufstehen vom Sofa. Ehemann alarmiert 112. Anamnese: Unterschenkelgips vor 12 Tagen entfernt (Sprunggelenkfraktur), gestern mehrstündige Autofahrt (Urlaub).',
+  befund:'Patientin kaltschweißig, zyanotisch, gestaute Halsvenen. Atemgeräusch bds. auskultierbar. Linkes Bein: leichte Schwellung und Druckschmerz Wade. EKG: Sinustachykardie, S1Q3-Muster, Rechtsschenkelblock. FAST: rechtes Herz massiv dilatiert, D-Zeichen.',
   vitals:{RR:'70/40',HF:'128/min',SpO2:'83 %',AF:'30/min',GCS:'12',BZ:'n.e.'},
   eh:[
     'Erkennt massive LAE mit hämodynamischer Instabilität (Schock) als Indikation zur sofortigen Lysetherapie',
@@ -477,6 +498,8 @@ const cases = [
   id:10, cat:'neurologie', diff:'basis',
   title:'Schlaganfall mit Großgefäßverschluss (LVOS)',
   agnn:'Schlaganfall ("Stroke")',
+  stichwort:'M 68 · Lähmung + Sprachstörung',
+  notruf:'"Mein Mann verhält sich seltsam, spricht nicht mehr richtig, sein Arm hängt irgendwie runter" – BE-FAST nicht bekannt, "betrunken" als erste Vermutung',
   alarm:'68-jähriger Mann, plötzlicher Beginn vor 45 min: Rechtsseitige Lähmung, Sprachlosigkeit, Kopfdrehen nach links. Ehefrau alarmiert Rettungsdienst.',
   befund:'BE-FAST: B+, E- (kein Doppelbild), F+ (Fazialisparese rechts), A+ (Armparese rechts), ST+ (plötzlicher Beginn). Globale Aphasie. GCS 10. BZ 115 mg/dl.',
   vitals:{RR:'185/100',HF:'88/min',SpO2:'95 %',AF:'16/min',GCS:'10',BZ:'115 mg/dl'},
@@ -511,6 +534,8 @@ const cases = [
   id:11, cat:'neurologie', diff:'basis',
   title:'Status epilepticus',
   agnn:'Status epilepticus',
+  stichwort:'M 42 · anhaltender Krampfanfall',
+  notruf:'"Mein Freund hat einen Anfall und zuckt schon ewig, wir können ihn nicht ansprechen" – Dauer und fehlende Erholung unklar',
   alarm:'42-jähriger Mann, generalisierter tonisch-klonischer Anfall seit 12 min, bisher kein Sistieren. Bekannte Epilepsie, Medikamente zuhause. Partnerin alarmiert Notarzt.',
   befund:'Patient in Seitenlage, klonische Bewegungen beider Extremitäten, Zungenbiss, Zyanose. Kein i.v.-Zugang möglich während der aktiven Krämpfe. Fieber 37,8°C.',
   vitals:{RR:'165/95',HF:'118/min',SpO2:'88 %',AF:'unregelmäßig',GCS:'3',BZ:'78 mg/dl'},
@@ -546,6 +571,8 @@ const cases = [
   id:12, cat:'neurologie', diff:'basis',
   title:'Schwere Hypoglykämie / hypoglykämisches Koma',
   agnn:'Hypoglykämie',
+  stichwort:'M 55 · morgens bewusstlos, nicht erweckbar',
+  notruf:'"Mein Mann ist im Bett und reagiert nicht, ich kann ihn nicht wecken" – Diabetes und Insulinpumpe nicht erwähnt',
   alarm:'55-jähriger Diabetiker (Typ 1, Insulinpumpe), morgens bewusstlos im Bett aufgefunden von Ehefrau. Kein Ansprechen auf Ansprache.',
   befund:'Patient bewusstlos, Schutzreflexe erhalten, kalte feuchte Haut, Blässe, Muskelzuckungen vereinzelt. Insulinpumpe läuft.',
   vitals:{RR:'145/85',HF:'105/min',SpO2:'96 %',AF:'16/min',GCS:'6',BZ:'< 20 mg/dl'},
@@ -580,6 +607,8 @@ const cases = [
   id:13, cat:'neurologie', diff:'fortgeschritten',
   title:'CO-Vergiftung – Mehrere Betroffene',
   agnn:'Kohlenmonoxid-Intoxikation',
+  stichwort:'Mehrere Personen · Bewusstlosigkeit, Wohnung',
+  notruf:'"In der Wohnung nebenan schlafen alle und können nicht geweckt werden" – Kohleofen und CO als Ursache unbekannt',
   alarm:'Mehrere Personen (3) in einer Wohnung mit Kohleofen im Winter bewusstlos oder somnolent. Zeugen berichten über Kopfschmerzen und Übelkeit bei allen.',
   befund:'Pat. 1 (42J): GCS 8, Pat. 2 (38J): GCS 12, bewusstseinsgetrübt, Kopfschmerzen, Übelkeit. Pat. 3 (15J): GCS 14. Feuerwehr misst 350 ppm CO in der Wohnung. SpO₂ (Pulsoxymeter) 98 % – cave: falsch hoch!',
   vitals:{RR:'130/80',HF:'102/min',SpO2:'98 % (FALSCH!)',AF:'18/min',GCS:'8',BZ:'n.e.'},
@@ -614,6 +643,8 @@ const cases = [
   id:14, cat:'intern', diff:'fortgeschritten',
   title:'Septischer Schock',
   agnn:'Sepsis im Rettungsdienst',
+  stichwort:'W 68 Pflegeheim · Fieber, Verwirrtheit',
+  notruf:'"Unsere Bewohnerin ist ganz verwirrt und hat Fieber" – Schocksymptomatik nicht erkannt, kein Hinweis auf Schwere',
   alarm:'68-jährige Frau, Pflegeheimbewohnerin, seit 2 Tagen Fieber, Verwirrung, jetzt kein Ansprechen auf Ansprache. Laut Pflegepersonal "Harnwegsinfekt bekannt". Katheter liegt.',
   befund:'Patientin somnolent, warme gerötete Haut mit Mottling an Unterschenkeln, kein Schüttelfrost jetzt. Harnkatheter: trüber übelriechender Urin. Rekapillarisierungszeit 4 s.',
   vitals:{RR:'75/45',HF:'118/min',SpO2:'92 %',AF:'26/min',GCS:'10',BZ:'165 mg/dl',Temp:'39,8 °C'},
@@ -648,6 +679,8 @@ const cases = [
   id:15, cat:'intern', diff:'fortgeschritten',
   title:'Hypertensiver Notfall mit hypertensiver Enzephalopathie',
   agnn:'Hypertensiver Notfall',
+  stichwort:'M 58 · Verwirrtheit + Kopfschmerzen + Erbrechen',
+  notruf:'"Mein Mann ist ganz seltsam und verwirrt, klagt über Kopfschmerzen, hat gerade erbrochen" – Bluthochdruck als Ursache nicht kommuniziert',
   alarm:'58-jähriger Mann, bekannte arterielle Hypertonie, Medikamente seit 3 Tagen nicht eingenommen. Akut verwirrter Patient, Kopfschmerzen, Sehstörungen, Erbrechen.',
   befund:'Patient unruhig, desorientiert, Sehstörungen ("alles verschwommen"), Übelkeit/Erbrechen, keine Lähmungen, keine Aphasie. Fundoskopie nicht möglich. Pupillen isokor, Reaktion träge.',
   vitals:{RR:'240/145',HF:'95/min',SpO2:'97 %',AF:'18/min',GCS:'13',BZ:'n.e.'},
@@ -684,6 +717,8 @@ const cases = [
   id:16, cat:'trauma', diff:'fortgeschritten',
   title:'Polytrauma nach Verkehrsunfall',
   agnn:'Polytrauma, Schock',
+  stichwort:'M 32 · Motorradunfall, eingeklemmt',
+  notruf:'"Motorradunfall auf der B73, Fahrer liegt auf der Straße, kommt nicht hoch" – Verletzungsmuster und Bewusstseinslage unbekannt',
   alarm:'32-jähriger Motorradfahrer, Frontalzusammenstoß mit PKW bei ca. 60 km/h. Bewusstseinsgetrübt, Schutzbekleidung zeigt Schürfspuren. Ersthelfer sichern die Unfallstelle.',
   befund:'Helm noch auf → vorsichtig abnehmen (2-Helfer-Technik). GCS 10 (A3,V3,M4). Linker Oberschenkel stark deformiert, rechter Thorax: abgeschwächtes Atemgeräusch, paradoxe Atmung rechts. Becken stabil. Abdomen weich.',
   vitals:{RR:'85/60',HF:'128/min',SpO2:'88 %',AF:'26/min',GCS:'10',BZ:'n.e.'},
@@ -719,6 +754,8 @@ const cases = [
   id:17, cat:'trauma', diff:'fortgeschritten',
   title:'Schweres Schädel-Hirn-Trauma (GCS 8)',
   agnn:'Schädel-Hirn-Trauma des Erwachsenen',
+  stichwort:'M 45 · Sturz aus 4m, kurze Bewusstlosigkeit',
+  notruf:'"Arbeitsunfall, Mann vom Gerüst gefallen, liegt unten" – Bewusstseinsgrad und Pupillenstatus unbekannt',
   alarm:'45-jähriger Mann, Sturz vom Gerüst aus 4 m Höhe, kurze Bewusstlosigkeit, jetzt GCS 8, rechte Pupille weiter. Kein Alkohol laut Zeugen.',
   befund:'GCS 8 (A2,V2,M4), rechte Pupille weit und reaktionslos, linke normal. Kopfhaut-Riss frontal. Kein offenes SHT erkennbar. Keine Halsvenenstauung.',
   vitals:{RR:'165/95',HF:'55/min',SpO2:'94 %',AF:'12/min',GCS:'8',BZ:'142 mg/dl'},
@@ -754,6 +791,8 @@ const cases = [
   id:18, cat:'trauma', diff:'fortgeschritten',
   title:'Spannungspneumothorax nach Stichverletzung',
   agnn:'Thoraxtrauma, Durchführung einer Thoraxentlastung',
+  stichwort:'M 19 · Stichverletzung Thorax links',
+  notruf:'"Messerstecherei, einer hat Stich in die Seite bekommen, hat jetzt Atemnot" – Schwere und Lokalisation unklar',
   alarm:'19-jähriger Mann, Stichverletzung links lateral nach Auseinandersetzung, zunehmende Luftnot, jetzt bewusstseinsgetrübt. Wunde an der linken Seite sichtbar.',
   befund:'Pat. bewusstseinsgetrübt, zyanotisch. Links kein Atemgeräusch, hypersonorer Klopfschall links. Trachea nach rechts deviiert. Gestaute Halsvenen. Wunde: "sucking chest wound" mit Lufteinstrom.',
   vitals:{RR:'70/40',HF:'135/min',SpO2:'78 %',AF:'30/min',GCS:'11',BZ:'n.e.'},
@@ -788,6 +827,8 @@ const cases = [
   id:19, cat:'trauma', diff:'fortgeschritten',
   title:'Hämorrhagischer Schock nach Beckenfraktur',
   agnn:'Schock, Beckenfraktur, Indikationen Trochantergurt',
+  stichwort:'M 40 · Überrollunfall, Beckenschmerzen',
+  notruf:'"Überrollunfall auf Betriebsgelände, Mann liegt auf der Straße, klagt über Beckenschmerzen, kommt nicht hoch" – Schocksymptomatik unbekannt',
   alarm:'40-jähriger Fußgänger nach Überrollunfall durch LKW. Bewusstsein erhalten, extreme Schmerzen im Becken, Schwindel.',
   befund:'Pat. blass, kaltschweißig, Schmerzen bei Beckenkompression bds. Keine äußere Blutung sichtbar, kein Beinlängenunterschied. Instabiles Becken bei Kompressionstest. Kein rektaler Blutabgang.',
   vitals:{RR:'75/40',HF:'140/min',SpO2:'93 %',AF:'24/min',GCS:'14',BZ:'n.e.'},
@@ -822,6 +863,8 @@ const cases = [
   id:20, cat:'trauma', diff:'basis',
   title:'Brandverletzungen mit Inhalationstrauma',
   agnn:'Brandverletzungen',
+  stichwort:'M 38 · Wohnungsbrand, Verbrennung',
+  notruf:'"Wohnungsbrand in der zweiten Etage, einer war noch drin" – Inhalationstrauma-Dauer und Verbrennungsausmaß unbekannt',
   alarm:'38-jähriger Mann, Wohnungsbrand, ca. 20 min in verrauchtem Raum gewesen, Verbrennungen sichtbar an Armen und Thorax. Heiserkeit, rußige Nasenschleimhaut.',
   befund:'Verbrennungen Grad 2a-2b an beiden Armen (ca. 9 % KOF) und Brust (ca. 9 % KOF). Gesicht gerötet, Augenbrauen angesengt. Ruß in Mund/Nase. Heiserkeit. Kein Stridor jetzt.',
   vitals:{RR:'130/80',HF:'110/min',SpO2:'94 %',AF:'20/min',GCS:'14',BZ:'n.e.'},
@@ -858,6 +901,8 @@ const cases = [
   id:21, cat:'paediatrie', diff:'fortgeschritten',
   title:'Kinderreanimation nach Ertrinken',
   agnn:'Kinderreanimation',
+  stichwort:'Kind 3 J. · Ertrinken, Reanimation',
+  notruf:'"Mein Kind ist in den Teich gefallen, wir haben es rausgezogen, es atmet nicht" – Dauer der Submersion unklar',
   alarm:'3-jähriges Kind, ca. 5 min in Gartenteich eingetaucht, von Eltern gerettet, bewusstlos, keine Atmung. Eltern führen Laienreanimation durch.',
   befund:'Kind bewusstlos, kalt-nass, keine Atmung, kein tastbarer Puls. GCS 3. Lippen bläulich. Körperkern: kalt (Kleidung nass). Keine sicheren Todeszeichen.',
   vitals:{RR:'n.m.',HF:'0/min (Asytolie)',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
@@ -892,6 +937,8 @@ const cases = [
   id:22, cat:'paediatrie', diff:'basis',
   title:'Fieberkrampf / Status epilepticus Kind',
   agnn:'Fieberkrampf/Kindlicher Krampfanfall',
+  stichwort:'Kind 18 Mo. · Krampfanfall + Fieber',
+  notruf:'"Mein Kind zuckt ganz fürchterlich, das dauert schon ewig, hat auch hohes Fieber, ich glaube es stirbt!" – Panik, Dauer überschätzt',
   alarm:'18 Monate altes Kind, tonisch-klonischer Krampf seit 12 min, Fieber 39,5°C. Eltern panisch, Kind "wie tot" gewirkt. Kein i.v.-Zugang möglich.',
   befund:'Kind krampft noch, generalisiert, Zyanose der Lippen. Kein Seitenzeichen. Fieber taktil bestätigt. Eltern angaben: kein Krampf in der Vorgeschichte.',
   vitals:{RR:'n.m.',HF:'130/min',SpO2:'87 %',AF:'unregelmäßig',GCS:'3',BZ:'92 mg/dl',Temp:'39,6 °C'},
@@ -927,6 +974,8 @@ const cases = [
   id:23, cat:'paediatrie', diff:'fortgeschritten',
   title:'Anaphylaxie beim Kind',
   agnn:'Anaphylaxie',
+  stichwort:'Kind 8 J. · Atemnot nach Essen in der Schule',
+  notruf:'"Kind in der Schule hat etwas gegessen und bekommt jetzt schlecht Luft, Haut ist ganz rot" – Schwere und Erdnussallergie nicht sofort mitgeteilt',
   alarm:'8-jähriges Kind, 15 min nach versehentlichem Erdnussverzehr in der Schule: Stridor, Atemnot, Nesselsucht. Bekannte Erdnussallergie, Notfall-Set (Epipen Junior) wurde verwendet.',
   befund:'Kind ängstlich, inspiratorischer Stridor, Lippen ödematös, generalisierte Urtikaria. Nach Epipen (150 µg) leichte Besserung, aber Stridor noch vorhanden. RR gefallen.',
   vitals:{RR:'78/45',HF:'140/min',SpO2:'88 %',AF:'28/min',GCS:'14',BZ:'n.e.'},
@@ -962,6 +1011,8 @@ const cases = [
   id:24, cat:'paediatrie', diff:'basis',
   title:'Stridor / Krupp-Anfall beim Kleinkind',
   agnn:'Atemstörung im Kindesalter',
+  stichwort:'Kind 2 J. · bellender Husten, Stridor, nachts',
+  notruf:'"Mein Kind ist aufgewacht und macht so komische Atemgeräusche und hustet so seltsam bellend, ich mache mir Sorgen"',
   alarm:'2-jähriges Kind, nächtlich aufgewacht mit bellendem Husten und inspiratorischem Stridor. Eltern alarmieren Notruf. Kind schreit, Stridor besser beim Aufnehmen.',
   befund:'Kind weinend, inspiratorischer Stridor in Ruhe, bellender Husten. Kein Speichelfluss, kein Fieber, Heiserkeit. Atemreserve noch gut (schreit kräftig). Keine Einziehungen in Ruhe.',
   vitals:{RR:'n.m.',HF:'135/min',SpO2:'96 %',AF:'28/min',GCS:'15',BZ:'n.e.',Temp:'37,1 °C'},
@@ -998,6 +1049,8 @@ const cases = [
   id:25, cat:'organisation', diff:'fortgeschritten',
   title:'MANV – Ersteintreffender Notarzt',
   agnn:'Verhalten des ersteintreffenden Notarztes (MANV)',
+  stichwort:'MANV · Busunfall A1, viele Verletzte',
+  notruf:'"Busunfall auf der Autobahn, mehrere Verletzte" – Anzahl stark unterschätzt, keine Angabe zu leblos daliegenden Personen',
   alarm:'Busunfall auf der Autobahn, Bus mit Reisegruppe (Schätzung 40 Personen), gegen Leitplanke. Ersteintreffender RTW meldet: "Viele Verletzte, mind. 5 reglos".',
   befund:'Eigene Situation: Sie treffen als erstes NEF ein. Mindestens 15 erkennbar Verletzte, davon 2 offensichtlich leblos, ca. 5 mit schweren Verletzungen (blutend, bewusstlos).',
   vitals:{RR:'–',HF:'–',SpO2:'–',AF:'–',GCS:'–',BZ:'–'},
@@ -1029,6 +1082,8 @@ const cases = [
   id:26, cat:'organisation', diff:'basis',
   title:'NEF-Beladung – Ausrüstung & Medikamente',
   agnn:'Ausrüstung und Beladung des NEF / Rettungsdienstrecht',
+  stichwort:'Wissensfall · NEF-Pflichtausstattung',
+  notruf:'"(Theoretischer Prüfungsfall – kein Notruf)"',
   alarm:'Wissensfall – kein Patientenszenario. Prüfling soll Kenntnisse über die Mindestbeladung, Qualitätssicherung und rechtliche Grundlagen des NEF nachweisen.',
   befund:'Theoretischer Fall. Prüfungsgespräch über Ausrüstungs- und Arzneimittelstandards im Rettungsdienst.',
   vitals:{RR:'–',HF:'–',SpO2:'–',AF:'–',GCS:'–',BZ:'–'},
@@ -1060,6 +1115,8 @@ const cases = [
   id:27, cat:'organisation', diff:'fortgeschritten',
   title:'Transportverweigerung – Einwilligung & Zwangsmaßnahmen',
   agnn:'Rechtsfragen im Rettungsdienst – Einwilligungsfähigkeit, Transportverweigerung',
+  stichwort:'M 58 · wach nach Hypo, verweigert Transport',
+  notruf:'"Bewusstloser Diabetiker, jetzt wieder wach, will aber nicht mitfahren" – rechtliche Situation unklar',
   alarm:'58-jähriger Diabetiker (Typ 2), nach hypoglykämischem Ereignis (BZ 38 mg/dl), aufgewacht nach Glukosegabe. Beharrt darauf, nicht ins Krankenhaus zu wollen. "Ich kenn das, das passiert mir öfter."',
   befund:'Patient jetzt wach, orientiert (4×), kein fokal-neurologisches Defizit. BZ nach Glukosegabe 95 mg/dl. Kein Sturztrauma erkennbar. Patient unterschreibt Verweigerung – Sie zweifeln, ob er wirklich einwilligungsfähig ist.',
   vitals:{RR:'138/82',HF:'82/min',SpO2:'97 %',AF:'14/min',GCS:'15',BZ:'95 mg/dl'},
@@ -1092,6 +1149,8 @@ const cases = [
   id:28, cat:'organisation', diff:'basis',
   title:'Leichenschau & Todesfeststellung',
   agnn:'Leichenschau, Totenschein, rechtliche Grundlagen',
+  stichwort:'W 83 · leblos aufgefunden, nicht erweckbar',
+  notruf:'"Meine Mutter liegt in ihrem Bett und reagiert nicht mehr, sie schläft einfach nicht auf"',
   alarm:'Sie werden als Notarzt zu einer 83-jährigen Frau gerufen, die leblos in ihrem Bett aufgefunden wird. Tochter (Anruferin) berichtet: seit gestern Abend kein Kontakt mehr möglich. Herzinsuffizienz bekannt.',
   befund:'Patientin leblos, keine Atmung, kein Puls. Körper kühl, Totenstarre in Kiefergelenken und Extremitäten, Leichenflecken an Rücken und Gesäß lagestabil (beim Umdrehen nicht wegdrückbar). Mundschleimhaut trocken, Augen leicht eingefallen.',
   vitals:{RR:'n.m.',HF:'0',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
@@ -1124,6 +1183,8 @@ const cases = [
   id:29, cat:'kardiologie', diff:'basis',
   title:'Paroxysmale SVT / AVNRT – Adenosin',
   agnn:'Herzrhythmusstörungen – Tachykardie (supraventrikulär)',
+  stichwort:'W 38 · Herzrasen, erste Episode',
+  notruf:'"Herzrasen seit einer Stunde, sie sagt eigentlich ist es kein Notfall aber es hört nicht auf"',
   alarm:'38-jährige Frau, plötzlich einsetzende Herzrasen-Attacke seit 45 min, leichter Schwindel. Bisher keine Herzerkrankung. Erste Episode dieser Art. Ansonsten gesund.',
   befund:'Patientin wach, aufgeregt, Kreislauf kompensiert. EKG: schmale QRS-Komplexe, Frequenz 185/min, regelmäßig, keine erkennbaren P-Wellen vor QRS (versteckt im QRS oder danach). V. a. AVNRT.',
   vitals:{RR:'110/70',HF:'185/min',SpO2:'97 %',AF:'18/min',GCS:'15',BZ:'n.e.'},
@@ -1159,6 +1220,8 @@ const cases = [
   id:30, cat:'intern', diff:'fortgeschritten',
   title:'Eklampsie / Geburtshilfe-Notfall',
   agnn:'Geburtshilfliche Notfälle – Eklampsie, Nabelschnurvorfall',
+  stichwort:'W 28 SSW 36 · Krampfanfall, Schwangerschaft',
+  notruf:'"Meine schwangere Frau hat einen Anfall gehabt, zuckt jetzt nicht mehr, ist aber verwirrt" – Vorsorgebefunde mit erhöhtem RR nicht erwähnt',
   alarm:'28-jährige Erstgebärende, 36. SSW, generalisierter Krampfanfall zuhause, Ehemann alarmiert Notruf. Vorsorge-Pass zeigt: Proteinurie und erhöhter RR bei letzter Vorsorge vor 1 Woche.',
   befund:'Patientin nach 90 s Krampf jetzt post-iktal, verwirrt. Sichtbar schwanger. Ödeme an Knöcheln und Gesicht (Faziesödem). Kind durch Bauchmanöver: Kind quer, keine regelmäßigen Wehen.',
   vitals:{RR:'175/115',HF:'108/min',SpO2:'94 %',AF:'20/min',GCS:'10',BZ:'88 mg/dl',Temp:'37,2 °C'},
@@ -1194,6 +1257,8 @@ const cases = [
   id:31, cat:'trauma', diff:'fortgeschritten',
   title:'Ruptured BAA / Akutes Aortensyndrom',
   agnn:'Abdominelles Aortenaneurysma, Aortendissektion – Schock',
+  stichwort:'M 72 · vernichtende Rücken-/Bauchschmerzen',
+  notruf:'"Mein Mann hat plötzlich starke Bauchschmerzen und Rückenschmerzen, ist schwindelig" – vernichtender Charakter und Schocksymptome unterschätzt',
   alarm:'72-jähriger Mann, plötzlich einsetzende vernichtende Rücken- und Bauchschmerzen, Schwindel, einmalig erbrochen. Bekannte arterielle Hypertonie, Raucher. Frau alarmiert 112.',
   befund:'Pat. blass, kaltschweißig, Schmerzen thorakal/abdominal ausstrahlend in den Rücken. Abdomen: pulsatile Resistenz periumbilikal tastbar, druckdolent. Kein Peritonismus. Unterschiedliche Blutdrücke bds. Arme (ΔRR > 20 mmHg): re 160/90, li 105/65.',
   vitals:{RR:'105/65 (li)',HF:'118/min',SpO2:'93 %',AF:'22/min',GCS:'13',BZ:'n.e.'},
@@ -1222,6 +1287,227 @@ const cases = [
     'Nierenkolik-Diagnose bei vernichtenden Rückenschmerzen → BAA-Ruptur übersehen',
     'Aggressive Volumengabe → Druckanstieg → Koagel reißt → unkontrollierte Blutung',
     'Transport in nächste Chirurgie ohne Gefäßchirurgie → keine Operationsmöglichkeit'
+  ]
+},
+// ── NEU: eCPR ─────────────────────────────────────────────
+{
+  id:32, cat:'kardiologie', diff:'fortgeschritten',
+  title:'eCPR-Kandidat – refraktäres Kammerflimmern',
+  agnn:'Reanimation, eCPR/ECMO',
+  stichwort:'M 52 · Kollaps beim Joggen, refraktäres VF',
+  notruf:'"Mann beim Joggen zusammengebrochen, Passanten machen Herzdruckmassage seit ein paar Minuten" – Bystanderzeit und Qualität unklar',
+  alarm:'52-jähriger Sportler, beobachteter Kollaps beim Joggen. Sofortige Laien-CPR durch Passanten, AED gibt 2 Schocks ohne ROSC. NEF-Eintreffzeit 9 min. Nach weiteren 3 Schocks + Adrenalin + Amiodaron weiterhin VF.',
+  befund:'Beobachteter Kollaps, sofortige Laien-CPR. Jetzt 18 min Reanimation, weiterhin refraktäres VF trotz 5 Defibrillationen, 3 mg Adrenalin, 450 mg Amiodaron. Normotherm, kein Trauma, keine terminale Erkrankung bekannt, kein Suizidhinweis. Alter 52 J.',
+  vitals:{RR:'n.m.',HF:'VF',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
+  eh:[
+    'Kennt eCPR-Einschlusskriterien: beobachteter Kollaps + Laien-CPR ≤ 5 min nach Kollaps + refraktäres VF nach ≥ 3 Schocks + Alter ≤ 65 J. + keine Komorbiditäten + normotherm',
+    'Kennt Hamburger resCPR-Protokoll: Voranmeldung Herzkatheterlabor mit eCPR-Fähigkeit, Transport unter mechanischer CPR',
+    'Legt mechanisches Kompressionssystem (LUCAS/AutoPulse) mit minimaler No-Flow-Unterbrechung an',
+    'Führt Reanimationsalgorithmus weiter: Adrenalin + Amiodaron nach Schema, Defibrillationsversuche alle 2 min',
+    'Kennt absolute eCPR-Kontraindikationen: nicht beobachteter Kollaps ohne CPR, terminale Erkrankung, schwere neurologische Vorerkrankung, Trauma als Ursache',
+    'Versteht: eCPR = Brücke zur kausalen Therapie (PCI, Bypass) – kein Selbstzweck'
+  ],
+  fragen:[
+    'Was sind die eCPR-Einschlusskriterien in Hamburg?',
+    'Welches mechanische Gerät setzen Sie ein und wie legen Sie es an?',
+    'Was melden Sie bei der Voranmeldung im Herzkatheterlabor?',
+    'Welche absoluten Kontraindikationen für eCPR kennen Sie?',
+    'Was ist der Unterschied zwischen eCPR und ECMO?',
+    'Heparin – wann und warum geben Sie es unter laufender CPR?'
+  ],
+  meds:[
+    {n:'Adrenalin',d:'1 mg i.v./i.o. alle 3–5 min',h:'Weiter nach Algorithmus'},
+    {n:'Amiodaron',d:'300 mg + 150 mg i.v./i.o.',h:'Bei refraktärem VF – bereits gegeben'},
+    {n:'Heparin',d:'5.000–10.000 IE i.v.',h:'Vor eCPR-Ankunft im Zentrum – Antikoagulation vor ECMO-Kanülierung'}
+  ],
+  fallstricke:[
+    'LUCAS-Anlage dauert zu lange → No-Flow-Zeit steigt, Outcome verschlechtert sich',
+    'eCPR ohne Laien-CPR in den ersten 5 min → kein Benefit mehr erwartet',
+    'Falsches Zielkrankenhaus ohne eCPR-Kapazität → ECMO nicht verfügbar, Zeit verloren'
+  ]
+},
+// ── NEU: RSI ──────────────────────────────────────────────
+{
+  id:33, cat:'organisation', diff:'fortgeschritten',
+  title:'Narkose im Rettungsdienst – RSI präklinisch',
+  agnn:'Atemwegssicherung, RSI, Analgosedierung',
+  stichwort:'Wissensfall · RSI-Narkose präklinisch',
+  notruf:'"(Theoretischer Prüfungsfall – kein Notruf)"',
+  alarm:'Wissensfall – Prüfungsgespräch über Indikationen, Medikamente, Technik und Komplikationsmanagement der präklinischen RSI. Kein Patientenszenario.',
+  befund:'Theoretischer Fall. Prüfungsgespräch über RSI als Standardverfahren zur präklinischen Atemwegssicherung.',
+  vitals:{RR:'–',HF:'–',SpO2:'–',AF:'–',GCS:'–',BZ:'–'},
+  eh:[
+    'Kennt RSI-Indikationen präklinisch: GCS < 9, Atemversagen trotz O₂ (SpO₂ < 90 % persistierend), Aspirationsschutz erforderlich, Atemweg nicht sicherbar ohne Narkose',
+    'Kennt RSI-Sequenz (8P): Preparation, Preoxygenation, Premedication, Paralysis + induction, Protection & positioning, Placement with proof, Post-intubation management',
+    'Wählt korrekte Einleitungsmittel: Esketamin (hämodynamisch günstig, bronchodilatatorisch) beim Trauma/Schock; Propofol nur beim stabilen Patienten',
+    'Kennt Muskelrelaxanzien: Rocuronium 1,2 mg/kg (Antagonist: Sugammadex 16 mg/kg bei Cannot Intubate); Succinylcholin als Alternative aber Kontraindikationen beachten',
+    'Kennt Cannot Intubate–Cannot Oxygenate-Algorithmus: Videolaryngoskop, Larynxmaske, chirurgischer Atemweg (Krikothyreotomie)',
+    'Weiß: etCO₂-Monitoring nach Intubation obligat – einzige sichere Methode zum Ausschluss Fehlintubation'
+  ],
+  fragen:[
+    'Welche Indikationen für eine präklinische RSI kennen Sie?',
+    'Beschreiben Sie die RSI-Sequenz (8P).',
+    'Welches Einleitungsmittel wählen Sie beim Traumapatienten im Schock und warum?',
+    'Was sind Kontraindikationen für Succinylcholin?',
+    'Was tun Sie, wenn die Intubation zweimal scheitert?',
+    'Warum ist Kapnometrie nach Intubation absolut obligat?'
+  ],
+  meds:[
+    {n:'Esketamin',d:'1–2 mg/kg i.v. Einleitung',h:'Hämodynamisch günstig, bronchodilatatorisch – Mittel der Wahl beim Trauma'},
+    {n:'Propofol',d:'1–2 mg/kg i.v.',h:'Nur bei hämodynamisch stabilen Patienten'},
+    {n:'Rocuronium',d:'1,2 mg/kg i.v.',h:'RSI-Dosis; Antagonist: Sugammadex 16 mg/kg'},
+    {n:'Succinylcholin',d:'1–1,5 mg/kg i.v.',h:'Cave KI: Hyperkaliämie, Verbrennungen > 48h, Crush, Denervierungserkrankungen'},
+    {n:'Fentanyl',d:'2–4 µg/kg Co-Induktion',h:'Dämpft Intubationsreiz, senkt benötigte Induktionsdosis'}
+  ],
+  fallstricke:[
+    'etCO₂-Monitoring vergessen → Fehlintubation in den Ösophagus bleibt unerkannt → Tod!',
+    'Hypotonie nach RSI bei Schockpatienten unterschätzt – Narkosemittel senken Sympathikustonus',
+    'Succinylcholin bei Hyperkaliämie (Nierenversagen, Crush, Verbrennung) → fatales Kammerflimmern'
+  ]
+},
+// ── NEU: Immobilisierung ──────────────────────────────────
+{
+  id:34, cat:'trauma', diff:'basis',
+  title:'Immobilisierung – Indikation, Technik und Grenzen',
+  agnn:'Traumatologie, HWS-Trauma, Immobilisierung',
+  stichwort:'M 35 · Motorradunfall, Nackenschmerz, Kribbeln',
+  notruf:'"Motorradunfall auf der B5, Fahrer liegt am Straßenrand und klagt über Nackenschmerzen, ist aber wach"',
+  alarm:'35-jähriger Motorradfahrer, Seitenaufprall gegen PKW bei ca. 50 km/h. Bewusst, GCS 15, starke Nackenschmerzen, Kribbeln in beiden Händen. Helm noch auf. Keine erkennbare äußere Blutung.',
+  befund:'Patient wach und orientiert (GCS 15). Motorik beider Hände kräftig. Sensibilitätsstörung distal bds. HWS: Druckschmerz HWK 4–6 mittig. Keine Schocksymptomatik. Helm sitzt fest, kein Visier-Trauma.',
+  vitals:{RR:'130/82',HF:'92/min',SpO2:'97 %',AF:'16/min',GCS:'15',BZ:'n.e.'},
+  eh:[
+    'Erkennt Indikation zur HWS-Immobilisierung: Hochenergietrauma + Nackenschmerz + neurologische Symptome (Sensibilitätsstörung)',
+    'Führt 2-Helfer-Helmabnahme korrekt durch: manuelle In-line-Stabilisierung (MILS) während der gesamten Abnahme',
+    'Weiß: Halskrawatte allein schützt HWS nicht – Rotations- und Flexionsbewegungen werden nicht gehemmt; MILS ist überlegen',
+    'Kennt Vorteile Vakuummatratze vs. Spineboard: bessere Druckverteilung, Komfort, weniger Schmerzen – aktuell bevorzugt',
+    'Kennt Nachteile kompletter Immobilisierung: venöser Rückstau → ICP-Anstieg (SHT!), Aspirationsgefahr, Druckulzera, erschwerte Untersuchung, Zeitverlust',
+    'Kennt Grenzen: NEXUS/Canadian C-Spine Rule – risikoarme Patienten können ohne Immobilisierung transportiert werden'
+  ],
+  fragen:[
+    'Nach welchen Kriterien entscheiden Sie sich für eine HWS-Immobilisierung?',
+    'Wie nehmen Sie den Motorradhelm korrekt ab?',
+    'Was ist MILS und warum ist es der Halskrawatte allein überlegen?',
+    'Welche Nachteile hat eine vollständige Immobilisierung auf dem Spineboard?',
+    'Wann ist die Halskrawatte kontraindiziert?',
+    'Was empfiehlt die aktuelle Leitlinie: Spineboard oder Vakuummatratze?'
+  ],
+  meds:[
+    {n:'Fentanyl / Esketamin',d:'Analgesie nach Körpergewicht titriert',h:'Ausreichende Analgesie vor und während Lagerung – reduziert Abwehrbewegungen'}
+  ],
+  fallstricke:[
+    'Halskrawatte allein als vollständige HWS-Immobilisierung betrachten – ist sie nicht!',
+    'Spineboard > 30 min → Druckulzera am Hinterkopf, Sacrum – Vakuummatratze ist besser',
+    'Analgesie vergessen → Abwehrbewegungen des Patienten → Sekundärtrauma bei Lagerung'
+  ]
+},
+// ── NEU: Klinikablehnung ──────────────────────────────────
+{
+  id:35, cat:'organisation', diff:'basis',
+  title:'Ablehnung eines Notfallpatienten durch die Zielklinik',
+  agnn:'Rettungsdienstrecht, Zielklinikentscheidung',
+  stichwort:'M 62 · STEMI, Zielklinik hat "keinen Platz"',
+  notruf:'"Starke Brustschmerzen, schwitzt" – STEMI bestätigt, jetzt Klinikproblem',
+  alarm:'Sie versorgen einen 62-jährigen Mann mit gesichertem STEMI (Vorderwand, ST-Hebungen V1–V4). Leitstelle meldet: Das nächste PCI-Zentrum (12 min Fahrzeit) teilt mit "kein freies Herzkatheterlabor, bitte anderes Haus". Das übernächste PCI-Zentrum liegt 38 min entfernt.',
+  befund:'Patient mit STEMI-EKG, hämodynamisch noch stabil (RR 115/75, HF 98/min), leichte Luftnot. Schmerzen VAS 7/10. ASS und Heparin bereits gegeben.',
+  vitals:{RR:'115/75',HF:'98/min',SpO2:'93 %',AF:'20/min',GCS:'15',BZ:'n.e.'},
+  eh:[
+    'Kennt rechtliche Grundlage: Klinik kann vital bedrohten Notfallpatienten nicht ablehnen wenn Erstversorgung möglich – rettungsdienstliche Einweisung hat Vorrang vor Kapazitätsmeldungen',
+    'Sucht direkten ärztlichen Kontakt: nicht nur Leitstelle → auch Oberarzt Kardiologie direkt kontaktieren',
+    'Kennt Zeitfenster: door-to-balloon < 90 min nach Erstkontakt; 38 min längere Fahrt bedeutet signifikante Schlechterstellung',
+    'Kennt Lyse als Backup: bei door-to-balloon > 120 min und kein PCI-Zentrum erreichbar → Lyse erwägen (sofern keine KI)',
+    'Entscheidet für nächstes PCI-Zentrum trotz Ablehnung bei vital bedrohtem Patienten',
+    'Dokumentiert: Ablehnung, Uhrzeiten, Gesprächspartner, eigene Begründung vollständig'
+  ],
+  fragen:[
+    'Kann eine Klinik einen vital bedrohten Notfallpatienten rechtlich ablehnen?',
+    'Was ist das door-to-balloon-Zeitfenster und warum ist jede Minute entscheidend?',
+    'Wie gehen Sie vor, wenn die Leitstelle das nächste PCI-Zentrum ablehnt?',
+    'Wann ist die Lysetherapie dem PCI-Transport vorzuziehen?',
+    'Was dokumentieren Sie in dieser Situation und warum?',
+    'Welche Rolle spielt der ärztliche Direktkontakt mit der Zielklinik?'
+  ],
+  meds:[
+    {n:'ASS + Heparin',d:'Bereits gegeben – weiterführen',h:'Thrombozytenaggregationshemmung + Antikoagulation'},
+    {n:'Alteplase (Lyse)',d:'15 mg Bolus + 0,75 mg/kg über 30 min (max 50 mg) + 0,5 mg/kg über 60 min',h:'Nur wenn door-to-balloon > 120 min und kein PCI-Zentrum erreichbar – Kontraindikationen prüfen!'}
+  ],
+  fallstricke:[
+    'Zu lange über Leitstelle verhandeln statt direkt zum nächsten PCI-Zentrum fahren',
+    'Lyse ohne Kontraindikationsprüfung geben → intrazerebrale Blutung möglich',
+    'Ablehnung nicht dokumentieren → fehlende Rückverfolgbarkeit'
+  ]
+},
+// ── NEU: IHT ──────────────────────────────────────────────
+{
+  id:36, cat:'organisation', diff:'basis',
+  title:'Interhospitaltransfer (IHT) – Besonderheiten',
+  agnn:'Interhospitaltransfer, Transportmedizin',
+  stichwort:'W 68 · IHT, intubierter Stroke-Patient',
+  notruf:'"(Verlegungsauftrag durch abgebende Klinik – kein direkter Notruf)"',
+  alarm:'Verlegungsauftrag: 68-jährige Frau mit gesichertem Stroke (LVOS, MRT bestätigt), abgebende Klinik ohne Thrombektomie-Möglichkeit. Verlegung ins Comprehensive Stroke Center, 85 km entfernt. GCS bei Verlegungsanfrage: 9.',
+  befund:'Patientin intubiert (RSI in abgebender Klinik bei GCS 9), beatmet (FiO₂ 0,4, PEEP 5, Vt 420 ml). Noradrenalin 0,08 µg/kg/min. Arterieller Katheter A. radialis li. 2 i.v.-Zugänge. CT-Bilder und Arztbrief übergeben. Blasenkatheter. Restlaufzeit der Perfusoren 3h.',
+  vitals:{RR:'138/78',HF:'86/min',SpO2:'97 %',AF:'14/min',GCS:'6',BZ:'122 mg/dl'},
+  eh:[
+    'Führt strukturierte Übernahme durch: ISBAR-Schema (Identify, Situation, Background, Assessment, Recommendation)',
+    'Prüft Transportfähigkeit: Hämodynamik stabil? Ausreichend Medikamente für Transport + 50 % Reserve? O₂-Vorrat berechnet?',
+    'Verwendet eigenes Transportbeatmungsgerät (kein klinisches Gerät verwenden – Akkuprobleme, Kompatibilität)',
+    'Berechnet O₂-Bedarf: (Vt × AF × FiO₂ × Transportzeit × 1,5-facher Reserve) – Vorrat prüfen',
+    'Kennt rechtliche Aspekte: Verantwortung beim Notarzt bis zur dokumentierten ärztlichen Übernahme in aufnehmender Klinik',
+    'Führt Transportprotokoll: Vitalzeichen alle 5–10 min, alle Medikamentengaben, Vorkommnisse, Übergabezeit'
+  ],
+  fragen:[
+    'Was überprüfen Sie bevor Sie den Interhospitaltransfer antreten?',
+    'Was bedeutet ISBAR im Kontext der Übergabe?',
+    'Wie berechnen Sie den O₂-Bedarf für den Transport?',
+    'Warum dürfen Sie nicht das Beatmungsgerät der abgebenden Klinik mitnehmen?',
+    'Wann ist ein Patient nicht transportfähig?',
+    'Wann gilt die ärztliche Verantwortung als übertragen?'
+  ],
+  meds:[
+    {n:'Noradrenalin',d:'Fortführung der laufenden Katecholamintherapie',h:'Ausreichende Spritzenvorräte für Transport + 50 % Reserve'},
+    {n:'Midazolam + Fentanyl',d:'Transportanalgosedierung titriert',h:'Spontanbewegungen/Pressen bei intubiertem Pat. vermeiden – ICP-Anstieg!'}
+  ],
+  fallstricke:[
+    'Klinisches Beatmungsgerät im RTW → Akku leer, Kompatibilität unsicher, ggf. nicht geeicht',
+    'O₂-Vorrat nicht berechnet → Engpass bei Stau oder Transportverzögerung',
+    'Zu früh Verantwortung abgeben → rechtliche Grauzone bis dokumentierte ärztliche Übernahme'
+  ]
+},
+// ── NEU: Typ-A-Dissektion ─────────────────────────────────
+{
+  id:37, cat:'kardiologie', diff:'fortgeschritten',
+  title:'Aortendissektion Typ A (Stanford A)',
+  agnn:'Hypertensiver Notfall, Aortendissektion',
+  stichwort:'M 62 · vernichtender Brustschmerz mit Rückenausstrahlung',
+  notruf:'"Herzinfarkt! Mein Mann hat starke Brustschmerzen die in den Rücken ausstrahlen und schwitzt" – als ACS gemeldet, RR-Seitendifferenz unbekannt',
+  alarm:'62-jähriger Mann, plötzlich einsetzender vernichtender Brustschmerz "wie ein Reißen", sofort maximale Intensität, Ausstrahlung in den Rücken und zwischen die Schulterblätter. Bekannte arterielle Hypertonie. Frau alarmiert 112.',
+  befund:'RR rechts 188/105, links 88/55 (Differenz > 20 mmHg!). Puls rechts kräftig, links abgeschwächt. EKG: keine STEMI-Kriterien, leichte ST-Senkungen I/aVL. Auskultation: kurzes Diastolikum parasternal. Kein Perikardreiben.',
+  vitals:{RR:'188/105 (re) / 88/55 (li)',HF:'110/min',SpO2:'94 %',AF:'22/min',GCS:'14',BZ:'n.e.'},
+  eh:[
+    'Differenziert Aortendissektion Typ A von STEMI: Schmerzcharakter (sofort maximal, "Reißen"), keine Evolution, RR-Seitendifferenz > 20 mmHg, Pulsdefizit, keine klassischen ST-Hebungen',
+    'Erkennt Komplikationen Typ A: Herzbeuteltamponade (Perikarderguss), Aorteninsuffizienz, Koronarbeteiligung (→ STEMI-Mimikry), zerebrale Ischämie',
+    'Kennt präklinische Therapieprinzipien: Blutdrucksenkung (Ziel syst. 100–120 mmHg), HF-Senkung (Ziel HF < 60/min), Analgesie',
+    'Wählt richtige Medikamente: Esmolol oder Labetalol (α+β-Blockade) + Urapidil; kein Nitrat als Monotherapie (Reflex-Tachykardie erhöht Wandscherspannung)',
+    'Versteht Transportdringlichkeit: Typ A = operativer Notfall → Herzchirurgie mit Herzlungenmaschine, kein anderes Haus',
+    'Verhindert Lyse: ACS-Mimikry → Lyse bei Dissektion = fatal (Perikardtamponade, unkontrollierte Blutung)'
+  ],
+  fragen:[
+    'Wie unterscheiden Sie klinisch eine Aortendissektion von einem STEMI?',
+    'Was bedeutet eine Blutdruckdifferenz von > 20 mmHg zwischen beiden Armen?',
+    'Welche Komplikationen drohen bei einer Typ-A-Dissektion?',
+    'Was ist der Unterschied zwischen Stanford Typ A und Typ B?',
+    'Welche Blutdruckzielwerte und Medikamente setzen Sie präklinisch ein?',
+    'Warum ist Lysetherapie bei Dissektion absolut kontraindiziert?'
+  ],
+  meds:[
+    {n:'Esmolol',d:'0,5 mg/kg Bolus i.v., dann 0,05–0,3 mg/kg/min',h:'Kurzwirksamer Beta-Blocker – gut steuerbar'},
+    {n:'Labetalol',d:'20 mg Bolus i.v., ggf. wiederholen',h:'α+β-Blockade kombiniert – ideal bei Dissektion'},
+    {n:'Urapidil',d:'5–10 mg Boli i.v.',h:'Zur ergänzenden RR-Senkung – cave: Reflex-Tachykardie vermeiden'},
+    {n:'Fentanyl',d:'0,05–0,1 mg titriert i.v.',h:'Analgesie senkt Katecholaminausschüttung und Wandscherspannung'}
+  ],
+  fallstricke:[
+    'Lyse bei ACS-Mimikry der Dissektion → perikardiale/mediastinale Blutung, Tod!',
+    'Nitrat als Monotherapie → Reflex-Tachykardie → erhöhte Wandscherspannung → Progression',
+    'Transport in Klinik ohne Herzchirurgie → Typ A muss operiert werden!'
   ]
 }
 ];
@@ -1252,10 +1538,11 @@ function renderGrid(filter){
           ${renderBadge('diff-'+c.diff, c.diff==='basis'?'Basis':'Fortgeschritten')}
         </div>
         <div class="card-title">${c.title}</div>
+        ${c.stichwort ? `<div class="card-stw">📟 ${c.stichwort}</div>` : ''}
         <div class="card-alarm">${c.alarm}</div>
       </div>
       <div class="card-footer">
-        <span>AGNN: ${c.agnn}</span>
+        <span style="font-size:.75rem;color:#aaa">AGNN: ${c.agnn}</span>
         <span>→</span>
       </div>
     </div>
@@ -1338,6 +1625,7 @@ function openCase(id){
         <strong>Alarmierung / Fallvorstellung</strong>
         ${c.alarm}
       </div>
+      ${c.notruf ? `<div class="notruf-box"><b>Notruf-Meldung (was die Leitstelle meldet)</b>${c.notruf}</div>` : ''}
       <div class="vitals-grid">${vitalsHtml}</div>
       ${c.befund ? `<div class="befund-box" style="margin-top:.75rem"><strong style="font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:#888;display:block;margin-bottom:.3rem">Befund</strong>${c.befund}</div>` : ''}
     </div>
