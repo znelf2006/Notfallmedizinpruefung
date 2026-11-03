@@ -135,7 +135,7 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
     <span class="hdr-sub">AGNN-Therapieempfehlungen 2026 · Zusatzweiterbildung Notfallmedizin · Muster-WBO BÄK</span>
   </div>
   <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">Alle (37)</button>
+    <button class="filter-btn active" data-filter="all">Alle (43)</button>
     <button class="filter-btn cat-btn" data-cat="kardiologie">Kardiologie</button>
     <button class="filter-btn cat-btn" data-cat="pulmonal">Pulmonal · Allergie</button>
     <button class="filter-btn cat-btn" data-cat="neurologie">Neurologie</button>
@@ -1510,6 +1510,237 @@ const cases = [
     'Lyse bei ACS-Mimikry der Dissektion → perikardiale/mediastinale Blutung, Tod!',
     'Nitrat als Monotherapie → Reflex-Tachykardie → erhöhte Wandscherspannung → Progression',
     'Transport in Klinik ohne Herzchirurgie → Typ A muss operiert werden!'
+  ]
+},
+// ── TOXIKOLOGIE ───────────────────────────────────────────
+{
+  id:38, cat:'intern', diff:'fortgeschritten',
+  title:'Opioid-Intoxikation mit Atemdepression',
+  agnn:'Intoxikation, Atemwegssicherung',
+  stichwort:'M 28 · bewusstlos, Spritze neben ihm',
+  notruf:{korrekt:'M 28 · Opioid-Intox / Atemdepression', irre:'M 28 · Bewusstlos'},
+  alarm:'28-jähriger Mann, im Treppenhaus aufgefunden. Gebrauchte Heroinspritze neben ihm. Begleiter hatte Zugang und rief Notruf. Schnappatmung.',
+  befund:'GCS 5 (E1V1M3), stecknadelkopfgroße Miosis beidseits, Schnappatmung 4/min, Kaltschweißigkeit. Venöse Einstichstellen an Unterarmen, keine äußerlichen Verletzungen.',
+  vitals:{RR:'80/50',HF:'52/min',SpO2:'70 %',AF:'4/min',GCS:'5',BZ:'62 mg/dl'},
+  eh:[
+    'Erkennt Opioid-Trias: Bewusstlosigkeit + Miosis + Atemdepression',
+    'Sichert Atemweg sofort: Guedel/Wendl-Tubus, BVM-Beatmung mit 100% O2',
+    'Gibt Naloxon titriert: 0,4 mg i.v. (nicht als hoher Bolus – Entzug!)',
+    'Kennt Naloxon-Wirkdauer (30–90 min) → Re-Sedierung möglich, kein Entlassen',
+    'Schließt Differentialdiagnosen aus: BZD, SHT, Hypoglykämie (BZ 62!)',
+    'Plant Zielklinik: Intensivstation, BtM-Protokoll, psychiatrische Mitbehandlung',
+    'Cave: Agitation nach Naloxon → kein Flumazenil, keine physische Fixierung ohne Sedierung'
+  ],
+  fragen:[
+    'Nennen Sie die klassische klinische Trias der Opioidintoxikation.',
+    'Warum titrieren statt Bolus bei Naloxon – was passiert bei zu hoher Dosis?',
+    'Naloxon hat eine kurze Wirkdauer. Was bedeutet das für Transportziel und Monitoring?',
+    'SpO2 70% – was tun Sie, bevor Sie Naloxon geben?',
+    'Welche Differentialdiagnosen müssen Sie ausschließen, bevor Sie "nur Opioid-Intox" diagnostizieren?',
+    'Was müssen Sie beim BtM-Protokoll im Rettungsdienst beachten?',
+    'BZ ist 62 mg/dl – wie gehen Sie vor?'
+  ],
+  meds:[
+    {n:'Naloxon',d:'0,4 mg i.v. titriert, alle 2–3 min',h:'Bis AF ≥12/min – nicht als Bolus'},
+    {n:'Glukose 40%',d:'25 g i.v.',h:'Hypoglykämie ausschließen und behandeln'},
+    {n:'O2',d:'15 L/min über BVM',h:'Vor Naloxon bereits beatmen!'}
+  ],
+  fallstricke:[
+    'Naloxon als hoher Bolus → akuter Entzug, Lungenödem, Agitation',
+    'Kurze Wirkdauer nicht bedacht → Patient re-sediert nach 30–90 min',
+    'Beatmung vor Naloxon vergessen → vermeidbare Hypoxieschäden',
+    'BZ-Messung unterlassen → Hypoglykämie als Koursache übersehen'
+  ]
+},
+{
+  id:39, cat:'intern', diff:'fortgeschritten',
+  title:'Mischintoxikation – Benzodiazepin + Alkohol',
+  agnn:'Intoxikation, Atemwegssicherung, Suizidalität',
+  stichwort:'W 45 · bewusstlos, leere Tablettenpäckchen',
+  notruf:{korrekt:'W 45 · Mischintox BZD + Alkohol', irre:'W 45 · bewusstlos / Alkohol'},
+  alarm:'45-jährige Frau, durch Freundin aufgefunden. Mehrere leere Diazepam-Päckchen (ca. 200 mg gesamt) und leere Weinflasche. Schnarchen, nicht erweckbar.',
+  befund:'GCS 8 (E2V2M4), Atemweg verlegt (Schnarchen), AF 8/min flach, keine Fokalzeichen, keine Pupillenauffälligkeit. Alkoholfahne. Keine Verletzungen.',
+  vitals:{RR:'100/65',HF:'88/min',SpO2:'88 %',AF:'8/min',GCS:'8',BZ:'54 mg/dl'},
+  eh:[
+    'Sichert Atemweg: stabile Seitenlage, Absaugbereitschaft, ggf. RSI bei GCS ≤8 + Schutzreflex-Verlust',
+    'Entscheidet kritisch über Flumazenil: kontraindiziert bei Mischintox mit TZA, Krampfanamnese, Polytox',
+    'Behandelt Hypoglykämie (BZ 54): Thiamin 100 mg VOR Glukose (Wernicke-Prophylaxe!)',
+    'Erkennt Suizidversuch: rechtliche Aspekte, psychiatrische Konsultation pflicht',
+    'Dokumentiert Giftstoffe, Menge, Zeitpunkt für Notaufnahme / Giftnotruf',
+    'Erwägt Giftnotruf (Beratung durch Toxikologen, Telefon immer empfohlen)'
+  ],
+  fragen:[
+    'Wann intubieren Sie einen Intoxikationspatienten präklinisch – welche Kriterien gelten?',
+    'Welche Kontraindikationen hat Flumazenil? Warum ist es hier potenziell gefährlich?',
+    'Warum Thiamin vor Glukose – was passiert sonst bei einem Alkoholiker?',
+    'Welche Informationen übergeben Sie an die Notaufnahme (ISBAR + Toxikologie)?',
+    'Welche rechtlichen Aspekte gelten bei einem Suizidversuch und Transportverweigerung?',
+    'Was ist die Rolle des Giftnotrufs – und wann kontaktieren Sie ihn?'
+  ],
+  meds:[
+    {n:'Thiamin (B1)',d:'100 mg i.v.',h:'Immer VOR Glukose bei Alkoholikern'},
+    {n:'Glukose 40%',d:'25 g i.v.',h:'BZ 54 mg/dl – Hypoglykämie behandeln'},
+    {n:'Flumazenil',d:'0,2 mg i.v. (cave: KI!)',h:'Nur wenn reine BZD-Intox sicher; niemals bei TZA-Mischintox oder Krampfanamnese'}
+  ],
+  fallstricke:[
+    'Flumazenil bei TZA-Mischintox oder Krampfanamnese → kontraindiziert',
+    'Glukose ohne Thiamin bei Alkoholiker → Wernicke-Enzephalopathie',
+    'GCS 8 ohne Atemwegsicherung → Aspirationspneumonie',
+    'Suizidversuch ohne psychiatrische Meldung und Dokumentation'
+  ]
+},
+{
+  id:40, cat:'intern', diff:'fortgeschritten',
+  title:'Trizyklika-Intoxikation (kardiotoxisch)',
+  agnn:'Intoxikation, kardiotoxisch, EKG-Diagnostik',
+  stichwort:'W 52 · bewusstlos nach Tabletten, breiter QRS',
+  notruf:{korrekt:'W 52 · Trizyklika-Intox / QRS-Verbreiterung', irre:'W 52 · bewusstlos nach Tabletten'},
+  alarm:'52-jährige Frau, Suizidversuch mit eigenen Amitriptylin-Tabletten (leere Packung 100 × 75 mg = 7,5 g). Ehemann findet sie bewusstlos am Boden.',
+  befund:'GCS 6 (E1V2M3), Mydriasis beidseits, trockene Haut und Schleimhäute, motorische Unruhe (anticholinerges Syndrom). EKG: QRS 140 ms, QTc 560 ms, Sinustachykardie. RR 70/45.',
+  vitals:{RR:'70/45',HF:'130/min',SpO2:'94 %',AF:'18/min',GCS:'6',BZ:'92 mg/dl'},
+  eh:[
+    'Erkennt anticholinerges Syndrom: Mydriasis, trockene Haut, Tachykardie, Bewusstlosigkeit',
+    'Wertet EKG: QRS >120 ms → kardiotoxisch → sofort Natriumbicarbonat!',
+    'Gibt NaHCO3 korrekt: 1–2 mval/kg i.v. als Bolus',
+    'Intubiert bei GCS <8 (RSI)',
+    'Kennt absolute Kontraindikation: Physostigmin bei TZA → Asystolie-Risiko!',
+    'Wählt Zielklinik mit Toxikologie/Intensivstation und kontinuierlichem EKG-Monitoring',
+    'Überwacht QRS-Breite unter Therapie – Ziel: QRS <120 ms'
+  ],
+  fragen:[
+    'Was ist das anticholinerge Syndrom? Nennen Sie typische klinische Zeichen.',
+    'Welche EKG-Veränderungen sind bei TZA-Intox lebensgefährlich – und was tun Sie dagegen?',
+    'Warum wirkt Natriumbicarbonat bei TZA-Kardiotoxizität? Welchen Mechanismus nutzen Sie?',
+    'Welches Antidot ist bei TZA-Vergiftung KONTRAINDIZIERT und warum?',
+    'Der Patient entwickelt im Transport Kammerflimmern – was ist die Besonderheit bei der Reanimation?',
+    'Wie berechnen Sie die Toxizität einer Tablettenintoxikation – ab wann ist sie wahrscheinlich?'
+  ],
+  meds:[
+    {n:'Natriumbicarbonat 8,4%',d:'1–2 mval/kg i.v. Bolus',h:'Bei QRS >120 ms – Alkalinisierung schützt Na-Kanal'},
+    {n:'RSI-Narkose',d:'Ketamin + Rocuronium',h:'Bei GCS <8 – Atemwegsicherung'},
+    {n:'Noradrenalin',d:'0,1–0,5 µg/kg/min',h:'Persistierende Hypotonie nach NaHCO3'}
+  ],
+  fallstricke:[
+    'Physostigmin bei TZA → fatale Asystolie!',
+    'QRS-Verbreiterung als bloße Tachykardie fehlinterpretiert',
+    'Kein kontinuierliches EKG-Monitoring → maligne Arrhythmie nicht erkannt',
+    'NaHCO3 vergessen → fortschreitende Kardiotoxizität'
+  ]
+},
+{
+  id:41, cat:'intern', diff:'basis',
+  title:'CO-Intoxikation – Einzelperson (Holzkohlegrill innen)',
+  agnn:'Intoxikation CO, Sauerstofftherapie',
+  stichwort:'M 35 · Kopfschmerzen + Verwirrtheit, Grill in der Wohnung',
+  notruf:{korrekt:'M 35 · CO-Vergiftung', irre:'M 35 · Kopfschmerzen / Schwindel'},
+  alarm:'35-jähriger Mann, in Wohnung aufgefunden. Fenster und Türen geschlossen, Holzkohlegrill noch glühend im Zimmer. Freundin kam zu Besuch und fand ihn verwirrt auf dem Sofa, wartete im Flur auf den RD.',
+  befund:'GCS 10 (E3V3M4), Kopfschmerzen und Schwindel auf Befragung, keine Paresen. SpO2 98% (Pulsox – unzuverlässig!). CO-Hb in BGA: 28%. Kein CO-Melder in der Wohnung.',
+  vitals:{RR:'140/85',HF:'102/min',SpO2:'98 % (falsch!)',AF:'18/min',GCS:'10',BZ:'98 mg/dl'},
+  eh:[
+    'Erkennt CO-Verdacht: Anamnese (geschlossener Raum + Verbrennungsquelle) + Symptome',
+    'Eigensicherung: Wohnung nur mit PSA / PA betreten, Bereich absperren, Lüften',
+    'Kennt SpO2-Fallstrick: Pulsox zeigt falsch-normale Werte bei CO-Hb (Carboxyhämoglobin!) → BGA obligat',
+    'Gibt sofort 100% O2 über dichte Maske (Halbwertzeit CO-Hb sinkt von ~5 h auf 60–90 min)',
+    'Kennt HBO-Indikation: CO-Hb >25%, Bewusstlosigkeit, Schwangerschaft, kardiale Symptome',
+    'Untersucht Freundin im Flur – sie wurde ggf. ebenfalls exponiert',
+    'Informiert Leitstelle über CO-Ereignis → Feuerwehr, Nachbarwohnungen checken'
+  ],
+  fragen:[
+    'Warum ist die Pulsoximetrie bei CO-Vergiftung unzuverlässig? Was messen Sie stattdessen?',
+    'Ab welchem CO-Hb empfehlen Sie HBO – und was sind weitere Indikationen?',
+    'Was sind die Maßnahmen zur Eigensicherung an diesem Einsatzort?',
+    'Welche Spätschäden können bei CO-Vergiftung auftreten – auch bei initialer Besserung?',
+    'Wie lange beträgt die Halbwertzeit von CO-Hb an Raumluft vs. unter 100%-O2 vs. HBO?',
+    'Was müssen Sie bzgl. anderer Personen im Gebäude veranlassen?'
+  ],
+  meds:[
+    {n:'O2 100%',d:'15 L/min über dichte Reservoirmaske',h:'HWZ CO-Hb: 5 h (Luft) → 60 min (100% O2) → 20 min (HBO)'},
+    {n:'HBO',d:'Überweisung in HBO-Zentrum',h:'Indikation: CO-Hb >25%, Bewusstlosigkeit, Schwangerschaft'}
+  ],
+  fallstricke:[
+    'SpO2 zeigt falsch-normale 98% → trügt bei CO-Vergiftung, BGA zwingend',
+    'Eigensicherung vergessen → RD-Personal eigene CO-Exposition!',
+    'HBO-Indikation nicht erkannt trotz CO-Hb 28%',
+    'Freundin im Flur nicht untersucht → zweites Opfer übersehen'
+  ]
+},
+// ── PULMONAL: Inhalationstrauma ────────────────────────────
+{
+  id:42, cat:'pulmonal', diff:'fortgeschritten',
+  title:'Inhalationstrauma – toxisches Lungenödem (Chlorgas)',
+  agnn:'Inhalationstrauma, Lungenödem, Atemwegssicherung',
+  stichwort:'M 42 · Atemnot nach Chemieunfall, kein Brand',
+  notruf:{korrekt:'M 42 · Inhalationstrauma Chlorgas', irre:'M 42 · Luftnot / Hustenreiz'},
+  alarm:'42-jähriger Hausmeister, hat Reinigungsmittel gemischt (Salzsäure + Natriumhypochlorit → Chlorgas). Schlecht belüfteter Keller. Sofort nach draußen geflüchtet. Jetzt Atemnot, brennende Augen, Hustenreiz.',
+  befund:'Ausgeprägte Konjunktivitis und Tränenfluss, inspir. und exspir. Stridor, SpO2 88%, AF 30/min. Kein Verbrennungsmuster an der Haut. Haut und Schleimhäute gerötet.',
+  vitals:{RR:'145/90',HF:'118/min',SpO2:'88 %',AF:'30/min',GCS:'15',BZ:'104 mg/dl'},
+  eh:[
+    'Entfernt Patienten von Exposition, verhindert erneute Exposition (Keller absperren)',
+    'Eigensicherung: kein PSA mit Atemschutz beim Hausmeister-Einsatz = trotzdem PA holen (Chlorgas noch vorhanden)',
+    'Sofort O2 + Salbutamol inhalativ (Bronchospasmus)',
+    'Kennt verzögerte Komplikation: toxisches Lungenödem (ARDS) nach Latenz 6–24 h',
+    'Erkennt: initialer Besserung nicht trauen → stationäre Überwachung mindestens 6 h zwingend',
+    'Spült Augen und Schleimhäute großzügig mit NaCl 0,9%',
+    'Kontaktiert Giftnotruf für substanzspezifische Therapieempfehlung'
+  ],
+  fragen:[
+    'Was entsteht bei der Mischung von Salzsäure und Natriumhypochlorit? Welche Sofortmaßnahmen?',
+    'Warum ist das toxische Lungenödem nach Chlorgasexposition gefürchtet – wann tritt es auf?',
+    'Welche Inhalativa setzen Sie ein und warum?',
+    'Der Patient fühlt sich nach 20 min O2 deutlich besser – darf er zu Hause bleiben?',
+    'Welche Schutzmaßnahmen müssen Ersthelfer und Rettungsdienst an diesem Einsatzort treffen?',
+    'Wie unterscheidet sich das Inhalationstrauma durch Rauchgase von dem durch Chlorgas?'
+  ],
+  meds:[
+    {n:'Salbutamol',d:'2,5–5 mg vernebt',h:'Bronchospasmus – auch prophylaktisch bei Chlorgasexposition'},
+    {n:'Budesonid',d:'2 mg inhalativ',h:'Entzündungshemmung der oberen Atemwege'},
+    {n:'O2',d:'10–15 L/min, SpO2-Ziel ≥94%',h:'Kombination mit Inhalativa'},
+    {n:'NaCl 0,9%',d:'Augenspülung 500–1000 ml',h:'Konjunktivitis / Schleimhautreizung'}
+  ],
+  fallstricke:[
+    'Toxisches Lungenödem mit Latenz 6–24 h → Patient in falscher Sicherheit entlassen',
+    'Eigensicherung unterlassen (Chlorgas noch im Keller)',
+    'Kein Giftnotruf kontaktiert → spezifische Therapiehinweise verpasst',
+    'Augenspülung vergessen → Korneaschäden'
+  ]
+},
+// ── TRAUMA: Schwere Brandverletzung ───────────────────────
+{
+  id:43, cat:'trauma', diff:'fortgeschritten',
+  title:'Schwere Brandverletzung >30% VKOF – Parkland-Formel',
+  agnn:'Thermisches Trauma, Verbrennung, Volumentherapie',
+  stichwort:'M 55 · Explosion Werkstatt, großflächige Verbrennung',
+  notruf:{korrekt:'M 55 · Schwere Verbrennung >30% VKOF', irre:'M 55 · Explosionsunfall'},
+  alarm:'55-jähriger Mann, Explosion einer Gasflasche in der Werkstatt. Flammeneinwirkung ca. 20 Sekunden an Oberkörper und Armen. Wach, adäquat, extreme Schmerzen. Keine Bewusstlosigkeit, Fenster waren offen (kein Inhalationstrauma).',
+  befund:'Grad IIb-III Verbrennungen: beide Arme (18%), Thorax anterior (9%), Bauch (9%), Gesicht/Hals (9%) = ca. 45% VKOF. Keine zirkulären Verbrennungen initial. Haare nicht versengt, SpO2 97% Raumluft. Keine Ruß-Ablagerungen.',
+  vitals:{RR:'125/80',HF:'114/min',SpO2:'97 %',AF:'20/min',GCS:'15',BZ:'108 mg/dl'},
+  eh:[
+    'Schätzt Verbrennungsausdehnung (VKOF) korrekt mit Neunerregel oder Handflächenregel',
+    'Berechnet Volumenbedarf nach Parkland-Formel: 4 ml × kg KG × % VKOF in 24 h, Hälfte in 8 h',
+    'Starke Analgesie: Opioide + ggf. Ketamin (wacher Patient, starke Schmerzen)',
+    'Verzichtet auf Kühlung bei >15% VKOF → Hypothermiegefahr! Nur sterile Abdeckung',
+    'Erkennt Zeitkritikalität: primär Brandverletztenzentrum, kein lokales KH',
+    'Prüft auf zirkuläre Verbrennungen an Extremitäten → Kompartmentsyndrom-Risiko',
+    'Schützt Verbrennungswunden: sterile Abdeckung, Wärmeerhalt (Aluminiummatte)'
+  ],
+  fragen:[
+    'Erklären Sie die Neunerregel zur Abschätzung der Verbrennungsfläche.',
+    'Berechnen Sie den Volumenbedarf für diesen 80-kg-Patienten nach der Parkland-Formel.',
+    'Warum ist großflächige Kühlung bei >15% VKOF gefährlich?',
+    'Welche Analgesie wählen Sie für einen wachen Verbrennungspatienten mit extremen Schmerzen?',
+    'Wann und warum sind Dekompressionsschnitte (Escharotomie) indiziert?',
+    'Welche Kriterien bestimmen die Zuweisung in ein Brandverletztenzentrum?'
+  ],
+  meds:[
+    {n:'Fentanyl',d:'1–2 µg/kg i.v. titriert',h:'Starke Schmerzen – titrieren bis Schmerzkontrolle'},
+    {n:'Ketamin S',d:'0,25–0,5 mg/kg i.v.',h:'Dissoziative Analgesie, erhält Schutzreflexe'},
+    {n:'Ringer-Laktat',d:'Parkland: 4 ml × 80 kg × 45% VKOF = 14,4 L / 24 h',h:'Hälfte (7,2 L) in ersten 8 h, Rest in 16 h'}
+  ],
+  fallstricke:[
+    'Kühlung >15% VKOF → lebensbedrohliche Hypothermie',
+    'Neunerregel falsch angewendet → Volumen unter-/überschätzt',
+    'Zirkuläre Verbrennung der Extremitäten → Kompartmentsyndrom nicht erkannt',
+    'Transport in nächste Klinik statt Brandverletztenzentrum'
   ]
 }
 ];
