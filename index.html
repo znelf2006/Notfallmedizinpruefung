@@ -93,7 +93,8 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
 .eh-check{width:18px;height:18px;min-width:18px;border:1.5px solid #d1d5db;border-radius:4px;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s;background:#fff}
 .eh-check.checked{background:#16a34a;border-color:#16a34a;color:#fff}
 .eh-check.checked::after{content:'✓';font-size:11px;font-weight:700}
-.eh-nf{font-size:.76rem;color:#6b7280;font-style:italic;margin-top:.25rem;padding-left:.4rem;border-left:2px solid #d1d5db;line-height:1.45}
+.eh-nf{font-size:.76rem;color:#6b7280;font-style:italic;margin-top:.25rem;padding-left:.4rem;border-left:2px solid #d1d5db;line-height:1.45;position:relative;cursor:help}
+.eh-nf[data-answer]:hover::after{content:attr(data-answer);position:absolute;left:0;top:calc(100% + 4px);background:#1f2937;color:#f9fafb;padding:.65rem .95rem;border-radius:7px;font-size:.79rem;font-style:normal;line-height:1.55;min-width:260px;max-width:500px;white-space:normal;z-index:500;box-shadow:0 4px 18px rgba(0,0,0,.32);pointer-events:none}
 
 .fragen-list{display:flex;flex-direction:column;gap:0.5rem;counter-reset:fragen}
 .frage-item{counter-increment:fragen;display:flex;gap:0.7rem;font-size:0.88rem;line-height:1.5;padding:0.5rem 0.7rem;border-left:3px solid #e5e7eb;border-radius:0 5px 5px 0}
@@ -2050,6 +2051,362 @@ const EH_NF = {
     'Welche Informationen sind für die Voranmeldung beim Traumazentrum essenziell?']
 };
 
+const EH_NF_A = {
+  1:[
+    'STEMI: ST-Hebung ≥1 mm in ≥2 benachbarten Extremitätenableitungen oder ≥2 mm in ≥2 Brustwandableitungen; neuer LBBB = STEMI-Äquivalent. Hinterwand II/III/aVF; RVI V3R/V4R. (AGNN 2026)',
+    'AGNN: Nitrat → venöse Dilatation → Vorlast ↓. RVI: RV preload-abhängig → Vorlastsenkung → RV-Auswurf ↓ → RR-Absturz. KI: Hinterwandinfarkt + RVI.',
+    'AGNN: FMC = erster medizinischer Kontakt. Ziel: PCI ≤90 min ab FMC (door-to-balloon). Bei nicht erreichbarem Zeitfenster → Lyse + Transport.',
+    'AGNN: Zu viel Volumen beim RVI → RV-Überdehnung → Septumshift links → LV-Füllung ↓ → HZV ↓. Volumen vorsichtig titrieren, max. 500 ml Bolusgabe.',
+    'AGNN: UFH 5.000 IE i.v. oder 70 IE/kg (max. 5.000 IE) präklinisch. HWZ ~1 h; Thrombuslast ↓ vor PCI.',
+    'Komplikationen: kardiogener Schock, AV-Block II/III (Hinterwand), akute MKI (Papillarmuskelnekrose), freie Wandruptur, VSD, Dressler-Perikarditis. (AGNN 2026)'
+  ],
+  2:[
+    'AGNN/ERC: Asystolie + PEA = nicht defibrillierbar. Dort: CPR + Adrenalin 1 mg i.v. alle 3–5 min + reversible Ursachen (4 Hs/HITS).',
+    'AGNN/ERC 2021: Tiefe 5–6 cm, Frequenz 100–120/min, 30:2 ohne gesichertem Atemweg, vollständige Entlastung, Pause <10 s.',
+    'AGNN: Adrenalin 1 mg i.v. nach dem 3. Schock, dann alle 3–5 min. Amiodaron 300 mg nach 3. Schock, 150 mg nach 5. Schock.',
+    'AGNN/ERC: ETCO2 >10–15 mmHg = gute CPR-Qualität. Plötzlicher Anstieg >35 mmHg = ROSC. Ziele: Tiefe 5–6 cm, AF 100–120/min, Pause <10 s.',
+    'AGNN 4 Hs: Hypoxie, Hypovolämie, Hypo-/Hyperkaliämie, Hypothermie. HITS: Herzbeuteltamponade, Intoxikation, Thrombose (LAE/Koronar), Spannungspneumothorax.',
+    'AGNN: Abbruch nach >20–30 min ohne ROSC/reversible Ursache; sichere Todeszeichen; valide Patientenverfügung mit CPR-Ablehnung; nicht überlebbare Verletzung.'
+  ],
+  3:[
+    'AGNN: VT: QRS >120 ms, AV-Dissoziation, Fusionspotenziale. SVT mit Aberranz: retrograde P-Wellen, keine AV-Dissoziation. Im Zweifel stets als VT behandeln.',
+    'AGNN/ERC: Ohne Synchronisation → Schock in T-Wellen-Phase möglich → VF-Induktion. Synchronisierter Schock auf R-Gipfel ausgelöst.',
+    'AGNN/ERC: Monomorphe VT biphasisch initial 100–200 J; bei Unsicherheit 200 J.',
+    'AGNN: Polymorphe VT/Torsades: Magnesium 2 g i.v. langsam; QT-verlängernde Medikamente stopp; ggf. Überstimulation. Nicht kardiovertierbar.',
+    'AGNN/ERC 2021: Amiodaron Klasse I–IV-Effekte, geringere Inotropie-Minderung als Lidocain; Antiarrhythmikum der ersten Wahl bei refraktärem VF/VT.',
+    'AGNN: Instabilität: RR <90 mmHg, Bewusstseinsstörung, Angina, Lungenödem → sofortige synchronisierte Kardioversion 100–200 J.'
+  ],
+  4:[
+    'AGNN: Grad I: PQ >200 ms konstant. II° Wenckebach: progressiv länger, QRS-Ausfall. II° Mobitz: PQ konstant, plötzlicher Ausfall. III°: vollständige AV-Dissoziation, Kammer ≤40/min.',
+    'AGNN: Adam-Stokes: passagere Asystolie/VF beim Rhythmuswechsel → Bewusstlosigkeit <10 s + kurze tonisch-klonische Zuckungen; spontane Erholung. DD epileptischer Anfall.',
+    'AGNN: Atropin 0,5–1 mg i.v. blockiert M2-Rezeptoren am AV-Knoten (Vagus). Infranodaler Block (His-Bündel, Tawara) → kein Vagusanteil → Atropin unwirksam oder paradox.',
+    'AGNN: Orciprenalin 0,5 mg i.v. (β1/β2): wirkt unabhängig vom Vagus → bei Atropin-Versagen und infranodalem Block. Überbrückung bis Schrittmacher.',
+    'AGNN: Transcutanes Pacing: Pads anterior-posterior, 70/min, Energie steigern bis Capturing (QRS nach Spike + peripherer Puls tastbar). Analgesie (Fentanyl/Ketamin S) obligat.',
+    'AGNN: Zielfrequenz 60–80/min → ausreichendes HZV ohne Tachykardie-induzierte Ischämie.'
+  ],
+  5:[
+    'AGNN: Frank-Starling: LV-Versagen → LVEDP ↑ → LA-Druck ↑ → pulmonalvenöser Stau → hydrostatischer Druck > onkotischer Druck → Alveolarödem.',
+    'AGNN: Nitroglycerin 0,4–1,6 mg s.l. oder i.v.-Perfusor titriert → venöse Dilatation → Vorlast ↓ → Stau rückläufig. KI: RR <100 mmHg, Rechtsherzinfarkt.',
+    'AGNN: NIV/CPAP 5–10 cmH₂O PEEP, IPAP 10–15 cmH₂O; reduziert Intubationsrate ~50%, senkt Sterblichkeit. O2-Ziel SpO2 94–98%.',
+    'AGNN-Eskalation zu Intubation: SpO2 <90% trotz max. NIV, pH <7,25, Bewusstlosigkeit, Erschöpfungszeichen (Atemhilfsmuskulatur, paradoxe Atmung).',
+    'AGNN: Furosemid 40–80 mg i.v. bei kardialem Lungenödem. KI: Hypovolämie (Sepsis!), Anurie ohne Monitor, schwere Elektrolytstörung.',
+    'AGNN: Kardiales Ödem: Orthopnoe, beidseitige feuchte RG, Herzgeräusch, BNP ↑. ARDS: eher bilateral ohne Orthopnoe, Fieber, Infekt.'
+  ],
+  6:[
+    'AGNN 4 Hs: Hypoxie, Hypovolämie, Hypo-/Hyperkaliämie, Hypothermie. HITS: Herzbeuteltamponade, Intoxikation, Thrombose (LAE/Koronar), Spannungspneumothorax. Bei PEA stets systematisch suchen.',
+    'AGNN: POCUS bei Kreislaufstillstand: echofreier Saum periaortal, Kollaps RA diastolisch, "swinging heart" = Tamponade → Indikation Perikardpunktion.',
+    'AGNN: PEA = EMD (elektromechanische Dissoziation) = identische Begriffe. PEA ist aktuelle ERC-Terminologie.',
+    'AGNN/ERC: ETCO2 >10–15 mmHg = gute CPR-Qualität. Plötzlicher Anstieg >35 mmHg = ROSC. ETCO2 <5 mmHg nach 20 min ohne Ursache = schlechte Prognose.',
+    'AGNN: Spannungspneumo → Nadeldekompression sofort. Hypovolämie → Volumen. Tamponade → Perikardpunktion. Hypothermie → CPR bis KKT ≥35°C.',
+    'AGNN: Adrenalin 1 mg i.v./i.o. bei PEA/Asystolie so früh wie möglich; bei VF/pVT nach 3. Schock. Alle 3–5 min wiederholen.'
+  ],
+  7:[
+    'AGNN: Grad I: Haut/Schleimhaut. Grad II: + leichte Kreislauf-/Atemwegsbeteiligung. Grad III: Bronchospasmus, Larynxödem, Kreislaufschock. Grad IV: Atem-/Kreislaufstillstand.',
+    'AGNN: Adrenalin i.m. lateraler Oberschenkel → schnellere Resorption als subkutan; i.v. nur Grad III–IV titriert. i.m. = Standard präklinisch (ERC/AGNN).',
+    'AGNN: Erwachsene 0,5 mg i.m. (0,5 ml 1:1000). Kinder 0,01 mg/kg i.m., max. 0,5 mg. Wiederholung nach 5–15 min wenn keine Besserung.',
+    'AGNN: H1-Blocker (Dimetinden 0,1 mg/kg i.v.) wirken nur auf Histamin → kein Effekt auf Schock/Bronchospasmus/Larynxödem. Niemals Adrenalin-Ersatz.',
+    'AGNN: Biphasische Reaktion in 5–20% nach 1–72 h (median ~8 h). Stationäre Überwachung ≥6–24 h nach Anaphylaxie obligat.',
+    'AGNN: Anaphylaxie = schwere generalisierte Überempfindlichkeitsreaktion. Anaphylaktischer Schock = Anaphylaxie + Kreislaufinstabilität (RR syst. <90 mmHg).'
+  ],
+  8:[
+    'AGNN: "Silent lung" = kein Strömungsgeräusch trotz maximaler Atemanstrengung = totale Obstruktion → kein Gasaustausch. Sofort eskalierende Therapie.',
+    'AGNN: Air trapping: exspiratorische Obstruktion → Lungenüberblähung → Auto-PEEP → Barotrauma (Pneumothorax) + Rechtsherzbelastung → niedrige AF beim Beatmen.',
+    'AGNN: NIV Status asthmaticus – IPAP 10–14 cmH₂O, EPAP 5–8 cmH₂O; verlängerte Exspiration; O2 ≥94%. Reduziert Intubationsrate.',
+    'AGNN: Ketamin S 0,5–1 mg/kg i.v. → Bronchodilatation (sympathomimetisch) + Analgesie. Immer mit Midazolam kombinieren (Dysphorie/Halluzination).',
+    'AGNN: Intubationsindikation: drohende Erschöpfung, SpO2 <88% trotz O2/NIV, Bewusstlosigkeit, pH <7,20.',
+    'AGNN: Beatmung Asthma: AF 10–12/min, I:E 1:3–4 (verlängerte Exspiration), Vt 6–8 ml/kg, PEEP niedrig. Cave Auto-PEEP!'
+  ],
+  9:[
+    'AGNN: Häufigste EKG-Zeichen LAE: Sinustachykardie (häufigst), S1Q3T3, neuer Rechtsschenkelblock, T-Negativierung V1–V4. Normales EKG schließt LAE nicht aus.',
+    'AGNN: S1Q3T3: S-Zacke in I, Q + T-Inversion in III. Sensitivität ~20%, Spezifität ~70%. Nicht pathognomonisch; nur im klinischen Kontext verwerten.',
+    'AGNN: Wells-Score LAE: klinische TVT-Zeichen (3), andere Diagnose weniger wahrscheinlich (3), HF >100 (1,5), Immobilisation ≤3 Wo. (1,5), frühere TVT/LAE (1,5), Hämoptysen (1), Malignom (1).',
+    'AGNN: Thrombolyse bei massiver LAE mit hämodynamischer Instabilität: Alteplase 100 mg über 2 h. Bei Reanimation: 50 mg Bolus + CPR 60–90 min fortführen.',
+    'AGNN: Massive LAE → akuter Druckanstieg → RV-Dilatation/-Versagen → Septumshift links → LV-Füllung ↓ → obstruktiver Schock → Kreislaufstillstand.',
+    'AGNN: UFH 5.000 IE i.v. präklinisch bei LAE-Verdacht (hemmt Thrombuswachstum). Lyse nur bei hämodynamischer Instabilität.'
+  ],
+  10:[
+    'AGNN: LVOS = Verschluss A. carotis interna oder proximale MCA (M1). Klinisch: schwere Hemisymptomatik, Blickdeviation, GCS ↓. Entscheidend für Thrombektomie-Indikation.',
+    'AGNN: BE-FAST: Balance, Eyes, Face, Arm, Speech, Time (→ 112). Sensitiver als FAST; ~25% der Schlaganfälle betreffen hintere Strombahn.',
+    'AGNN: Lyse ≤4,5 h ab Symptombeginn. Thrombektomie ≤24 h bei LVOS + Penumbra. Ziel: FMC-to-imaging ≤30 min, imaging-to-needle ≤60 min.',
+    'AGNN: Stroke Mimics: Hypoglykämie (BZ sofort!), Todd-Parese, Migräne mit Aura, Hirnabszess, MS-Schub. BZ-Messung obligat bei jedem V. a. Schlaganfall.',
+    'AGNN: KI systemische Lyse: Blutung im CT, RR >185/110, Antikoagulation (INR >1,7), Trauma/OP <14 d, vorheriger Schlaganfall <3 Mo.',
+    'AGNN: NIHSS ≤5 = leicht; 6–25 = mittelschwer/schwer (Lyse-Kandidat); >25 = sehr schwer (Thrombektomie, Lyse Nutzen-Risiko abwägen).'
+  ],
+  11:[
+    'AGNN: t1 = >5 min (Behandlungsbeginn). t2 = >30 min = drohende irreversible neuronale Schäden. Präklinisch Therapie ab Krampfdauer ≥5 min.',
+    'AGNN Stufentherapie 1. Linie: Midazolam 10 mg i.m./bukkal (>40 kg) oder 0,2 mg/kg; Lorazepam 0,1 mg/kg i.v. (max. 4 mg). Nach 5 min wiederholen.',
+    'AGNN: Refraktärer SE nach 2 BZD-Gaben → 3. Linie: Levetiracetam 60 mg/kg i.v. oder Valproat 40 mg/kg i.v. oder Phenytoin 20 mg/kg i.v. (≤50 mg/min).',
+    'AGNN: Reversible Ursachen SE: Hypoglykämie (BZ + Glukose sofort!), Hyponatriämie, Meningitis (Ceftriaxon + Dexamethason), Eklampsie (Magnesium), Intoxikation.',
+    'AGNN: Fehler beim SE: zu niedrige BZD-Dosis, zu lange Wartezeit, fehlende BZ-Messung, Atemweg vernachlässigt (Aspirationsgefahr!).',
+    null
+  ],
+  12:[
+    'AGNN: Whipple-Trias: BZ <50 mg/dl (2,8 mmol/l) + Symptome + Besserung nach Glukose. Bei Langzeitdiabetikern Symptome auch bei höheren Werten (relative Hypoglykämie).',
+    'AGNN: Adrenerg (früh): Zittern, Schwitzen, Tachykardie, Angst. Neuroglukopenisch (spät): Verwirrtheit, Bewusstlosigkeit, Krampf. Bei autonomer Neuropathie fehlt Adrenerg-Phase.',
+    'AGNN: Glukose 40% 50 ml (= 20 g) i.v. oder Glukose 20% 100 ml. Ziel BZ >80 mg/dl. Keine Hyperkorrektur.',
+    'AGNN: Bei V. a. Alkoholismus/Mangelernährung Thiamin 100 mg i.v. vor Glukosegabe → verhindert Wernicke-Enzephalopathie (Ophthalmoplegie + Ataxie + Verwirrtheit; irreversibel!).',
+    'AGNN: Glukagon KI: Sulfonylharnstoff-Überdosierung (stimuliert Insulinsekretion → verlängerte Hypoglykämie!), erschöpfte Glykogenreserven (Alkohol, Hunger).',
+    'AGNN: Transport-Indikation: unklare Ursache, rezidivierend, Sulfonylharnstoff (Glibenclamid HWZ ~12 h), Insulinpumpe, BZ nach Therapie nicht stabil ≥80 mg/dl.'
+  ],
+  13:[
+    'AGNN: SpO2 bei CO falsch-hoch: CO-Hb absorbiert wie O2Hb bei 660 nm → bis 40% CO-Hb unentdeckt. CO-Hb-Messung nur via BGA-CO-Oximeter.',
+    'AGNN: CO-Hb-Halbwertzeit: Raumluft ~5–6 h → 100% O2 dicht sitzend ~60–90 min → HBO 2–3 atm ~20 min. 100% O2 sofort via High-Flow-Maske anlegen.',
+    'AGNN: HBO-Indikationen: CO-Hb >25%, Bewusstlosigkeit (jede Dauer), kardiale Komplikationen, Schwangerschaft (jedes CO-Hb >10%), persistierende neurologische Symptome.',
+    'AGNN: Delayed neurological sequelae (DNS) 2–40 Tage nach CO: Gedächtnisstörung, Parkinsonismus, Persönlichkeitsveränderung, Inkontinenz. Aufklärung + Nachsorge obligat.',
+    'AGNN: Eigensicherung: kein Betreten ohne PA (umluftunabhängiges Atemschutzgerät). CO unsicht-/geruchlos. Feuerwehr mit CGUS alarmieren, Bereich sperren.',
+    'AGNN: Bei Rauchgasvergiftung/Brand: Zyanid (CN) aus Kunststoffen → CN + CO synergistisch. Hydroxocobalamin 5 g i.v. deckt beide ab. CN-Hinweis: SpO2 normal + Laktatazidose.'
+  ],
+  14:[
+    'AGNN/Sepsis-3: Organdysfunktion (SOFA ≥2) durch dysregulierte Immunantwort auf Infektion. Septischer Schock: Sepsis + Vasopressor + Laktat >2 mmol/l.',
+    'AGNN: qSOFA: AF ≥22/min (1), veränd. Bewusstsein (1), RR syst. ≤100 mmHg (1). ≥2 = Screening positiv. Wenig sensitiv; SOFA ist Standard.',
+    'AGNN/SSC Hour-1 Bundle: Laktat messen, Blutkulturen vor AB, Breitspektrum-AB sofort, 30 ml/kg Kristalloid in ≤3 h, Noradrenalin wenn MAP <65 mmHg.',
+    'AGNN: 500 ml Kristalloid i.v. Bolus, Reassessment danach. Endpunkte: MAP >65 mmHg, Laktat ↓, Diurese >0,5 ml/kg/h.',
+    'AGNN: Noradrenalin 0,05–1 μg/kg/min Perfusor als Vasopressor erster Wahl: α1-Wirkung → MAP ↑ ohne Tachykardie; splanchnische Perfusion besser als Dopamin.',
+    'AGNN: Häufigste Sepsisfoki: Pneumonie (~50%), Abdomen, Harnwege, Haut/Weichteile, Meningitis, Kathetersepsis.'
+  ],
+  15:[
+    'AGNN: Emergency: Hypertension + Endorganschaden → sofortige Senkung. Urgency: Hypertension ohne Schaden → elektive Senkung über Stunden. Unterschied bestimmt Therapieintensität.',
+    'AGNN: Endorganschäden: hypertensive Enzephalopathie, Schlaganfall, akutes Nierenversagen, Lungenödem, Aortendissektion, ACS, Retinopathie Grad IV.',
+    'AGNN: Zerebrale Autoregulation bei chron. Hypertension nach rechts verschoben. Zu schnelle Senkung → unter Autoregulationsgrenze → zerebrale Ischämie.',
+    'AGNN: Erste Stunde max. 20–25% Senkung des Ausgangs-RR. Ausnahme Dissektion: RR syst. <120 mmHg + HF <60/min aggressiver.',
+    'AGNN: Hypertensive Enzephalopathie: Kopfschmerzen + Verwirrtheit + RR ≥180/120 mmHg. Kein fokalneurologisches Defizit (DD Schlaganfall → CT!).',
+    'AGNN: Vernichtungsschmerz + Rückenausstrahlung + RR-Seitendifferenz >20 mmHg → Dissektion ausschließen! Lyse/Antikoagulation dann absolut KI.'
+  ],
+  16:[
+    'AGNN: Polytrauma (Berliner Definition): ISS ≥16 + AIS ≥3 in ≥2 Körperregionen; oder lebensbedrohliche Verletzung + Begleitverletzung.',
+    'AGNN: Permissive Hypotonie RR syst. 80–90 mmHg bis chirurgische Blutstillung. Ausnahmen: SHT (MAP ≥80), Schwangerschaft, spinales Trauma (MAP ≥85), Kinder.',
+    'AGNN: DCR = Damage Control Resuscitation: (1) permissive Hypotonie, (2) balancierte Transfusion 1:1:1 (EK:FFP:TK), (3) TXA ≤3 h, (4) letale Trias vermeiden.',
+    'AGNN: Blutungskontrolle: Tourniquet (Extremität), Druckverband, Wundpacking (Hämostasegaze), Beckengurt. TXA 1 g i.v. in 10 min, ≤3 h nach Trauma (CRASH-2-Studie).',
+    'AGNN: Letale Trias: Hypothermie + Azidose + Koagulopathie. Gegenseitige Verstärkung. DCR-Prinzip durchbricht diesen Kreislauf.',
+    'AGNN: Primärer Hirnschaden: direkt durch Trauma. Sekundärer Schaden: Hypotension (MAP <80) + Hypoxie (SpO2 <94%) + Hyperthermie → durch ABCDE verhinderbar.'
+  ],
+  17:[
+    'AGNN: Leichtes SHT GCS 13–15, mittelschwer GCS 9–12, schwer GCS ≤8 = Intubationsindikation. Amnesie + Vigilanzminderung auch bei hohem GCS relevant.',
+    'AGNN: Monro-Kellie: starres Kranium = Hirnparenchym + Blut + Liquor. Hämatom → Liquorverdrängung → Blutverdrängung → ICP ↑ exponentiell → Herniation.',
+    'AGNN: Normoventilation zwingend: etCO2 35–40 mmHg. Hyperventilation → CO2 ↓ → Vasokonstriktion → Ischämie ↑. Nur kurzzeitig bei akuter Herniation erlaubt.',
+    'AGNN: Nottrepanation präklinisch nur bei: eindeutiger transtentorieller Herniation (fixierte Pupille + Strecksyn.) + Transport >60 min + kein RTH. Seltenste Indikation.',
+    'AGNN: "Talk and die" beim Epiduralhämatom: A. meningea media → rascher GCS-Abfall. Herniation: ipsilaterale Mydriasis + Strecksynergismen + Cushing-Reflex (HT + Brady + unregel. Atmung).',
+    'AGNN: Narkose SHT: Ketamin S bei Normoventilation vertretbar (ältere KI überholt). Cave RR-Abfall (Propofol) → Ziel MAP ≥80 mmHg erhalten!'
+  ],
+  18:[
+    'AGNN: Klinische Diagnose: Schock + aufgehobenes Atemgeräusch ipsilateral ± Trachealdeviation kontralateral. Halsvenenstauung wenn kein Volumenmangel.',
+    'AGNN: Monaldi (2. ICR MCL): Nadeldekompression mit 14G-Katheter, schnell zugänglich. Bülau (4.–5. ICR MAL): besser für Drainage. Cave Monaldi: A. mammaria interna medial MCL.',
+    'AGNN: Klinische Diagnose → sofortige Entlastung ohne Bildgebung bei Schock + fehlendem Atemgeräusch + Beatmungsdruckanstieg. Warten auf Röntgen kann tödlich sein!',
+    'AGNN: Chest Seal = Ventilpflaster auf offene Thoraxwunde: Luft raus, nicht rein. Nur aufkleben, nie vollständig verkleben → Spannungspneumo-Risiko bei Verschluss.',
+    'AGNN: Tamponade (Becks Trias): Halsvenenstauung + gedämpfte Herztöne + Hypotonie. Spannungspneumo: aufgehobenes Atemgeräusch + Trachealdeviation. Therapeutisch entscheidend!',
+    'AGNN: Becks Trias: Halsvenenstauung + gedämpfte Herztöne + Hypotonie. Kussmaul-Zeichen: paradoxe Halsvenenfüllung bei Inspiration (RV-Versagen).'
+  ],
+  19:[
+    'AGNN/ACS-Klassifikation: Klasse I <750 ml (<15%): HF <100. II 750–1500 ml (15–30%): HF 100–120. III 1500–2000 ml (30–40%): HF >120, RR ↓. IV >2000 ml (>40%): RR nicht messbar, BW ↓.',
+    'AGNN: Schockindex = HF/RR syst. Normal <1,0. SI ≥1,0 = signifikante Blutung. SI ≥1,4 = lebensbedrohlich. Schnell, ohne Geräte.',
+    'AGNN: Beckengurt über Trochanteres majores (NICHT Crista iliaca!): stabilisiert hintere Ringläsion, reduziert Beckenvolumen. Falsche Anlage verschlechtert Blutung.',
+    'AGNN: Permissive Hypotonie RR 80–90 mmHg bis chirurgische Kontrolle. Ausnahmen: SHT (MAP ≥80), spinales Trauma (MAP ≥85), Schwangerschaft, Kinder.',
+    'AGNN: Klasse III: Bewusstsein getrübt, HF >120, Haut kalt/blass. Klasse IV: Bewusstlosigkeit, kein peripherer Puls tastbar, Schnappatmung.',
+    'AGNN: Überregionales Traumazentrum mit Interventionsradiologie (Angioembolisation/REBOA), Orthopädie, Transfusionsmedizin. ISBAR mit Verletzungsmuster + Schockindex.'
+  ],
+  20:[
+    'AGNN: Drei Zeichen Inhalationstrauma: (1) versengte Gesichtshaare/Wimpern, (2) Ruß in Mund/Nase/Sputum, (3) Heiserkeit/Stridor. Latenz für pulmonale Zeichen bis 24 h.',
+    'AGNN: CO-Hb-Messung nur via BGA-CO-Oximeter; normale SpO2 schließt CO-Vergiftung nicht aus. Immer BGA bei V. a. Inhalationstrauma.',
+    'AGNN: Frühintubation bei: Heiserkeit, Stridor, Ruß im Atemweg, GCS <8, progredieres Gesichtsödem. Nach Ödembildung schwieriger Atemweg → Videolaryngoskop bereithalten!',
+    'AGNN/DKG-Kriterien BVZ: >20% VKOF Grad IIb/III, Gesicht/Hände/Füße/Genitale, zirkuläre Verbrennung, Inhalationstrauma, Kinder, Elektrounfall.',
+    'AGNN: HBO bei CO + Inhalationstrauma: CO-Hb >25%, Bewusstlosigkeit, Schwangerschaft, kardiale Komplikationen → HWZ CO-Hb ~20 min (vs. ~90 min mit 100% O2 normobar).',
+    null
+  ],
+  21:[
+    'AGNN/ERC Pädiatrie: 5 initiale Beatmungen, dann 15:2 (2 Helfer)/30:2 (1 Helfer). Kompressionstiefe 1/3 Thoraxdurchmesser. Defi 4 J/kg. Säugling: 2-Finger; Kind: 1–2 Hände.',
+    'AGNN: Hypothermie + Diving Reflex + Q10-Effekt → ZNS-Schutz bei Kaltwasser-Ertrinken. Reanimation länger fortführen. ROSC nach 30+ min möglich (belegt).',
+    'AGNN: "Not dead until warm and dead": CPR bis KKT ≥30–35°C. ECMO-Erwärmung bei refraktärem Kreislaufstillstand bei Hypothermie erwägen.',
+    'AGNN: Kinderschocker 4 J/kg biphasisch; Folgeschocks 4–10 J/kg. Kinder-Pads wenn vorhanden; Erwachsenen-Pads bei Kind >10 kg anterior-posterior.',
+    'AGNN: Häufige Fehler Kinderreanimation: unzureichende Beatmung (beim Kind wichtiger als beim Erwachsenen!), zu flache Kompression, Defi vergessen, i.o.-Zugang zu spät.',
+    null
+  ],
+  22:[
+    'AGNN: Einfach: <15 min, generalisiert, einmalig in 24 h, kein Neurologie-Defizit. Kompliziert: ≥15 min, fokal, >1×/24 h oder postiktales Defizit → erhöhtes Epilepsierisiko.',
+    'AGNN: Fieberreduktion: Paracetamol 15 mg/kg oder Ibuprofen 10 mg/kg. Aktives Kühlen (feuchte Tücher) nur vorsichtig → Shivering vermeiden (Fieber ↑!). Antipyrese verhindert Rezidiv nicht.',
+    'AGNN: Midazolam bukkal/nasal: <5 kg = 2,5 mg; 5–10 kg = 5 mg; >10 kg = 7,5–10 mg. Diazepam rektal: <15 kg = 5 mg, ≥15 kg = 10 mg. Lorazepam i.v. 0,1 mg/kg wenn Zugang.',
+    'AGNN: Therapie beginnen ab Krampfdauer ≥5 min (nicht abwarten; Dauer meist unterschätzt).',
+    'AGNN: Fieberkrampf: Alter 6 Mo.–5 J., immer mit Fieber, selbstlimitierend, kein EEG-Substrat. Epilepsie: Anfälle ohne Fieber, EEG-Veränderungen, oft >5. Lebensjahr.',
+    null
+  ],
+  23:[
+    'AGNN: Kinder Adrenalin 0,01 mg/kg i.m., max. 0,5 mg. Autoinjektor: Jext/EpiPen Junior 150 µg für 15–30 kg; Jext/EpiPen 300 µg für >30 kg.',
+    'AGNN: Autoinjektor-Dosierungen: Jext Junior 150 µg = 15–30 kg; Jext 300 µg = >30 kg. Fastjekt Junior 7,5–25 kg. Anaphylaxie-Pass beachten.',
+    'AGNN: Prednisolon 2 mg/kg i.v. (max. 100 mg): Wirkung erst nach 4–6 h; kein Effekt auf Sofortsymptome; mögliche Prävention biphasischer Reaktion (Evidenz schwach). Niemals Adrenalin-Ersatz!',
+    'AGNN: Häufigste pädiatrische Auslöser: Nahrungsmittel (Erdnuss, Baumnuss, Milch, Ei), Insektenstiche, Latex. Kleinst- und Schulkinder unterscheiden sich.',
+    'AGNN: Atemwegsödem Kinder: kleine Atemwege → rasche Progression. Heiserkeit = Larynxödem → Frühintubation vor vollständiger Obstruktion. Videolaryngoskop bereithalten.',
+    null
+  ],
+  24:[
+    'AGNN/Westley-Score: Stridor 0–2, Einziehungen 0–3, Lufteintritt 0–2, Bewusstsein 0–5, Zyanose 0–5. Leicht ≤2, mittel 3–7, schwer ≥8 (Intensivindikation).',
+    'AGNN: Adrenalin 1:1000 vernebelt 0,5 ml/kg (max. 5 ml). α-Wirkung → Schleimhautschwellung ↓. Wirkdauer ~2 h; Rebound möglich → Überwachung ≥3 h nach Gabe.',
+    'AGNN: Epiglottitis DD: hohes Fieber, toxisches Bild, Schluckbeschwerden, Hypersalivation, kloßige Stimme. Keine Racheninspektion präklinisch (Laryngospasmus!). Sofort in OP.',
+    'AGNN: Pseudokrupp: Parainfluenza Typ 1/3, Herbst/Winter, Alter 6 Mo.–3 J. Nächtlich akut, bellender Husten, Heiserkeit, inspiratorischer Stridor, leichtes/kein Fieber.',
+    'AGNN: Erschöpfungszeichen: Zyanose, Bewusstlosigkeit, zunehmende Tachykardie/-pnoe → sofortige Notfallintubation (schwierig: ödematöses Kind → kleinstes Tubus).',
+    null
+  ],
+  25:[
+    'AGNN/STaRT: (1) Geh! → S3 grün. (2) Atemweg – keine Atmung nach 2 Korrekturen → S4 schwarz; Atmung >30/min → S1 rot. (3) Kapillare >2 s/Puls nicht tastbar → S1. (4) Befehle nicht befolgt → S1; befolgt → S2.',
+    'AGNN: S1 rot = sofort/Behandlung ≤10 min. S2 gelb = dringend/≤1 h. S3 grün = leicht/warten. S4 schwarz = verstorben oder nicht überlebbar (expectant).',
+    'AGNN: Ersteintreffender NA: Lagedarstellung (5 W), Führungsübernahme bis LNAA. Keine Einzelversorgung; Sichtung priorisieren. Kommunikation über Leitstelle bündeln.',
+    'AGNN: MANV I <10, II 10–50, III >50 Verletzte (regional variiert). Kernkriterium: vorhandene Ressourcen reichen nicht für reguläre Versorgung.',
+    'AGNN: Sichtungsrevision nur durch leitenden NA (LNAA) oder ärztlichen Einsatzleiter. Einzel-NA hat keine Legitimation zur Ressourcenumverteilung ohne Absprache.',
+    null
+  ],
+  26:[
+    'AGNN: DIN 75079 regelt Mindestausstattung Notarztfahrzeuge. DIN EN 1789 für RTW/KTW. AGNN gibt Empfehlungen über DIN-Mindeststandard hinaus.',
+    'AGNN-Pflichtmedikamente NEF: Adrenalin, Atropin, Adenosin, Amiodaron, Furosemid, Glukose 40%, Heparin, Kortikoid, Magnesium, Midazolam, Fentanyl/Morphin, Naloxon, NaHCO3, Nitro, Noradrenalin, Rocuronium, Succinylcholin, Ketamin S, Urapidil.',
+    'AGNN: BtM-Protokoll: lückenlose Dokumentation jeder BtMV-Entnahme + Anwendung; Unterschrift NA + Rettungsassistent; Restmengen vernichten und dokumentieren. Kein Umgang ohne Arzt.',
+    'AGNN: NEF = Notarzteinsatzfahrzeug (bringt NA zum RTW). RTH = Rettungshubschrauber (große Distanzen, Intensivtransport). HEMS = Helicopter Emergency Medical Services.',
+    null,
+    null
+  ],
+  27:[
+    'AGNN: Einwilligungsfähigkeit ≠ Geschäftsfähigkeit. Einwilligungsfähigkeit: situative Fähigkeit, Bedeutung einer Entscheidung zu verstehen. Auch Minderjährige können einwilligungsfähig sein.',
+    'AGNN: Prüfkriterien: (1) Versteht Patient die Situation? (2) Kann er Konsequenzen abschätzen? (3) Entscheidet er freiwillig? Alle 3 Kriterien müssen erfüllt sein.',
+    'AGNN: § 34 StGB rechtfertigender Notstand erlaubt lebenserhaltende Maßnahmen beim bewusstlosen Patienten ohne Patientenverfügung und unbekanntem Willen.',
+    'AGNN: Mutmaßlicher Wille: Was hätte der Patient nach seinen Werten gewollt? Angehörige befragen. Betreuer/Bevollmächtigter kontaktieren.',
+    'AGNN: Dokumentation der Transportverweigerung: Zeitpunkt, Situation, genaue Aussage, Einschätzung Einwilligungsfähigkeit, Aufklärung über Risiken, Unterschrift Patient + Zeugen.',
+    'AGNN: Fehlende Einwilligungsfähigkeit + kein Betreuer: richterlicher Beschluss nach PsychKG/UnterbringungsG. Notfall: vorläufige polizeiliche Unterbringung.'
+  ],
+  28:[
+    'AGNN: Sichere Todeszeichen: Livores (ab ~30 min), Totenstarre (ab ~2–6 h), Fäulnis, nicht überlebbare Verletzung. Bei Hypothermie: keine sicheren Zeichen ohne Erwärmung.',
+    'AGNN: Todesursache = medizinische Ursache. Todesart: natürlich (bekannte Erkrankung), nicht-natürlich (Unfall/Suizid/Tötung), ungeklärt → bestimmt Meldepflicht.',
+    'AGNN: Reanimationsabbruch: >20–30 min ohne ROSC, keine reversible Ursache; sichere Todeszeichen; valide PV mit CPR-Ablehnung; nicht überlebbare Verletzung.',
+    'AGNN: Polizeimeldung bei: Anhalt auf nicht-natürliche Todesart, unklare Todesumstände, unbekannte Identität, Fund ohne anwesenden Arzt.',
+    'AGNN: Nicht-natürliche Todesart → "ungeklärt" im Totenschein; Leichnam nicht transportieren; Polizei + Staatsanwaltschaft; Tatortschutz (nichts anfassen).',
+    null
+  ],
+  29:[
+    'AGNN: AVNRT: Reentry im AV-Knoten (langsame α- und schnelle β-Bahn). P-Wellen direkt nach QRS oder im QRS versteckt; RP-Intervall <70 ms.',
+    'AGNN: Vagusmanöver: Valsalva (40 mmHg Ausatmen), Karotissinusmassage (nur einseitig, keine Strömungsgeräusche). Modifiziertes Valsalva (REVERT): Konversionsrate ~40%.',
+    'AGNN: REVERT: 15 s pressen gegen 10-ml-Spritze → sofort flach + Beine hoch → 45 s warten. Erhöhte Vorlast → Baroreflex → Vagustonus ↑ → AV-Überleitung unterbrochen.',
+    'AGNN: Adenosin KI: Asthma bronchiale (Bronchospasmus), WPW/Präexzitation (→ AF + akzess. Bahn → VF!), AV-Block II/III, Sick-Sinus-Syndrom.',
+    'AGNN: WPW + AF: akzessorische Bahn ohne AV-Knoten-Bremse → bis 300/min ventrikulär → VF. Adenosin blockiert AV-Knoten, nicht akzessorische Bahn → lebensbedrohlich!',
+    'AGNN: AVNRT: regelmäßige Schmalkomplex-Tachykardie 150–250/min; P nicht sichtbar oder pseudo-R in V1 (= P im QRS); abrupter Beginn/Ende.'
+  ],
+  30:[
+    'AGNN: Präeklampsie: RR ≥140/90 mmHg nach 20. SSW + Proteinurie. Eklampsie: + Krampfanfall. HELLP: Hämolyse + erhöhte Leberenzyme + Thrombopenie (kein RR-Kriterium!)',
+    'AGNN: Aktuelle Definition: RR ≥140/90 mmHg (2× ≥4 h Abstand) nach 20. SSW + Proteinurie >0,3 g/24h oder ein Zeichen mütterlicher Organdysfunktion (ohne Proteinurie möglich).',
+    'AGNN: Magnesium Loading 4–6 g i.v. über 15–20 min; Erhalt 1–2 g/h. Toxizitätskontrolle: PSR alle 30 min (fehlendes PSR = erste Warnung bei ~5 mmol/l), AF >14/min, Diurese >25 ml/h.',
+    'AGNN: Antidot Magnesium-Toxizität: Kalziumglukonat 10 ml 10% (= 1 g) i.v. langsam. Sofort bei Atemdepression, fehlendem PSR, Herzrhythmusstörung.',
+    'AGNN: Weitere geburtshilfliche Notfälle: vorzeitige Plazentalösung (Brett-harte Uterus), Placenta praevia (Blutung ohne Schmerz), Nabelschnurvorfall (Becken hochlagern!), postpartale Hämorrhagie (TXA!).',
+    null
+  ],
+  31:[
+    'AGNN: Klassische BAA-Ruptur-Trias: pulsierender Oberbauch-/Rückenschmerz + Hypotonie + tastbare pulsatile Raumforderung. Nur ~50% zeigen alle drei Zeichen.',
+    'AGNN: Klinische Diagnose präklinisch. POCUS wenn verfügbar: Aorta >3 cm + freie Flüssigkeit = Ruptur wahrscheinlich. CT-Diagnose erfolgt in der Klinik.',
+    'AGNN: Permissive Hypotonie RR syst. 80–100 mmHg bis chirurgische Kontrolle. Aggressiver Volumenersatz → Gerinnungsverdünnung + erhöhter Wanddruck → mehr Blutung.',
+    'AGNN: BAA häufig infrarenal (>90%), zwischen Zöliakalabgang und Iliacabifurkation. Ruptur-Risiko ↑ ab >5,5 cm (Männer), >5 cm (Frauen), Wachstum >1 cm/Jahr.',
+    'AGNN: Zeitfenster door-to-OR <30 min in spezialisierten Zentren. Letalität ohne OP ~100%; mit Notfall-OP ~40–50%. Voranmeldung ISBAR zwingend.',
+    null
+  ],
+  32:[
+    'AGNN: eCPR = ECMO-gestützte Reanimation (VA-ECMO). Femorale Kanülierung (V. + A. femoralis). Überbrückt Herz-/Lungenfunktion; ermöglicht längere CPR-Dauer.',
+    'AGNN-Kriterien eCPR: Alter ≤65 J., beobachteter Kollaps, Laien-CPR sofort, No-flow ≤5 min, refraktäres VF/VT (≥3 Schocks), keine terminale Komorbidität, Transport ≤45 min zu eCPR-Zentrum.',
+    'AGNN: No-flow ≤5 min, Low-flow ≤60 min für akzeptable neurologische Ergebnisse. Keine absoluten Cut-offs, aber deutlich schlechtere Prognose bei Überschreitung.',
+    'AGNN: Absolute KI eCPR: nicht beobachteter Kollaps ohne Laien-CPR, terminale Grunderkrankung, Alter >70–75 J. (protokollabhängig), keine erreichbare eCPR-Logistik.',
+    'AGNN: Dokumentation eCPR: Kollapszeitpunkt, Laien-CPR-Beginn, No-flow-Zeit, Schockanzahl + Energie, Medikamente + Uhrzeiten, neurologisches Ausgangsniveau. ISBAR obligat.',
+    'AGNN: VA-ECMO: V. femoralis → Pumpe → Oxygenator → A. femoralis = Herz-Lungen-Ersatz. VV-ECMO: venös-venös = nur Lungenersatz (kein Herzersatz).'
+  ],
+  33:[
+    'AGNN: 8P-RSI-Sequenz: (1) Preparation, (2) Pre-oxygenation (SpO2 100%), (3) Pre-treatment (Atropin Kinder, Lidocain bei SHT), (4) Paralysis + Induction, (5) Positioning, (6) Placement, (7) Post-intubation, (8) Proof.',
+    'AGNN: "Burned bridge": nach Succinylcholin/Rocuronium keine Eigenatmung. RSI erst nach CICO-Plan definiert und Equipment bereit (Videolaryngoskop, SGA, Koniotomiebesteck).',
+    'AGNN: CICO-Algorithmus: max. 2–3 Versuche → SGA (i-gel/LMA) → SpO2 kritisch trotz SGA → Notfallkoniotomie (Stich-Zug, Tubus 6.0, ETCO2-Kontrolle).',
+    'AGNN: Videolaryngoskopie (C-MAC, GlideScope): verbesserte Sicht bei LEMON-positiven Patienten; Koordination (Monitor-Augen) erforderlich. Direktlaryngoskopie: keine Verzögerung, besser bei Sekret.',
+    'AGNN: BURP-Manöver (Backward Upward Rightward Pressure): Schildknorpel durch Assistenten nach dorsal-kranial-rechts. Verbessert CL Grad III→II. Nicht mit Sellick (Krikoiddruck) verwechseln!',
+    'AGNN: Indikationen präklinische RSI: GCS ≤8 + Intubationsindikation, Atemwegsgefährdung, refraktärer Bronchospasmus, CICO, pädiatrische Prozeduren.'
+  ],
+  34:[
+    'AGNN: Aktuelle Evidenz (Cochrane 2015, PREHOSPITAL-Studie): kein Beweis für Vorteil der Routineimmobilisierung; möglicherweise schädlich. AGNN: selektive Immobilisierung bei klinischem Verdacht.',
+    'AGNN: MILS (Manual Inline Stabilisation): neutrale HWS-Fixierung ohne Zug/Torquierung. Kein Jugularvenendruck, kein Atemwegserschwernis beim schwierigen Atemweg.',
+    'AGNN: Spineboard → Dekubitusrisiko ab 30–45 min + Schmerzen + Atemeinschränkung. Vakuummatratze: konform + komfortabler. AGNN bevorzugt Vakuummatratze bei Liegendtransport.',
+    'AGNN: NEXUS-Kriterien für Verzicht auf HWS-Bildgebung: kein HWS-Druckschmerz, kein Neurologie-Defizit, normales Bewusstsein, keine Intoxikation, keine ablenkende Verletzung. Alle 5 erfüllt = low risk.',
+    'AGNN: KI Immobilisierung: M. Bechterew/Spondylitis ankylosans (fixierte Deformität → Geradebiegen gefährlich!). Instabiler Atemweg hat Priorität. Dokumentation obligat.',
+    null
+  ],
+  35:[
+    'AGNN: Aufnahmepflicht nach § 323c StGB (unterlassene Hilfeleistung) + SGB V §109 (Versorgungsauftrag). Kein Krankenhaus darf Notfälle rechtmäßig ablehnen.',
+    'AGNN: D2B-Eskalation: direkter Kontakt HKL (Umgehung Notaufnahme), ISBAR + EKG per Telemetrie, Leitstelle einschalten (RETTLST-Protokoll). Ablehnung dokumentieren.',
+    'AGNN: Präklinische Lyse (Tenecteplase bevorzugt) bei D2B >120 min, kein Lyse-KI, Symptombeginn <12 h. Immer anschließend PCI-Klinik anfahren.',
+    'AGNN: Eskalation: (1) Klinikleitung direkt, (2) Leitstelle für Alternativklinik, (3) Ablehnung dokumentieren (Zeitpunkt, Name, Begründung), (4) Notfallaufnahme ohne Ankündigung.',
+    null,
+    null
+  ],
+  36:[
+    'AGNN: ISBAR: I=Identify (Name + Funktion), S=Situation (Problem in 1 Satz), B=Background (Vorgeschichte, Diagnose, Therapie), A=Assessment (Schweregrad), R=Recommendation (Anforderung).',
+    'AGNN: O2-Kalkulation: Bedarf (L/min) × Transportzeit (min) × Sicherheitsfaktor 1,5. Beispiel: 100% O2, AMV 8 L/min, 60 min → 8 × 60 × 1,5 = 720 L → 2× E-Flasche nötig.',
+    'AGNN: IHT-Risiken: Beatmungsdiskonnektion, Tubusdislokation, Perfusorversagen, Gasdruck ↓, Defi-Batterie, räumliche Enge, Erschütterungen. Checkliste vor Abfahrt obligat.',
+    'AGNN: Mindestmonitoring beatmeter IHT: EKG, RR (arteriell bevorzugt), SpO2, ETCO2, Vt/Paw, FiO2, Perfusorrestlaufzeiten.',
+    'AGNN: Verschlechterung im Transport: Anhalten, ABCDE, Leitstelle informieren, nächste geeignete Klinik anfahren, ggf. RTH nachfordern. Primäres Ziel: Stabilisierung.',
+    null
+  ],
+  37:[
+    'AGNN: Stanford A: Ascendens betroffen → OP-Indikation dringlich. Stanford B: nur Descendens → medikamentös zunächst. Entscheidend für Zielklinik + Lyse-KI.',
+    'AGNN: DeBakey I: Ascendens + Descendens. II: nur Ascendens. III: nur Descendens (= Stanford B). Klinisch wird Stanford-Klassifikation bevorzugt (therapierelevanter).',
+    'AGNN: Ziel-RR syst. 100–120 mmHg + HF 60–70/min (Wandscherspannung ↓). Esmolol (titrierbar, kurzwirksam) oder Urapidil (kein Reflex-Tachykardie). Zu niedrig → Organischämie.',
+    'AGNN: Lyse bei Dissektion absolut KI: Perikardtamponade, Mediastinalblutung, Tod durch Ablösung der Dissektionsmembran möglich. Heparin ebenfalls meist KI.',
+    'AGNN: RR-Seitendifferenz >20 mmHg = Subklavia durch Dissektionsmembran okkludiert. Bei STEMI-Bild + Seitendifferenz → immer Dissektion ausschließen → Lyse KI!',
+    null
+  ],
+  38:[
+    'AGNN: Opioid-Trias: Miosis (stecknadelkopfgroß, bilateral), Atemdepression (AF <12/min), Bewusstlosigkeit. Miosis diagnostisch am zuverlässigsten (bleibt auch bei Mischintox).',
+    'AGNN: Naloxon HWZ 30–90 min; Opioide oft länger (Methadon bis 72 h, Fentanyl-Pflaster). Re-Sedierung nach Naloxon-Ende → stationäre Überwachung 6–24 h obligat; kein Entlassen!',
+    'AGNN: Naloxon-Bolus >0,4–0,8 mg → akuter Entzug: Agitation, Erbrechen (Aspiration!), Tachykardie, Hypertension. AGNN: titrieren 0,1–0,2 mg-Schritte i.v. alle 2–3 min.',
+    'AGNN: Miosis-DD: Organophosphate (SLUDGE: Speichelfluss, Lakrimation, Urin, Defäkation, GI-Krämpfe, Emesis), Clonidin, pontine Blutung.',
+    'AGNN: BtM-Protokoll: Morphin/Fentanyl = BtMV; Entnahme + Anwendung lückenlos dokumentieren; Unterschrift NA + Rettungsassistent; Restmengen vernichten.',
+    'AGNN: Strategie: 0,1–0,2 mg i.v. alle 2–3 min bis AF ≥12/min + adäquate Schutzreflexe. Ziel: kein Tiefkoma, kein vollständiger Entzug. Beatmung hat immer Vorrang.'
+  ],
+  39:[
+    'AGNN: Flumazenil KI bei Mischintox: (1) TZA-Beimischung → hebt BZD-Anfallsschutz auf → Krampf mit kardiotoxischen Folgen; (2) Krampfanamnese (Entzugsanfall); (3) ICP-Erhöhung.',
+    'AGNN: Thiamin 100 mg i.v. vor Glukosegabe bei Alkoholikern/Mangelernährung. Thiaminmangel + Glukose → Wernicke-Enzephalopathie (Ophthalmoplegie + Ataxie + Verwirrtheit; irreversibel!).',
+    'AGNN: Intubationsindikation Intox: GCS ≤8 und/oder fehlende Schutzreflexe und/oder AF <10/min und/oder progrediente Atemwegsgefährdung.',
+    'AGNN: Giftnotruf: Substanzname + Menge + Konzentration + Zeitpunkt, Alter + Gewicht Patient, klinischer Status, bereits gegebene Antidote. DE: Giftnotruf München 089-19240.',
+    null,
+    null
+  ],
+  40:[
+    'AGNN: Anticholinerges Syndrom: "hot as hell" (Hyperthermie), "dry as a bone" (trockene Haut), "red as a beet" (Hautrötung), "blind as a bat" (Mydriasis), "mad as a hatter" (Agitation).',
+    'AGNN: TZA → Na-Kanal-Blockade → QRS-Verbreiterung → ventrikuläre Arrhythmien. NaHCO3 1–2 mmol/kg i.v.: Alkalinisierung + Na-Überschuss überwindet Blockade. Ziel QRS <120 ms.',
+    'AGNN: Physostigmin bei TZA absolut KI: Ach↑ → AV-Block, Asystolie; additiver Effekt zur TZA-bedingten AV-Überleitungsstörung → fatal!',
+    'AGNN: QRS >100 ms = Marker kardiotoxische Arrhythmien. QRS >120 ms → NaHCO3 sofort. QRS >160 ms → hohes VF-Risiko. Kontinuierliches EKG-Monitoring obligat.',
+    null,
+    null
+  ],
+  41:[
+    'AGNN: Pulsoximeter bei 660 nm: CO-Hb absorbiert fast identisch wie O2Hb → SpO2 falsch-hoch. Bis 40% CO-Hb unentdeckt möglich. Nur BGA-CO-Oximeter misst CO-Hb korrekt.',
+    'AGNN: CO-Hb-Symptomkorrelation: 10–25% = Kopfschmerzen, Übelkeit. 25–40% = Verwirrtheit, Tachykardie. >40% = Bewusstlosigkeit, Krampf. >60% = lethal. Schwangere: fötales HbF bindet CO stärker.',
+    'AGNN: HBO 2–3 atm: pO2 physikalisch gelöst ↑↑ → Gewebe ohne Hb versorgbar; CO-HWZ ~20 min (vs. ~90 min mit 100% O2 normobar). Indikation: CO-Hb >25%, BW-los, kardial, Schwangerschaft.',
+    'AGNN: DNS = Delayed Neurological Sequelae 2–40 Tage nach CO: Gedächtnisstörung, Parkinsonismus, Persönlichkeitsveränderung. Aufklärung + Nachsorge obligat.',
+    null,
+    null
+  ],
+  42:[
+    'AGNN: Chlorgas entsteht aus Hypochlorit + Säure. Gelblich-grün, schwerer als Luft. Geruch beißend-chlorartig. <1 ppm Reizung; >10 ppm lebensgefährlich; >25 ppm tödlich.',
+    'AGNN: Toxisches Lungenödem: Latenz 6–24 h nach scheinbarer Besserung. Cl2 + H2O → HCl + HOCl → direkte Alveolarepithel-Schädigung → kapilläre Permeabilität ↑ → ARDS.',
+    'AGNN: Mindestüberwachung 12–24 h nach Chlorgas-Exposition, auch bei Beschwerdefreiheit (toxisches Lungenödem mit Latenz). Stationäre Aufnahme obligat.',
+    'AGNN/ARDSnet: Tidalvolumen 6 ml/kg ideales KG, Plateau-Druck <30 cmH₂O, PEEP nach ARDSnet-Tabelle. Permissive Hyperkapnie (pCO2 ≤70 mmHg, pH ≥7,25) akzeptiert.',
+    null,
+    null
+  ],
+  43:[
+    'AGNN: Neunerregel (Wallace): Kopf 9%, jeder Arm 9%, Vorderthorax 9%, Vorderabdomen 9%, Rücken oben 9%, Rücken unten 9%, jeder Oberschenkel 4,5%, jeder Unterschenkel 4,5%, Genitale 1%.',
+    'AGNN: Parkland-Formel: 4 ml × kg × % VKOF (IIb + III) in 24 h. Erste Hälfte in 8 h ab Brandzeitpunkt, zweite Hälfte in 16 h. Ringer-Laktat. 80 kg, 45% = 14.400 ml (erste 8 h: 900 ml/h).',
+    'AGNN: Kühlung nur <10–15% VKOF, 10–20 min lauwarmes Wasser. >15% VKOF: Hypothermiegefahr (verbrannte Haut verliert Wärme massiv). AGNN: Wärmeerhalt hat Priorität.',
+    'AGNN: Escharotomie bei zirkulärer Verbrennung (Extremitäten/Thorax): Längsinzision durch avitales Eschar → Kompartmentdruck ↓. Präklinisch selten; chirurgische Indikation.',
+    'AGNN/DKG-Kriterien BVZ: >20% VKOF Grad IIb/III, Gesicht/Hände/Füße/Genitale, Inhalationstrauma, zirkuläre Verbrennung, Elektrounfall, Kinder <8 J., schwere Komorbidität.',
+    null
+  ],
+  44:[
+    'AGNN: LEMON – L=Look externally (Trauma, Bart, Adipositas, Stridor). E=Evaluate 3-3-2 (Mund ≥3 F., Kinn-Hyoid ≥3 F., Hyoid-Schildknorpel ≥2 F.). M=Mallampati I–IV. O=Obstruction. N=Neck mobility.',
+    'AGNN: CI-CO = "can\'t intubate, can oxygenate" (BVM/SGA sichert O2 → Zeit). CICO = "can\'t intubate, can\'t oxygenate" → weder Intubation noch O2-Sicherung → Notfallkoniotomie sofort.',
+    'AGNN: Krikothyreotomie-Landmark: Lig. cricothyreoideum (zwischen Schildknorpel + Ringknorpel). Stich-Zug: horizontaler Skalpellschnitt, Traktion kaudal, Tubus 6.0 cuffed einführen, ETCO2-Kontrolle.',
+    'AGNN: "Burned bridge": Succinylcholin HWZ 8–12 min = keine Eigenatmung ~10 min. Rocuronium + Sugammadex 16 mg/kg = Antagonisierung in ~3 min (AGNN Escape-Option). RSI erst nach definitiver CICO-Planung.',
+    'AGNN: SGA-Optionen: i-gel Gr. 4/5 (kein Aufblasballon, schnell) oder LMA Supreme (Absaugung). Limitation: >30 cmH₂O Beatmungsdruck → Leckage; kein Aspirationsschutz. Max. 2–3 Versuche.',
+    'AGNN: Sugammadex 16 mg/kg i.v.: vollständige Rocuronium-Antagonisierung in ~3 min. Nur Aminosteroid-NMB (Rocuronium, Vecuronium); kein Effekt auf Succinylcholin!',
+    'AGNN: Voranmeldung Gesichtstrauma: Unfallereignis, GCS, Atemweg gesichert womit (Tubus/SGA/ungesichert), Vitalparameter, ISBAR. MKG-Chirurgie + HNO-Notfallbereitschaft anfordern.'
+  ]
+};
+
 // ── Rendering ─────────────────────────────────────────────
 
 let currentFilter = 'all';
@@ -2127,12 +2484,15 @@ function openCase(id){
   }).join('');
 
   const nfArr = EH_NF[c.id] || [];
+  const naArr = EH_NF_A[c.id] || [];
   const ehHtml = c.eh.map((e,i) => {
     const checked = checkState[id][i];
     const nfQ = nfArr[i] || null;
+    const naQ = naArr[i] || null;
+    const ansAttr = naQ ? ` data-answer="${naQ.replace(/"/g,'&quot;')}"` : '';
     return `<div class="eh-item">
       <div class="eh-check ${checked?'checked':''}" onclick="toggleEH(${c.id},${i});event.stopPropagation()"></div>
-      <div><div>${e}</div>${nfQ ? `<div class="eh-nf">↳ ${nfQ}</div>` : ''}</div>
+      <div><div>${e}</div>${nfQ ? `<div class="eh-nf"${ansAttr}>↳ ${nfQ}</div>` : ''}</div>
     </div>`;
   }).join('');
 
