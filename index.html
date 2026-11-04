@@ -120,6 +120,21 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
 .detail-print-btn{margin-top:0.5rem;padding:0.5rem 1rem;background:#fff;border:1px solid #d4d4cc;border-radius:6px;font-size:0.83rem;cursor:pointer;color:#555}
 .detail-print-btn:hover{border-color:#888;color:#111}
 
+/* Prüfungsplanung */
+.pruefling-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;align-items:center}
+.pruefling-label{font-size:.78rem;color:#888;font-weight:500;white-space:nowrap;margin-right:.2rem}
+.pl-btn{padding:.3rem .8rem;border:1px solid #d4d4cc;border-radius:20px;background:#fff;font-size:.8rem;cursor:pointer;color:#555;transition:all .15s;white-space:nowrap}
+.pl-btn:hover{border-color:#888;color:#111}
+.pl-btn.active{background:#1a1a18;color:#fff;border-color:#1a1a18}
+.pl-assign-btn{background:#f0fdf4;border-color:#86efac;color:#15803d}
+.pl-assign-btn.active{background:#15803d;border-color:#15803d;color:#fff}
+.card{position:relative}
+.card-assign-toggle{position:absolute;top:.5rem;right:.5rem;z-index:10;width:22px;height:22px;border-radius:50%;border:1.5px solid #d1d5db;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;line-height:1;transition:all .15s;user-select:none}
+.card-assign-toggle.assigned{background:#16a34a;border-color:#16a34a;color:#fff}
+.card-assign-toggle.unassigned{color:#9ca3af}
+.card-assign-toggle:hover{transform:scale(1.15)}
+.grid-assign-mode{outline:2px dashed #86efac;outline-offset:6px;border-radius:12px}
+
 /* Print */
 @media print{
   header,#grid-view,.detail-back,.detail-print-btn{display:none!important}
@@ -137,7 +152,7 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
     <span class="hdr-sub">AGNN-Therapieempfehlungen 2026 · Zusatzweiterbildung Notfallmedizin · Muster-WBO BÄK</span>
   </div>
   <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">Alle (44)</button>
+    <button class="filter-btn active" data-filter="all">Alle (48)</button>
     <button class="filter-btn cat-btn" data-cat="kardiologie">Kardiologie</button>
     <button class="filter-btn cat-btn" data-cat="pulmonal">Pulmonal · Allergie</button>
     <button class="filter-btn cat-btn" data-cat="neurologie">Neurologie</button>
@@ -145,6 +160,15 @@ h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.01em}
     <button class="filter-btn cat-btn" data-cat="trauma">Traumatologie</button>
     <button class="filter-btn cat-btn" data-cat="paediatrie">Pädiatrie</button>
     <button class="filter-btn cat-btn" data-cat="organisation">Organisation · Recht</button>
+  </div>
+  <div class="pruefling-row" id="pruefling-row">
+    <span class="pruefling-label">Prüfling:</span>
+    <button class="pl-btn active" data-pl="0" onclick="selectPruefling(0)">Alle</button>
+    <button class="pl-btn" data-pl="1" onclick="selectPruefling(1)">Biehler</button>
+    <button class="pl-btn" data-pl="2" onclick="selectPruefling(2)">Dreyer</button>
+    <button class="pl-btn" data-pl="3" onclick="selectPruefling(3)">Dupont</button>
+    <button class="pl-btn" data-pl="4" onclick="selectPruefling(4)">Lempferdt</button>
+    <button class="pl-btn pl-assign-btn" id="pl-assign-btn" onclick="toggleAssignMode()" style="display:none" title="Fälle zuordnen / entfernen">Zuordnung bearbeiten</button>
   </div>
 </header>
 
@@ -1785,6 +1809,154 @@ const cases = [
     'Zirkuläre Verbrennung der Extremitäten → Kompartmentsyndrom nicht erkannt',
     'Transport in nächste Klinik statt Brandverletztenzentrum'
   ]
+},
+{
+  id:45, cat:'organisation', diff:'fortgeschritten',
+  title:'Reanimationsabbruch – TOR-Kriterien & Ethik',
+  agnn:'Reanimation (Erwachsene), Beendigung',
+  stichwort:'M 73 · Bewusstlosigkeit, Kollaps – unbeobachtet',
+  notruf:{korrekt:'M 73 · Reanimation / Asystolie', irre:'M 73 · Bewusstlos'},
+  alarm:'73-jähriger Mann, von Ehefrau bewusstlos auf dem Sofa vorgefunden. Keine Laienreanimation. Erster Rhythmus: Asystolie. Trotz 25 Minuten ACLS-Reanimation kein ROSC.',
+  befund:'Erster Rhythmus Asystolie, kein schockbarer Rhythmus während der gesamten Reanimation. ETCO₂ initial 10 mmHg, nach 20 min 8 mmHg (kein Anstieg). Ehefrau berichtet von schwerer Herzinsuffizienz, bekannter Mitralklappenstenose. Keine Patientenverfügung auffindbar.',
+  vitals:{RR:'n.m.',HF:'0/min',SpO2:'n.m.',AF:'0/min',GCS:'3',BZ:'n.e.'},
+  eh:[
+    'Kennt TOR-Kriterien (ERC 2021 / AGNN): kein Bystander-CPR vor Eintreffen, nicht-defibrillierbarer Erstrhythmus, kein ROSC nach qualitativ hochwertiger ACLS-Reanimation',
+    'Erkennt Aussagewert des ETCO₂: anhaltend niedriger ETCO₂ (<10 mmHg nach ≥20 min) als prognostischer Marker – kein isolierter Cut-off, immer im Kontext',
+    'Prüft systematisch reversible Ursachen (4H/HITS) vor Abbruchentscheidung',
+    'Bezieht Angehörige ein, kommuniziert Situation klar, respektvoll und ohne Fachjargon – Family Presence gemäß AGNN-Empfehlung',
+    'Sucht und berücksichtigt Patientenverfügung sowie mutmaßlichen Patientenwillen',
+    'Dokumentiert Reanimationsabbruch rechtssicher: Uhrzeit, Rhythmus, Maßnahmen, ETCO₂-Verlauf, Entscheidungsgrundlage',
+    'Leitet Leichenschau ein: klinische Todeszeichen dokumentieren, Todesbescheinigung ausfüllen, ggf. Polizei bei unklaren Umständen'
+  ],
+  fragen:[
+    'Welche TOR-Kriterien nennt das ERC 2021 – und warum sind sie keine absoluten Stoppregeln?',
+    'Welchen prognostischen Wert hat der ETCO₂-Wert bei der Reanimationsentscheidung?',
+    'Wie kommunizieren Sie den Reanimationsabbruch gegenüber Angehörigen, die darauf bestehen weiterzumachen?',
+    'Welche ethischen Prinzipien leiten die Entscheidung zur Einstellung der Reanimation?',
+    'Was tun Sie, wenn Sie eine Patientenverfügung finden, die eine Reanimation ablehnt – aber bereits begonnen wurde?',
+    'Wie dokumentieren Sie einen Reanimationsabbruch rechtssicher im Einsatzprotokoll?'
+  ],
+  meds:[],
+  fallstricke:[
+    'TOR-Kriterien als absolute Stoppregeln interpretieren – sie sind Entscheidungshilfen, keine Pflicht zum Abbruch',
+    'Angehörige ohne angemessene Kommunikation zurücklassen',
+    'Keine Suche nach Patientenverfügung oder Vorsorgevollmacht',
+    'Unvollständige Dokumentation des Abbruchs – fehlende Uhrzeit oder ETCO₂-Verlauf'
+  ]
+},
+{
+  id:46, cat:'paediatrie', diff:'fortgeschritten',
+  title:'Schwieriger Atemweg bei Trisomie 21 – SHT mit V.a. ICB',
+  agnn:'Schädel-Hirn-Trauma, Schwieriger Atemweg, RSI',
+  stichwort:'M 28 · Trisomie 21 · Sturz, Bewusstseinstrübung',
+  notruf:{korrekt:'M 28 · SHT / drohende Bewusstlosigkeit', irre:'M 28 · Sturz'},
+  alarm:'28-jähriger Mann mit Trisomie 21, bei Betreuer kollabiert nach Sturz auf Hinterkopf. GCS 10 (E3M5V2). Betreuer berichtet von zunehmender Verlangsamung der letzten 20 Minuten.',
+  befund:'Patient unruhig, GCS 10. Makroglossie, kurzer Hals, eingeschränkte HWS-Beweglichkeit (atlantoaxiale Instabilität bekannt). Linksseitige Hemiparese. Pupillen: re 3 mm träge, li 2 mm prompt. V.a. epidurales/subdurales Hämatom. SpO₂ 93% unter Raumluft.',
+  vitals:{RR:'148/92',HF:'54/min',SpO2:'93 %',AF:'14/min',GCS:'10',BZ:'88 mg/dl'},
+  eh:[
+    'Erkennt schwierigen Atemweg bei Trisomie 21: Makroglossie, kurzer Hals, atlantoaxiale Instabilität → LEMON-Schema anwenden',
+    'Berücksichtigt atlantoaxiale Instabilität: Neutralstellung der HWS, keine forcierte Reklination beim Intubationsversuch',
+    'Erkennt Cushing-Trias (Bradykardie + Hypertonie + irreguläre Atmung) als Zeichen erhöhten ICP',
+    'Wählt korrekte RSI-Medikamente (AGNN): Ketamin (ICP-neutral, bronchodilatierend) + Rocuronium; kein Succinylcholin bei möglichem erhöhten ICP',
+    'Hält alternatives Atemwegsmanagement bereit: Videolaryngoskop, Supraglottische Atemwegshilfe, chirurgischer Atemweg als ultima ratio',
+    'Zielorientiertes Beatmungsmanagement (AGNN SHT): SpO₂ 94–98%, normokapnisch (paCO₂ 35–45 mmHg), Oberkörper 30°',
+    'Behandelt erhöhten ICP: OKH-Lagerung, Hyperventilation als Bridging NUR bei akuter Einklemmung, keine Steroide bei SHT'
+  ],
+  fragen:[
+    'Erklären Sie das LEMON-Schema – welche Punkte sind bei Trisomie 21 besonders relevant?',
+    'Warum ist atlantoaxiale Instabilität bei Trisomie 21 ein Risikofaktor beim Atemwegsmanagement?',
+    'Welche RSI-Medikamente wählen Sie und warum – was spricht gegen Succinylcholin beim SHT mit V.a. erhöhtem ICP?',
+    'Erklären Sie die Cushing-Trias – was ist die zugrundeliegende Pathophysiologie?',
+    'Welche Beatmungsziele streben Sie beim schweren SHT an?',
+    'Was sind Ihre Rückfalloptionen, wenn die Intubation bei Trisomie 21 scheitert?'
+  ],
+  meds:[
+    {n:'Ketamin',d:'1–2 mg/kg i.v.',h:'Narkoseeinleitung; hämodynamisch stabil, bronchodilatierend; bei erhöhtem ICP aktuell akzeptiert (AGNN 2026)'},
+    {n:'Rocuronium',d:'1,2 mg/kg i.v.',h:'Muskelrelaxans zur RSI; Escape: Sugammadex 16 mg/kg'},
+    {n:'Midazolam',d:'0,05–0,1 mg/kg i.v.',h:'Narkosevertiefung / Sedierung'},
+    {n:'Mannitol',d:'0,5–1 g/kg i.v. über 15–20 min',h:'AGNN: nur bei klinischen Einklemmungszeichen als Bridging bis zur definitiven Versorgung'}
+  ],
+  fallstricke:[
+    'Reklination der HWS bei atlantoaxialer Instabilität → Myelonkompression möglich',
+    'Succinylcholin bei erhöhtem ICP → kurzzeitige ICP-Erhöhung durch Faszikulation, Hyperkaliämie-Risiko',
+    'Hyperventilation dauerhaft → zerebrale Ischämie durch Vasokonstriktion (AGNN: nur Bridging bei Einklemmung)',
+    'Fehlende Vorbereitung auf den schwierigen Atemweg → kein Videolaryngoskop, kein Bougie bereit'
+  ]
+},
+{
+  id:47, cat:'trauma', diff:'fortgeschritten',
+  title:'Taktische Medizin – xABCDE & Blutstillung',
+  agnn:'Traumatologie, Blutstillung (TECC/MARCH), Schussverletzung',
+  stichwort:'Schusswaffenverletzung · Oberschenkel, vital',
+  notruf:{korrekt:'Schussverletzung · arterielle Blutung · vital', irre:'Trauma · Oberschenkel'},
+  alarm:'32-jähriger Mann nach Schusswaffenverletzung am Oberschenkel. Polizei sichert die Lage (Warm Zone aktiv). Patient ansprechbar, starke arterielle Blutung am proximalen Oberschenkel rechts.',
+  befund:'Patient wach, GCS 15. Schusswunde am proximalen Oberschenkel rechts mit spritzender arterieller Blutung. Kein weiterer Einschuss erkennbar. Keine Atemwegsbeeinträchtigung, symmetrische Belüftung. Puls radial tastbar, aber fadenförmig. Haut blass, kaltschweißig.',
+  vitals:{RR:'88/60',HF:'128/min',SpO2:'96 %',AF:'22/min',GCS:'15',BZ:'n.e.'},
+  eh:[
+    'Kennt xABCDE-Schema (AGNN): X = eXsanguination zuerst – lebensbedrohliche Blutung stoppen VOR Atemweg',
+    'Wendet X korrekt an: Tourniquet bei Extremitätenblutung 5–7 cm proximal der Wunde, Wound Packing + hämostyptische Gaze bei Junctionalblutungen',
+    'Kennt TECC-Phasen: Phase 1 Hot Zone (nur Tourniquet), Phase 2 Warm Zone (Blutstillung, Atemweg, Schock), Phase 3 Cold Zone (vollständige Versorgung)',
+    'Versteht Reihenfolge: X vor A, B, C – Exsanguination ist primäre präventable Todesursache beim penetrierenden Trauma',
+    'Kennt hämostyptische Mittel (AGNN): Combat Gauze (Kaolin), Celox (Chitosan) – Wound-Packing-Technik: Gaze bis auf Wundgrund, 3–5 Minuten Direktdruck',
+    'Behandelt hämorrhagischen Schock mit permissiver Hypotension (AGNN: Ziel syst. RR 80–90 mmHg bei SHT-Ausschluss) bis zur definitiven Blutungskontrolle'
+  ],
+  fragen:[
+    'Erklären Sie das xABCDE-Schema – warum hat X Vorrang vor A?',
+    'Wann legen Sie einen Tourniquet an und wann ist Wound Packing die richtige Technik?',
+    'Was ist permissive Hypotension – für welche Patienten gilt sie und für wen nicht?',
+    'Erklären Sie die drei TECC-Phasen und welche Maßnahmen in jeder Phase durchgeführt werden.',
+    'Was ist die "Lethal Triad" des Traumas – und wie beeinflusst sie das präklinische Management?',
+    'Welche Junctional-Blutungen bereiten besondere Probleme – warum versagt dort der Tourniquet?'
+  ],
+  meds:[
+    {n:'TXA (Tranexamsäure)',d:'1 g i.v. über 10 min, dann 1 g über 8 h',h:'AGNN: innerhalb 3 h nach Trauma – je früher, desto besser (CRASH-2). Kontraindikation: >3 h, DIC'},
+    {n:'NaCl 0,9% / Vollelektrolyt',d:'250–500 ml Boli, titrieren',h:'AGNN: permissive Hypotension – Ziel syst. 80–90 mmHg; bei SHT Ziel ≥90 mmHg'},
+    {n:'Ketamin',d:'0,1–0,5 mg/kg i.v. titriert',h:'AGNN: Analgesie im Trauma – hämodynamisch stabil, keine Atemdepression in analgetischer Dosis'}
+  ],
+  fallstricke:[
+    'Tourniquet zu distal oder direkt über Wunde / Gelenk → ineffektiv, Nerven-/Gefäßschaden',
+    'Aggressive Volumentherapie vor Blutungskontrolle → löst Klottamponade auf',
+    'TXA vergessen oder >3 h → einer der wirksamsten präklinischen Eingriffe beim schweren Trauma (CRASH-2)',
+    'xABCDE nicht konsequent: Atemweg vor Blutungsstillung → Patient verblutet während der Intubation'
+  ]
+},
+{
+  id:48, cat:'intern', diff:'fortgeschritten',
+  title:'Rauchgasintoxikation – Brand Mehrfamilienhaus (CO + HCN)',
+  agnn:'CO-Vergiftung, Blausäurevergiftung, Inhalationstrauma',
+  stichwort:'W 45 · Brand Mehrfamilienhaus · bewusstlos geborgen',
+  notruf:{korrekt:'W 45 · Rauchgasintoxikation / bewusstlos', irre:'W 45 · Trauma nach Brand'},
+  alarm:'Brand in Mehrfamilienhaus, Feuerwehr birgt eine bewusstlose 45-jährige Frau aus dem 2. OG. Russpartikel perioral und in Nase. Stark verqualmt. Keine Verbrennungen am Körper.',
+  befund:'Patientin bewusstlos, kein Trauma. Russablagerungen perioral und in Nase. SpO₂ 97% (falsch-normal bei CO-Hb!). Zyanotische Verfärbung. Cheyne-Stokes-Atmung. Rachen: Rötung, Rußspuren. EKG: Sinustachykardie. BGA (venös): Laktat >10 mmol/l, pH 7,18.',
+  vitals:{RR:'100/68',HF:'118/min',SpO2:'97 % (falsch-normal!)',AF:'Cheyne-Stokes',GCS:'6',BZ:'88 mg/dl'},
+  eh:[
+    'Versteht falsch-normale SpO₂ bei CO-Vergiftung: Standard-Puls-Oximetrie unterscheidet CO-Hb nicht – valide Messung nur per CO-Oximetrie (BGA)',
+    'Erkennt kombinierte CO + HCN-Intoxikation (AGNN): Rauchgasintoxikation bei Hausbrand enthält typischerweise BEIDE Gifte; Laktatazidose >10 mmol/l ohne O₂-Erklärung = HCN-Hinweis',
+    'Gibt sofort 100% O₂ über dicht sitzende Maske (AGNN): reduziert CO-Hb-Halbwertzeit von 4–5 h auf 60–90 min; bei Atemstillstand Intubation',
+    'Indiziert Hydroxocobalamin (Cyanokit) bei V.a. HCN-Vergiftung (AGNN): 5 g i.v. über 15 min; prophylaktisch bei Rauchgasintoxikation akzeptiert',
+    'Kennt HBO-Indikationen (AGNN): GCS <15 nach Behandlung, CO-Hb >25%, Schwangere, kardiale Symptome, neurologische Ausfälle',
+    'Organisiert MANV-Aspekte: weitere betroffene Personen im Gebäude, Rückmeldung an Feuerwehr, ggf. Schichtleiter Leitstelle'
+  ],
+  fragen:[
+    'Warum ist die Pulsoximetrie bei CO-Vergiftung unzuverlässig – und wie messen Sie zuverlässig?',
+    'Erklären Sie den Mechanismus der HCN-Toxizität und warum sie Laktatazidose erzeugt.',
+    'Was ist Hydroxocobalamin (Cyanokit) – Mechanismus, Dosis und wann geben Sie es?',
+    'Welche Halbwertzeit hat CO-Hb unter Raumluft, unter 100% O₂ und unter HBO?',
+    'Welche HBO-Indikationen kennen Sie bei CO-Vergiftung?',
+    'Wie differenzieren Sie präklinisch zwischen CO-Monointoxikation und kombinierter CO+HCN-Vergiftung?'
+  ],
+  meds:[
+    {n:'O₂ 100%',d:'15 l/min über dicht sitzende Maske / Intubation',h:'AGNN: erste und wichtigste Maßnahme – reduziert CO-Hb-HWZ von 4–5 h auf 60–90 min'},
+    {n:'Hydroxocobalamin (Cyanokit)',d:'5 g i.v. über 15 min (Erw.)',h:'AGNN: V.a. HCN – Rauchgas + Laktat >10 + schlechter AZ trotz O₂; bindet CN⁻ zu Cyanocobalamin (Vit. B12); Dosis Kind: 70 mg/kg'},
+    {n:'Natriumthiosulfat',d:'12,5 g i.v.',h:'Alternative/Ergänzung zu Hydroxocobalamin; langsamer wirksam'},
+    {n:'Ketamin',d:'1–2 mg/kg i.v.',h:'AGNN: RSI bei Bewusstlosigkeit; hämodynamisch stabil'}
+  ],
+  fallstricke:[
+    'SpO₂ 97% fälschlicherweise als normal interpretieren → CO-Hb bleibt unerkannt',
+    'Nur CO behandeln, HCN vergessen → trotz O₂-Gabe persistierende Bewusstlosigkeit und Laktatazidose',
+    'Hydroxocobalamin zu spät geben oder nicht mitführen → irreversibler Zellschaden durch Zytochromhemmung',
+    'HBO-Indikation nicht prüfen → Spätschäden und Delayed Neurological Sequelae (DNS)'
+  ]
 }
 ];
 
@@ -2048,7 +2220,33 @@ const EH_NF = {
     'Was ist das "burned bridge"-Problem – welche Konsequenz für Ihre Entscheidung?',
     'Welche supraglottischen Atemwegshilfen kennen Sie – Vor-/Nachteile?',
     'Sugammadex als Escape: Ab welcher Dosis antagonisiert es Rocuronium vollständig?',
-    'Welche Informationen sind für die Voranmeldung beim Traumazentrum essenziell?']
+    'Welche Informationen sind für die Voranmeldung beim Traumazentrum essenziell?'],
+45:['Welche drei TOR-Kriterien nennt das ERC 2021 – und warum sind sie keine absoluten Stoppregeln?',
+    'Ab welchem ETCO₂-Wert und nach welcher Reanimationsdauer gilt er als prognostisch ungünstig?',
+    'Nennen Sie alle acht reversiblen Ursachen (4H/HITS) – welche müssen Sie aktiv ausschließen?',
+    'Wie beginnen Sie das Gespräch mit Angehörigen, die eine Weiterführung der Reanimation fordern?',
+    'Was tun Sie, wenn Sie eine Patientenverfügung finden, die Reanimation ablehnt – CPR aber schon begonnen hat?',
+    'Welche Mindestinhalte muss eine rechtssichere Dokumentation des Reanimationsabbruchs enthalten?',
+    'Was sind Ihre nächsten Pflichten als Notarzt nach Reanimationsabbruch am Einsatzort?'],
+46:['Erklären Sie alle fünf LEMON-Buchstaben – welche Punkte sind bei Trisomie 21 besonders kritisch?',
+    'Wie beeinflusst atlantoaxiale Instabilität Ihre Lagerung beim Atemwegsmanagement konkret?',
+    'Erklären Sie die Cushing-Trias pathophysiologisch – was ist der Mechanismus hinter dem Vollbild?',
+    'Warum ist Ketamin das bevorzugte Einleitungsmedikament beim erhöhten ICP – aktuelle Datenlage?',
+    'Beschreiben Sie Ihr Vorgehen, wenn die Intubation bei Trisomie 21 scheitert – Step by step.',
+    'Welche Beatmungsziele streben Sie beim schweren SHT an – SpO₂, paCO₂, MAP?',
+    'Welche präklinischen ICP-senkenden Maßnahmen sind evidenzbasiert – und was ist obsolet?'],
+47:['Erklären Sie, warum X vor A kommt – was ist die häufigste präventable Todesursache beim penetrierenden Trauma?',
+    'Wie legen Sie einen Tourniquet korrekt an – wo genau, wie fest, was dokumentieren Sie?',
+    'Erklären Sie die drei TECC-Phasen und die jeweiligen Behandlungsprioritäten.',
+    'Warum kann ein gleichzeitiges Atemwegsproblem das xABCDE-Schema nicht umkehren?',
+    'Was ist der Mechanismus hämostyptischer Mittel (Combat Gauze, Celox) – wie unterscheiden sie sich?',
+    'Was ist permissive Hypotension – für wen gilt sie, für wen nicht?'],
+48:['Warum zeigt die Standard-Pulsoximetrie bei CO-Vergiftung falsch-normal – wie messen Sie valide?',
+    'Wie unterscheiden Sie präklinisch CO-Monointoxikation von kombinierter CO+HCN-Vergiftung?',
+    'Was bewirkt 100% O₂ bei CO-Vergiftung – Halbwertzeiten unter Raumluft, Normaldruck-O₂ und HBO?',
+    'Hydroxocobalamin-Mechanismus: Wie bindet es CN⁻, was entsteht, warum ist das sicher?',
+    'Nennen Sie die HBO-Indikationen bei CO-Vergiftung – und was sind Delayed Neurological Sequelae?',
+    null]
 };
 
 const EH_NF_A = {
@@ -2404,6 +2602,40 @@ const EH_NF_A = {
     'AGNN: SGA-Optionen: i-gel Gr. 4/5 (kein Aufblasballon, schnell) oder LMA Supreme (Absaugung). Limitation: >30 cmH₂O Beatmungsdruck → Leckage; kein Aspirationsschutz. Max. 2–3 Versuche.',
     'AGNN: Sugammadex 16 mg/kg i.v.: vollständige Rocuronium-Antagonisierung in ~3 min. Nur Aminosteroid-NMB (Rocuronium, Vecuronium); kein Effekt auf Succinylcholin!',
     'AGNN: Voranmeldung Gesichtstrauma: Unfallereignis, GCS, Atemweg gesichert womit (Tubus/SGA/ungesichert), Vitalparameter, ISBAR. MKG-Chirurgie + HNO-Notfallbereitschaft anfordern.'
+  ],
+  45:[
+    'AGNN/ERC 2021: TOR-Kriterien – (1) kein Bystander-CPR vor Eintreffen, (2) nicht-defibrillierbarer Erstrhythmus, (3) kein ROSC nach vollständiger qualifizierter ACLS-Reanimation. Keine absoluten Stoppregeln: reversible Ursachen müssen ausgeschlossen sein, individuelle Prüfung bleibt Pflicht. AGNN: "TOR entbindet nicht von Einzelfallentscheidung."',
+    'AGNN: ETCO₂ <10 mmHg nach ≥20 min qualitativ hochwertiger CPR = stark prognostisch ungünstig. ETCO₂ >35 mmHg = ROSC-Zeichen. ERC 2021: kein isolierter Cut-off-Wert, aber anhaltend niedriger ETCO₂ stützt TOR-Entscheidung – immer im Gesamtkontext werten.',
+    'AGNN: 4Hs = Hypoxie, Hypovolämie, Hypo-/Hyperkaliämie, Hypothermie. HITS = Herzbeuteltamponade, Intoxikation, Thrombose (koronar/LAE), Spannungspneumothorax. Aktiv ausschließen: Hypothermie (Thermometer), Spannungspneumothorax (Nadeldekompression), Hypovolämie, Intoxikation (Anamnese).',
+    'AGNN/Kommunikation: Klarheit + Mitgefühl, kein Fachjargon. "Wir haben alles versucht, was medizinisch möglich war – sein Herz hat auf alle Behandlungsmaßnahmen nicht angesprochen." Angehörige dürfen anwesend sein (AGNN empfiehlt Family Presence). Keine Schuldzuweisungen, Zeit lassen.',
+    'AGNN/Recht: Eindeutige PV, die CPR ablehnt → Behandlung einstellen. Bereits begonnene CPR ist kein Fehler (bei Unklarheit). Abbruch nach Klärung ebenfalls kein Fehler. Bei unklarer oder fehlender PV: im Zweifel fortführen bis mutmaßlicher Wille geklärt oder Reanimationsabbruch aus medizinischen Gründen gerechtfertigt.',
+    'AGNN/Doku: Uhrzeit Erstrhythmus, alle Defibrillationen mit Joule, Medikamente mit Zeitpunkt, ETCO₂-Verlauf, Suche nach reversiblen Ursachen (dokumentiert), Suche nach PV (dokumentiert), Uhrzeit Abbruchentscheidung mit Begründung, anwesende Personen inkl. Angehörige.',
+    'AGNN: (1) Todeszeitpunkt festhalten (Asystolie ≥10 min EKG, Reaktionslosigkeit, fehlende Atmung, Mydriasis). (2) Leichenschau durchführen, Todesbescheinigung ausfüllen. (3) Todesart einschätzen: natürlich / ungeklärt / nicht natürlich. (4) Bei unklaren Umständen Polizei informieren.'
+  ],
+  46:[
+    'AGNN: LEMON – L=Look externally (Makroglossie, Prognathie, kurzer Hals, Trisomie-21-Fazies). E=Evaluate 3-3-2. M=Mallampati I–IV (bei Trisomie 21 oft III–IV). O=Obstruction (Zungenhypertrophie). N=Neck mobility (bei Trisomie 21 ↓ durch atlantoaxiale Instabilität → kein N frei!).',
+    'AGNN: Atlantoaxiale Instabilität bei Trisomie 21 (10–20% der Patienten): Lig. transversum atlantis insuffizient → Dens-axis-Subluxation bei Reklination/Flexion → Myelonkompression. Lagerung: neutrale HWS-Position, minimale Extension, keine forcierte Reklination, Achsensicherung durch zweite Person.',
+    'AGNN: Cushing-Trias = Bradykardie + Hypertension + irreguläre Atmung. Pathophysiologie: ICP ↑ → Hirnstammkompression → vasomotorisches Zentrum stimuliert → Hypertension → Barorezeptoren → Bradykardie (Bezold-Jarisch). Vollbild = unmittelbar bevorstehende transtentorielle Herniation – Notfall!',
+    'AGNN: Ketamin heute nicht mehr kontraindiziert bei erhöhtem ICP (Metaanalysen 2014–2022: kein ICP-Anstieg bei kontrollierter Beatmung). Vorteile: hämodynamisch stabil (kein RR-Abfall), bronchodilatierend. Dosis 1–2 mg/kg i.v. Rocuronium 1,2 mg/kg i.v. für RSI; Escape: Sugammadex 16 mg/kg → Antagonisierung in ~3 min.',
+    'AGNN: Schwieriger-Atemweg-Algorithmus: (1) optimierte direkte Laryngoskopie (BURP, Rampenposition). (2) Videolaryngoskopie (McGrath MAC, C-MAC). (3) Bougie-assistiert. (4) Supraglottische Atemwegshilfe (SGA: i-gel, LMA Supreme) als Oxygenierungsbridge. (5) Koniotomie (CICO-Rescue: Skalpell-Bougie-Tubus).',
+    'AGNN SHT-Beatmungsziele: SpO₂ 94–98% (Hypoxie absolut vermeiden). paCO₂ 35–45 mmHg normokapnisch (Hyperventilation → Vasokonstriktion → Ischämie; nur bei Einklemmung Ziel 30–35 mmHg als Bridging). MAP ≥80 mmHg. Oberkörper 30° erhöht.',
+    'AGNN: Evidenzbasiert: Oberkörperhochlagerung 30°, Normokapnie, Normothermie, Normoglykämie, Hypertonie tolerieren (MAP ≥80 mmHg). Hyperventilation NUR bei klinischen Einklemmungszeichen als kurzfristiges Bridging. Obsolet/kein Benefit: Steroide beim SHT (CRASH), prophylaktische Hyperventilation, Mannitol präklinisch ohne Einklemmungszeichen.'
+  ],
+  47:[
+    'AGNN/TECC: Exsanguination = #1 präventable Todesursache beim penetrierenden Trauma (>35% aller vermeidbaren Kriegstode, CoTCCC-Daten). Unkontrollierbare Extremitätenblutung führt in 3–5 min zum Tod. Verlegter Atemweg tötet langsamer (BVM-Beatmung überbrückt Zeit). "Secure the bleed first": kein Benefit, einen Atemweg zu sichern, wenn Patient verblutet.',
+    'AGNN: Tourniquet 5–7 cm proximal der Wunde (nicht direkt über Wunde/Gelenk). Festziehen bis Blutung sistiert (taktil + visuell – kein distaler Puls = korrekt). Uhrzeit auf Haut/TQ notieren (Konversionsfenster ≤2 h, Nerven-/Gefäßschaden ab 6 h). Konversion zu Wound Packing + Druckverband in Phase 3 wenn möglich.',
+    'AGNN/TECC-Phasen: Phase 1 Hot Zone (Bedrohung aktiv): nur Tourniquet, kein Verweilen. Phase 2 Warm Zone (Lage gesichert, Risiko besteht): Blutstillung (Wound Packing), Atemweg, Schock, Analgesie (Ketamin). Phase 3 Cold Zone (sicher): vollständige ABCDE-Versorgung, TXA, i.v.-Zugang, Vorbereitung Transport.',
+    'AGNN: Exsanguination ist definitiv (Exitus in Minuten) und durch X präventierbar. Verlegter Atemweg ist reversibel (BVM/SGA überbrückt Zeit). "Life before limb" – aber "bleed before airway". Ausnahme: sofortige Atemwegsobstruktion bei simultaner nicht-komprimierbarer Blutung = individuelle Entscheidung.',
+    'AGNN: Combat Gauze = Kaolin-imprägniert → aktiviert intrinsische Gerinnung (Faktor XII). Celox = Chitosan → direkter Erythrozyten/Thrombozyten-Klumper, gerinnungsunabhängig (auch bei Antikoagulation wirksam). Wound-Packing: Gaze bis auf Wundgrund stopfen, 3–5 min direkter manueller Druck, Druckverband darüber.',
+    'AGNN: Permissive Hypotension: Ziel syst. RR 80–90 mmHg bei penetrierendem Trauma OHNE SHT. Rationale: höherer Druck löst Klottamponade → mehr Blutung, Hypothermie, Azidose. NICHT anwenden bei: SHT (Ziel MAP ≥80 mmHg → zerebrale Perfusion), Alter >55 Jahre, penetrierendem Hirntrauma.'
+  ],
+  48:[
+    'AGNN: SpO₂-Sensor (660 nm / 940 nm) unterscheidet Hb und CO-Hb nicht – CO-Hb "sieht" aus wie oxygeniertes Hb → SpO₂ erscheint normal, obwohl Gewebe hypoxisch. Valide Messung: CO-Oximetrie via Blutgasanalyse (arteriell oder venös) oder dedizierter CO-Oximeter (Masimo RAD-57, 8-Wellenlängen).',
+    'AGNN: CO-Mono: SpO₂ falsch-normal, Kopfschmerz, Schwindel, Bewusstlosigkeit bei hohem CO-Hb. HCN-Zusatz bei Hausbrand (Verbrennung von Kunststoffen, Wolle, Schaumstoffen): Laktat >10 mmol/l trotz O₂-Gabe (Zytochromhemmung → kein aerober Stoffwechsel), schwerster AZ, keine Verbesserung unter O₂ allein. Leitbefund: therapieresistente Laktatazidose.',
+    'AGNN: CO-Hb-HWZ Raumluft: 4–5 h. 100% O₂ Normaldruck (dicht sitzende Maske!): 60–90 min. HBO (100% O₂ 2,4–2,8 ATA): 20–30 min. Mechanismus: Massenwirkungsgesetz – hoher O₂-Partialdruck verdrängt CO von Hämoglobin. Zusatznutzen HBO: reduziert Lipidperoxidation, Cytochrom-c-Oxidase-Inaktivierung und DNS.',
+    'AGNN: Hydroxocobalamin (Cyanokit): CN⁻ bindet an Cobalt(III) → Cyanocobalamin (Vit. B12) = renal eliminiert, nicht toxisch. Dosis: 5 g i.v. über 15 min (Erw.), 70 mg/kg (Kind). NW: Hautverfärbung rot/braun bis 48 h, SpO₂-Messung gestört (chromatisch). Prophylaktisch bei Rauchgasintoxikation akzeptiert (kein Nachteil bei reiner CO).',
+    'AGNN HBO-Indikationen: GCS <15 nach Behandlung, CO-Hb >25%, Schwangere (CO-Hb >15%), kardiale Symptome (Troponin ↑, Arrhythmie, ST-Veränderungen), neurologische Ausfälle, Kinder. Delayed Neurological Sequelae (DNS): kognitive Störungen, Parkinsonismus, Persönlichkeitsveränderungen nach freiem Intervall 2–28 Tage bei ~30% ohne HBO.',
+    null
   ]
 };
 
@@ -2411,6 +2643,60 @@ const EH_NF_A = {
 
 let currentFilter = 'all';
 let checkState = {}; // {caseId: [bool]}
+
+// ── Prüfungsplanung ───────────────────────────────────────
+const DEFAULT_CANDIDATES = [
+  {id:1, name:'Biehler',   cases:[21,12,13,32,45]},
+  {id:2, name:'Dreyer',    cases:[46,11,27,37]},
+  {id:3, name:'Dupont',    cases:[16,34,47,7,9]},
+  {id:4, name:'Lempferdt', cases:[22,38,33,20]},
+];
+let candidates      = [];
+let activePruefling = 0;
+let assignMode      = false;
+
+function loadCandidates(){
+  try{
+    const s = localStorage.getItem('nfm_candidates');
+    if(s) candidates = JSON.parse(s);
+    else  candidates = DEFAULT_CANDIDATES.map(c => ({...c, cases:[...c.cases]}));
+  }catch(e){
+    candidates = DEFAULT_CANDIDATES.map(c => ({...c, cases:[...c.cases]}));
+  }
+}
+function saveCandidates(){
+  try{ localStorage.setItem('nfm_candidates', JSON.stringify(candidates)); }catch(e){}
+}
+function getCandidate(id){ return candidates.find(c => c.id === id); }
+
+function selectPruefling(id){
+  activePruefling = id;
+  assignMode = false;
+  document.querySelectorAll('.pl-btn[data-pl]').forEach(b =>
+    b.classList.toggle('active', parseInt(b.dataset.pl) === id));
+  const ab = document.getElementById('pl-assign-btn');
+  if(ab){ ab.style.display = id > 0 ? '' : 'none'; ab.classList.remove('active'); }
+  renderGrid();
+}
+function toggleAssignMode(){
+  if(!activePruefling) return;
+  assignMode = !assignMode;
+  const ab = document.getElementById('pl-assign-btn');
+  if(ab) ab.classList.toggle('active', assignMode);
+  renderGrid();
+}
+function toggleCaseAssignment(caseId, e){
+  e.stopPropagation();
+  if(!activePruefling) return;
+  const cand = getCandidate(activePruefling);
+  if(!cand) return;
+  const idx = cand.cases.indexOf(caseId);
+  if(idx >= 0) cand.cases.splice(idx, 1);
+  else cand.cases.push(caseId);
+  saveCandidates();
+  renderGrid();
+}
+// ─────────────────────────────────────────────────────────
 
 function getCatLabel(cat){ return CATS[cat] || cat; }
 
@@ -2420,11 +2706,27 @@ function renderBadge(cls, text){
 
 function renderStripe(cat){ return `<div class="card-stripe stripe-${cat}"></div>`; }
 
-function renderGrid(filter){
-  const filtered = filter === 'all' ? cases : cases.filter(c => c.cat === filter);
+function renderGrid(){
+  let filtered;
+  if(activePruefling > 0 && !assignMode){
+    const cand = getCandidate(activePruefling);
+    filtered = cand ? cases.filter(x => cand.cases.includes(x.id)) : [];
+  } else {
+    filtered = currentFilter === 'all' ? cases : cases.filter(c => c.cat === currentFilter);
+  }
   const grid = document.getElementById('grid-view');
-  grid.innerHTML = filtered.map(c => `
+  if(assignMode) grid.classList.add('grid-assign-mode');
+  else grid.classList.remove('grid-assign-mode');
+  grid.innerHTML = filtered.map(c => {
+    let assignToggle = '';
+    if(assignMode && activePruefling > 0){
+      const cand = getCandidate(activePruefling);
+      const isAssigned = cand && cand.cases.includes(c.id);
+      assignToggle = `<div class="card-assign-toggle ${isAssigned?'assigned':'unassigned'}" onclick="toggleCaseAssignment(${c.id},event)" title="${isAssigned?'Entfernen':'Hinzufügen'}">${isAssigned?'✓':'+'}</div>`;
+    }
+    return `
     <div class="card" onclick="openCase(${c.id})">
+      ${assignToggle}
       ${renderStripe(c.cat)}
       <div class="card-body">
         <div class="card-meta">
@@ -2440,8 +2742,8 @@ function renderGrid(filter){
         <span style="font-size:.75rem;color:#aaa">AGNN: ${c.agnn}</span>
         <span>→</span>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function openCase(id){
@@ -2584,10 +2886,11 @@ document.getElementById('filters').addEventListener('click', e => {
   btn.classList.add('active');
   const cat = btn.dataset.cat || 'all';
   currentFilter = cat;
-  renderGrid(currentFilter);
+  renderGrid();
 });
 
-renderGrid('all');
+loadCandidates();
+renderGrid();
 </script>
 </body>
 </html>
