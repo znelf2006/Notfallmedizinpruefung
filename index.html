@@ -203,7 +203,10 @@ const cases = [
     'Trifft korrekte Transportentscheidung: primäre PCI (door-to-balloon < 90 min) → Herzkatheterzentrum',
     'Kennt hämodynamische Strategie: vorsichtige Volumen-Gabe beim Rechtsherzinfarkt, Vasopressoren (Noradrenalin) bei persistierendem Schock',
     'Nennt korrekte Pharmakotherapie: ASS + Heparin + titrierte Analgesie (kein Nitroglycerin)',
-    'Erkennt Komplikationen: VF als mögliche Folge → Defibrillation bereithalten'
+    'Erkennt Komplikationen: VF als mögliche Folge → Defibrillation bereithalten',
+    'Ordnet ST-Hebungsmuster Infarktarealen zu: II/III/aVF → inferior (RCA); V1–V4 → anterior (LAD); I/aVL/V5–V6 → lateral (LCX); V1–V3 ST-Senkung + R>S → posterior (Zusatz V7–V9); V3R/V4R → Rechtsherzinfarkt',
+    'Erkennt Hauptstamm-EKG (LMCA-Verschluss): isolierte ST-Hebung aVR (± V1) + diffuse ST-Senkungen ≥6 Ableitungen (I, II, V4–V6) → höchste Mortalität, kardiogener Schock erwartet',
+    'Kennt modifizierte Sgarbossa-Kriterien beim LBBB: (1) konkordante ST-Hebung ≥1 mm; (2) konkordante ST-Senkung V1–V3 ≥1 mm; (3) Smith-Modifikation 2012: exzessive diskordante Hebung ST/S-Ratio ≥ –0,25'
   ],
   fragen:[
     'Wie stellen Sie die Diagnose STEMI präklinisch? Welche EKG-Kriterien sind entscheidend?',
@@ -211,7 +214,10 @@ const cases = [
     'Lyse oder primäre PCI – wie entscheiden Sie präklinisch?',
     'Wie behandeln Sie die Hypotonie? Wann geben Sie Volumen, wann Katecholamine?',
     'Welche Zielklinik wählen Sie, wenn das nächste KH kein Herzkatheterlabor hat?',
-    'Der Patient verliert während des Transports das Bewusstsein und zeigt VF im EKG – Ihr Vorgehen?'
+    'Der Patient verliert während des Transports das Bewusstsein und zeigt VF im EKG – Ihr Vorgehen?',
+    'Welches Infarktareal und welches Gefäß entspricht ST-Hebungen in II/III/aVF – und welche Zusatzableitungen bei Bradykardie und Hypotonie obligat?',
+    'Was bedeutet eine isolierte ST-Hebung in aVR mit diffusen Senkungen in ≥6 Ableitungen – welche Differenzialdiagnose beachten Sie?',
+    'Sie sehen nach ROSC einen LBBB. Welche Smith-Sgarbossa-Kriterien sprechen für einen STEMI unter LBBB?'
   ],
   meds:[
     {n:'ASS',d:'150–300 mg p.o. oder i.v.',h:'Sofort – nicht auf EKG-Ergebnis warten'},
@@ -1333,7 +1339,9 @@ const cases = [
     'Legt mechanisches Kompressionssystem (LUCAS/AutoPulse) mit minimaler No-Flow-Unterbrechung an',
     'Führt Reanimationsalgorithmus weiter: Adrenalin + Amiodaron nach Schema, Defibrillationsversuche alle 2 min',
     'Kennt absolute eCPR-Kontraindikationen: nicht beobachteter Kollaps ohne CPR, terminale Erkrankung, schwere neurologische Vorerkrankung, Trauma als Ursache',
-    'Versteht: eCPR = Brücke zur kausalen Therapie (PCI, Bypass) – kein Selbstzweck'
+    'Versteht: eCPR = Brücke zur kausalen Therapie (PCI, Bypass) – kein Selbstzweck',
+    'Sucht nach ischämischer Ursache des refraktären VF: EKG auf STEMI-Muster prüfen (II/III/aVF → RCA; aVR ± V1 + diffuse Senkungen → LMCA); Infarktareal benennen; eCPR-Zielklinik = eCPR-fähiges HKL',
+    'Kennt modifizierte Sgarbossa-Kriterien: EKG-Diagnose eines STEMI unter LBBB möglich; Smith-Ratio ≥ –0,25 = PCI-Indikation trotz LBBB; unmittelbare HKL-Voranmeldung'
   ],
   fragen:[
     'Was sind die eCPR-Einschlusskriterien in Hamburg?',
@@ -1341,7 +1349,9 @@ const cases = [
     'Was melden Sie bei der Voranmeldung im Herzkatheterlabor?',
     'Welche absoluten Kontraindikationen für eCPR kennen Sie?',
     'Was ist der Unterschied zwischen eCPR und ECMO?',
-    'Heparin – wann und warum geben Sie es unter laufender CPR?'
+    'Heparin – wann und warum geben Sie es unter laufender CPR?',
+    'Welche EKG-Muster beim refraktären VF sprechen für eine ischämische Ursache – und welche Ableitungen deuten auf welches Infarktareal hin?',
+    'Sie erhalten bei eCPR-Transport kurz Spontanrhythmus und sehen einen LBBB. Wie entscheiden Sie, ob PCI indiziert ist?'
   ],
   meds:[
     {n:'Adrenalin',d:'1 mg i.v./i.o. alle 3–5 min',h:'Weiter nach Algorithmus'},
@@ -1516,7 +1526,9 @@ const cases = [
     'Kennt präklinische Therapieprinzipien: Blutdrucksenkung (Ziel syst. 100–120 mmHg), HF-Senkung (Ziel HF < 60/min), Analgesie',
     'Wählt richtige Medikamente: Esmolol oder Labetalol (α+β-Blockade) + Urapidil; kein Nitrat als Monotherapie (Reflex-Tachykardie erhöht Wandscherspannung)',
     'Versteht Transportdringlichkeit: Typ A = operativer Notfall → Herzchirurgie mit Herzlungenmaschine, kein anderes Haus',
-    'Verhindert Lyse: ACS-Mimikry → Lyse bei Dissektion = fatal (Perikardtamponade, unkontrollierte Blutung)'
+    'Verhindert Lyse: ACS-Mimikry → Lyse bei Dissektion = fatal (Perikardtamponade, unkontrollierte Blutung)',
+    'Erkennt EKG-Fallstrick bei Koronarbeteiligung: RCA-Ostium → II/III/aVF-Muster; LMCA-Ostium → aVR-Hebung ± V1 + diffuse Senkungen ≥6 Ableitungen → vor Lyse-Entscheidung immer Dissektion ausschließen',
+    'Kennt Hauptstamm-Muster als Dissektion-Mimikry: ST-Hebung aVR ± V1 + diffuse ST-Senkungen ≥6 Ableitungen bei Reißschmerz + RR-Differenz → Dissektion bis Beweis des Gegenteils; kein Heparin, keine Lyse'
   ],
   fragen:[
     'Wie unterscheiden Sie klinisch eine Aortendissektion von einem STEMI?',
@@ -1524,7 +1536,9 @@ const cases = [
     'Welche Komplikationen drohen bei einer Typ-A-Dissektion?',
     'Was ist der Unterschied zwischen Stanford Typ A und Typ B?',
     'Welche Blutdruckzielwerte und Medikamente setzen Sie präklinisch ein?',
-    'Warum ist Lysetherapie bei Dissektion absolut kontraindiziert?'
+    'Warum ist Lysetherapie bei Dissektion absolut kontraindiziert?',
+    'In welchen Ableitungen erwarten Sie STEMI-Muster bei Beteiligung des RCA-Ostiums – und bei Beteiligung des LMCA-Ostiums durch die Dissektion?',
+    'Was sind die fünf präklinischen Kriterien, die bei aVR-Hebung mit diffusen Senkungen für eine Dissektion statt LMCA-Verschluss sprechen?'
   ],
   meds:[
     {n:'Esmolol',d:'0,5 mg/kg Bolus i.v., dann 0,05–0,3 mg/kg/min',h:'Kurzwirksamer Beta-Blocker – gut steuerbar'},
@@ -1967,7 +1981,10 @@ const EH_NF = {
    'Door-to-balloon <90 min: Ab wann beginnt die Uhr zu laufen – Erstkontakt oder Klinikankunft?',
    'Warum ist zu viel Volumen beim Rechtsherzinfarkt schädlich – was passiert am rechten Ventrikel?',
    'Warum Heparin schon präklinisch und nicht erst in der Klinik?',
-   'Welche anderen malignen STEMI-Komplikationen müssen Sie präklinisch managen können?'],
+   'Welche anderen malignen STEMI-Komplikationen müssen Sie präklinisch managen können?',
+   'Welches Gefäß ist beim inferioren STEMI (II/III/aVF) am häufigsten betroffen – wann schreiben Sie V3R/V4R obligat vor der Intervention?',
+   'Welche Differenzialdiagnosen hat eine isolierte ST-Hebung in aVR – und wie unterscheiden Sie LMCA-Verschluss von Aortendissektion mit Koronarbeteiligung?',
+   'Wie berechnet man die Smith-modifizierte Sgarbossa ST/S-Ratio – und warum wurde die ≥5-mm-Regel des Original-Sgarbossa ersetzt?'],
 2:['Welche Rhythmen sind nicht defibrillierbar – und was tun Sie bei PEA und Asystolie stattdessen?',
    'Welche Kompressionstiefe und -frequenz gibt der ERC 2021 vor?',
    'Nach wie vielen Schocks geben Sie das erste Adrenalin – und in welchem Abstand wiederholen?',
@@ -2152,7 +2169,9 @@ const EH_NF = {
     'Was ist die maximale "no-flow time" für eine eCPR-Indikation?',
     'Was sind absolute Kontraindikationen für eCPR?',
     'Was muss der Notarzt dokumentieren und kommunizieren beim eCPR-Kandidaten?',
-    'Was ist der Unterschied zwischen VA-ECMO und VV-ECMO?'],
+    'Was ist der Unterschied zwischen VA-ECMO und VV-ECMO?',
+    'Warum ist die ischämische Ursache beim refraktären VF klinisch entscheidend – welche EKG-Muster verlangen trotz laufender Reanimation eine sofortige PCI-Voranmeldung?',
+    'Wie berechnet man die Smith-Sgarbossa ST/S-Ratio beim LBBB – und was bedeutet eine Ratio ≥ –0,25 für die Zielklinik?'],
 33:['Nennen Sie alle acht Phasen der RSI (8P-Sequenz der DGAI).',
     'Was bedeutet "burned bridge" bei der RSI – welche Konsequenz für die Entscheidungsfindung?',
     'Beschreiben Sie die CICO-Situation und Ihr Vorgehen Schritt für Schritt.',
@@ -2181,7 +2200,9 @@ const EH_NF = {
     'Welches RR-Ziel gilt bei der Aortendissektion – warum nicht zu niedrig?',
     'Warum ist eine versehentliche Lyse bei Dissektion katastrophal?',
     'Was ist das klinische Zeichen der RR-Seitendifferenz bei Typ-A-Dissektion?',
-    null],
+    null,
+    'Warum kann eine Aortendissektion mit Koronarbeteiligung im EKG wie ein STEMI aussehen – welches Muster für RCA- vs. LMCA-Ostiumeinbeziehung?',
+    'Wie unterscheiden Sie präklinisch das aVR-Hebungs-Muster bei LMCA-Verschluss von einer Aortendissektion mit LMCA-Beteiligung?'],
 38:['Was ist die klassische Opioid-Trias – und welcher Befund ist für die Diagnose entscheidend?',
     'Wirkdauer Naloxon i.v. – und warum ist das klinisch gefährlich?',
     'Was passiert bei Naloxon als hohem Bolus – welche Komplikationen?',
@@ -2256,7 +2277,10 @@ const EH_NF_A = {
     'AGNN: FMC = erster medizinischer Kontakt. Ziel: PCI ≤90 min ab FMC (door-to-balloon). Bei nicht erreichbarem Zeitfenster → Lyse + Transport.',
     'AGNN: Zu viel Volumen beim RVI → RV-Überdehnung → Septumshift links → LV-Füllung ↓ → HZV ↓. Volumen vorsichtig titrieren, max. 500 ml Bolusgabe.',
     'AGNN: UFH 5.000 IE i.v. oder 70 IE/kg (max. 5.000 IE) präklinisch. HWZ ~1 h; Thrombuslast ↓ vor PCI.',
-    'Komplikationen: kardiogener Schock, AV-Block II/III (Hinterwand), akute MKI (Papillarmuskelnekrose), freie Wandruptur, VSD, Dressler-Perikarditis. (AGNN 2026)'
+    'Komplikationen: kardiogener Schock, AV-Block II/III (Hinterwand), akute MKI (Papillarmuskelnekrose), freie Wandruptur, VSD, Dressler-Perikarditis. (AGNN 2026)',
+    'AGNN: II/III/aVF = inferiorer STEMI, RCA (85%) oder LCX (15%). Obligat bei inferiorem STEMI + Bradykardie/Hypotonie: V3R/V4R sofort (RVI in 30–50% d. Fälle!). Weitere Areale: V1–V4=anterior/LAD; I/aVL/V5–V6=lateral/LCX; V1–V3 ST-Senkung+R>S=posterior → V7/V8/V9 bestätigen.',
+    'AGNN: ST-Hebung aVR isoliert = reziproke Fernveränderung bei diffuser subendokardialer Ischämie. LMCA-Muster: ST↑ aVR ± V1 + ST↓ in I, II, V4–V6 (≥6 Abl.) → LMCA oder prox. LAD-Verschluss, sehr hohe Mortalität. DD Dissektion mit Koronarbeteiligung: gleiches EKG + Reißschmerz + RR-Seitendifferenz → KEINE Lyse, KEIN Heparin!',
+    'AGNN: Orig. Sgarbossa 1996: (1) konkordante Hebung ≥1 mm: 5 Pkt. (2) konkordante Senkung V1–V3 ≥1 mm: 3 Pkt. (3) diskordante Hebung ≥5 mm: 2 Pkt. ≥3 Pkt. = STEMI. Smith-Modifikation 2012: Kriterium 3 → ST/S-Ratio = ST (mm) / S-Zacke (mm) ≥ –0,25 = exzessive Diskordanz. Sensitiver + spezifischer als 5-mm-Regel. AGNN: bei LBBB + Brustschmerz → Sgarbossa anwenden, PCI-Team informieren.'
   ],
   2:[
     'AGNN/ERC: Asystolie + PEA = nicht defibrillierbar. Dort: CPR + Adrenalin 1 mg i.v. alle 3–5 min + reversible Ursachen (4 Hs/HITS).',
@@ -2504,7 +2528,9 @@ const EH_NF_A = {
     'AGNN: No-flow ≤5 min, Low-flow ≤60 min für akzeptable neurologische Ergebnisse. Keine absoluten Cut-offs, aber deutlich schlechtere Prognose bei Überschreitung.',
     'AGNN: Absolute KI eCPR: nicht beobachteter Kollaps ohne Laien-CPR, terminale Grunderkrankung, Alter >70–75 J. (protokollabhängig), keine erreichbare eCPR-Logistik.',
     'AGNN: Dokumentation eCPR: Kollapszeitpunkt, Laien-CPR-Beginn, No-flow-Zeit, Schockanzahl + Energie, Medikamente + Uhrzeiten, neurologisches Ausgangsniveau. ISBAR obligat.',
-    'AGNN: VA-ECMO: V. femoralis → Pumpe → Oxygenator → A. femoralis = Herz-Lungen-Ersatz. VV-ECMO: venös-venös = nur Lungenersatz (kein Herzersatz).'
+    'AGNN: VA-ECMO: V. femoralis → Pumpe → Oxygenator → A. femoralis = Herz-Lungen-Ersatz. VV-ECMO: venös-venös = nur Lungenersatz (kein Herzersatz).',
+    'AGNN: Refraktäres VF ist in >70% ischämisch. Post-ROSC-Fenster oder Analysepause: 12-Kanal-EKG sofort. Muster: II/III/aVF (RCA), V1–V4 (LAD), I/aVL/V5–V6 (LCX), aVR ±V1 + diffuse Senkungen (LMCA). Zielklinik = eCPR-fähiges HKL = PCI direkt nach ECMO-Anlage, kein Zwischenstopp.',
+    'AGNN/Sgarbossa (Smith 2012): ST/S-Ratio = ST-Auslenkung (mm) / tiefste S-Zacke (mm). Ratio ≥ –0,25 = exzessive Diskordanz = STEMI. Konkordante Hebung ≥1 mm + konkordante Senkung V1–V3 ≥1 mm bleiben unverändert. ≥3 Punkte (Originalsystem) oder Smith-Ratio positiv → PCI-Indikation trotz LBBB → eCPR-Zentrum mit HKL.'
   ],
   33:[
     'AGNN: 8P-RSI-Sequenz: (1) Preparation, (2) Pre-oxygenation (SpO2 100%), (3) Pre-treatment (Atropin Kinder, Lidocain bei SHT), (4) Paralysis + Induction, (5) Positioning, (6) Placement, (7) Post-intubation, (8) Proof.',
@@ -2544,7 +2570,9 @@ const EH_NF_A = {
     'AGNN: Ziel-RR syst. 100–120 mmHg + HF 60–70/min (Wandscherspannung ↓). Esmolol (titrierbar, kurzwirksam) oder Urapidil (kein Reflex-Tachykardie). Zu niedrig → Organischämie.',
     'AGNN: Lyse bei Dissektion absolut KI: Perikardtamponade, Mediastinalblutung, Tod durch Ablösung der Dissektionsmembran möglich. Heparin ebenfalls meist KI.',
     'AGNN: RR-Seitendifferenz >20 mmHg = Subklavia durch Dissektionsmembran okkludiert. Bei STEMI-Bild + Seitendifferenz → immer Dissektion ausschließen → Lyse KI!',
-    null
+    null,
+    'AGNN: Dissektion mit Koronarbeteiligung: RCA-Ostium → II/III/aVF (inferior-STEMI-Mimikry); LMCA-Ostium → aVR↑ ± V1 + diffuse Senkungen. Unterschied zu reinem ACS: Schmerz sofort maximal + Reißcharakter + RR-Seitendifferenz + Pulsdefizit. EKG allein reicht nicht → Klinik entscheidet über Lyse-KI!',
+    'AGNN: Präklinische Dissektion-Checkliste bei aVR-Muster: (1) Schmerzcharakter sofort maximal, Reißen (Dissektion) vs. crescendo (ACS); (2) RR-Seitendifferenz >20 mmHg; (3) Pulsdefizit; (4) Neurologische Ausfälle ohne Schlaganfallanamnese; (5) Mediastinalverbreiterung CXR. ≥1 Kriterium positiv → KEINE Lyse, KEIN Heparin, direkter Transport Herzchirurgie!'
   ],
   38:[
     'AGNN: Opioid-Trias: Miosis (stecknadelkopfgroß, bilateral), Atemdepression (AF <12/min), Bewusstlosigkeit. Miosis diagnostisch am zuverlässigsten (bleibt auch bei Mischintox).',
